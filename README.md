@@ -43,6 +43,22 @@ EXECUTION
 
 	You can give one integer parameter that set amount of loop iterations before a pause (debug-mode only).
 
+OUR TEEM
+--------
+
+Egor Volkov: egor.volkov.u@gmail.com
+Elena Zavalishina: elena.zavalishina.v@gmail.com
+Anatolij Baranov: anatolij.baranov.a@gmail.com
+
+THANKS
+------
+
+S.F. Krendelev
+
+
+
+
+
 Copyright |copy| 2015, |LibreRussia (TM)| |---| все права защищены.
 
 .. |copy| unicode:: 0xA9 .. знак копирайта
