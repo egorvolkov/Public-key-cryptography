@@ -8,7 +8,7 @@ INTRODUCTION
 
 This implementation allows to test the algorithm with the next input data:
 
-	Amount of variables:	from 0 to infinity; |infinity|
+	Amount of variables:	from 0 to infinity;
 	Size of a variable:	from 3 to 62;
 	Size of a module:	from 4 to 63;	// Size of a module must be more then size of a variable
 
@@ -47,21 +47,12 @@ OUR TEEM
 --------
 
 Egor Volkov: egor.volkov.u@gmail.com
+
 Elena Zavalishina: elena.zavalishina.v@gmail.com
+
 Anatolij Baranov: anatolij.baranov.a@gmail.com
 
 THANKS
 ------
 
 S.F. Krendelev
-
-
-
-
-
-Copyright |copy| 2015, |LibreRussia (TM)| |---| все права защищены.
-
-.. |copy| unicode:: 0xA9 .. знак копирайта
-.. |LibreRussia (TM)| unicode:: LibreRussia U+2122 .. символ торговой марки
-.. |---| unicode:: U+02014 .. длинное тире
-.. |infinity| unicode:: U+221E
