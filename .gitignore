@@ -4,7 +4,6 @@
 !*.c
 !*.cpp
 !*.txt
-!*.docx
-!*.exe
+!*.md
 !.gitignore
 !Makefile

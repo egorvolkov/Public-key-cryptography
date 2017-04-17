@@ -20,7 +20,7 @@ void getPublicKey(ulong *publicKey) {
 	}
 
 	uint amount = AMOUNT_OF_MEMBERS;
-	uint bufSize = size*amount*MAX_SIZE_OF_MODULE / 8 + ((size*amount*MAX_SIZE_OF_MODULE % 8) ? 1 : 0);
+	uint bufSize = size*amount*SIZE_OF_MODULE / 8 + ((size*amount*SIZE_OF_MODULE % 8) ? 1 : 0);
 	char buf;
 
 	publicKey[0] = 0;
@@ -30,7 +30,7 @@ void getPublicKey(ulong *publicKey) {
 		for (int k = 0; k < 8; k++) {
 			publicKey[count*amount + index] = (publicKey[count*amount + index] << 1) | ((buf >> (7 - k)) & 1);
 			bit_count++;
-			if (bit_count == MAX_SIZE_OF_MODULE) {
+			if (bit_count == SIZE_OF_MODULE) {
 				bit_count = 0;
 				index++;
 				if (index == amount) {

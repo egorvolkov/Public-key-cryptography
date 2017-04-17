@@ -1,1 +1,2 @@
-It's real version of the program
+Public-key cryptography based on integer third-degree polynomials
+=================================================================

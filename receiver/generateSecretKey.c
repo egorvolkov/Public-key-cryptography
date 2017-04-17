@@ -12,14 +12,14 @@ void generateSecretKey(struct Matrices *matrices) {
 void generateModule() {
 
 #ifdef DEBUG
-	if (pow(getModules(4000), moduleStruct.masSize) < (double)((ulong)1 << SIZE_OF_VARIABLE)) {
+	if (pow(getModules(MODULES - MODULES/10), moduleStruct.masSize) < (double)((ulong)1 << SIZE_OF_VARIABLE)) {
 		printf("Too little masSize\n");
 		exit(1);
 	}
 #endif
 
 	ulong min = (ulong)1 << SIZE_OF_VARIABLE;
-	ulong max = (ulong)1 << MAX_SIZE_OF_MODULE;
+	ulong max = (ulong)1 << SIZE_OF_MODULE;
 	ulong k[moduleStruct.masSize];
 	ulong i, a = 0, p1, p2;
 
@@ -60,18 +60,17 @@ void generateModule() {
 		if (i == MODULES) {
 			break;
 		}
-	} while (((ulong)1 << MAX_SIZE_OF_MODULE) > a);
+	} while (((ulong)1 << SIZE_OF_MODULE) > a);
 	p1 = i - 2;
 
 	do {
 		k[0] = getModules(getRandom(p1));
-	} while (pow(getModules(4000), moduleStruct.masSize - 1) < (double)((ulong)1 << SIZE_OF_VARIABLE) / k[0] || k[0] >= ((ulong)1 << SIZE_OF_VARIABLE));
+	} while (pow(getModules(MODULES - MODULES/10), moduleStruct.masSize - 1) < (double)((ulong)1 << SIZE_OF_VARIABLE) / k[0] || k[0] >= ((ulong)1 << SIZE_OF_VARIABLE));
 	moduleStruct.module *= k[0];
 	moduleStruct.partsOfModule[0] = k[0];
 
-	printf("%llu %llu\n", k[0], i);
 	min = (ulong)ceil(pow((double)((ulong)1 << SIZE_OF_VARIABLE) / k[0], (double)1 / (moduleStruct.masSize - 1)));
-	max = (ulong)floor(pow((double)((ulong)1 << MAX_SIZE_OF_MODULE) / k[0], (double)1 / (moduleStruct.masSize - 1)));
+	max = (ulong)floor(pow((double)((ulong)1 << SIZE_OF_MODULE) / k[0], (double)1 / (moduleStruct.masSize - 1)));
 
 	i = 0;
 	fseek(fin, 0, SEEK_SET);
@@ -104,9 +103,6 @@ void generateModule() {
 		}
 	}
 
-	printf("%llu %llu;\n", min, max);
-	printf("%llu %llu;\n", p1, p2);
-	printf("%llu %llu;\n", getModules(p1), getModules(p2));
 	do {
 		moduleStruct.module = k[0];
 		for (int j = 1; j < moduleStruct.masSize; j++) {
@@ -116,11 +112,11 @@ void generateModule() {
 			moduleStruct.module *= k[j];
 			moduleStruct.partsOfModule[j] = k[j];
 		}
-	} while (moduleStruct.module < ((ulong)1 << SIZE_OF_VARIABLE) || moduleStruct.module >= ((ulong)1 << MAX_SIZE_OF_MODULE));
+	} while (moduleStruct.module < ((ulong)1 << SIZE_OF_VARIABLE) || moduleStruct.module >= ((ulong)1 << SIZE_OF_MODULE));
 
 
 #ifdef DEBUG
-	if (moduleStruct.module < ((ulong)1 << SIZE_OF_VARIABLE) || moduleStruct.module >= ((ulong)1 << MAX_SIZE_OF_MODULE)) {
+	if (moduleStruct.module < ((ulong)1 << SIZE_OF_VARIABLE) || moduleStruct.module >= ((ulong)1 << SIZE_OF_MODULE)) {
 		printf("ERROR OF CREATING A MODULE\n");
 		getchar();
 	}

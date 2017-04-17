@@ -14,13 +14,13 @@ uint returnPublicKey(ulong *publicKey) {
 		return 1;
 	}
 
-	uint bufSize = (size * amount * MAX_SIZE_OF_MODULE + 7) / 8;
+	uint bufSize = (size * amount * SIZE_OF_MODULE + 7) / 8;
 	char buf = 0;
 	uint count = 0, bitCount = 0;
 	for (int i = 0; i < size; i++) {
 		for (int j = 0; j < amount; j++) {
-			for (int k = 0; k < MAX_SIZE_OF_MODULE; k++) {
-				buf = (buf << 1) | ((publicKey[i * amount + j] >> (MAX_SIZE_OF_MODULE - 1 - k)) & 1);
+			for (int k = 0; k < SIZE_OF_MODULE; k++) {
+				buf = (buf << 1) | ((publicKey[i * amount + j] >> (SIZE_OF_MODULE - 1 - k)) & 1);
 				bitCount++;
 				if (bitCount == 8) {
 					fwrite(&buf, 1, 1, fout);

@@ -3,7 +3,7 @@
 /**
  *	Main block
  */
-const uchar size = SIZE;
+const uchar size = AMOUNT_OF_VARIABLES;
 struct Module moduleStruct = {1, MAS_SIZE};
 
 #ifdef DEBUG
@@ -11,6 +11,18 @@ FILE *output;
 #endif
 
 int main(int argc, char* argv[]) {
+
+	int pause = PAUSE;
+	if (argc > 1) {
+		pause = 0;
+		int i = 0;
+		while (argv[1][i] != '\0') {
+			pause = pause*10 + argv[1][i] - '0';
+			i++;
+		}
+	}
+
+
 	struct Matrices matrices;
 	ulong publicKey[size * AMOUNT_OF_MEMBERS];
 	ulong encodedOrRealMessage[size];
@@ -27,8 +39,8 @@ int main(int argc, char* argv[]) {
 #endif
 		generateSecretKey(&matrices);
 #ifdef DEBUG
-		printf("SIZE: %d\nSIZE_OF_VARIABLE: %d\nSIZE_OF_MODULE: %d\n", SIZE, SIZE_OF_VARIABLE, MAX_SIZE_OF_MODULE);
-		fprintf(output, "SIZE: %d\nSIZE_OF_VARIABLE: %d\nSIZE_OF_MODULE: %d\n", SIZE, SIZE_OF_VARIABLE, MAX_SIZE_OF_MODULE);
+		printf("SIZE: %d\nSIZE_OF_VARIABLE: %d\nSIZE_OF_MODULE: %d\n", size, SIZE_OF_VARIABLE, SIZE_OF_MODULE);
+		fprintf(output, "SIZE: %d\nSIZE_OF_VARIABLE: %d\nSIZE_OF_MODULE: %d\n", size, SIZE_OF_VARIABLE, SIZE_OF_MODULE);
 		printf("Module: %llu\nParts of module: ", moduleStruct.module);
 		fprintf(output, "Module: %llu\nParts of module: ", moduleStruct.module);
 		for (int i = 0; i < moduleStruct.masSize; i++) {
@@ -127,7 +139,7 @@ int main(int argc, char* argv[]) {
 		fclose(file);
 
 		printf("\n____________________________________\n");
-		if (count % 100 == 0) {
+		if (count % pause == 0) {
 			printf("PAUSE\n");
 			getchar();
 		}

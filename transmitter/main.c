@@ -6,7 +6,7 @@ void printMatrix(ulong *matrix, uchar size1, uchar size2);
 /**
  *	Main block
  */
-const uchar size = SIZE;
+const uchar size = AMOUNT_OF_VARIABLES;
 
 int main(int argc, char* argv[]) {
 	ulong publicKey[2 * size * AMOUNT_OF_MEMBERS];	//	Correct Factor! It's ineffective memory using
@@ -25,11 +25,11 @@ int main(int argc, char* argv[]) {
 		// printf("\n");
 		// printMatrix(publicKey, size, AMOUNT_OF_MEMBERS);
 		// printf("\n");
-		// printf("Message: ");
-		// for (int i = 0; i < size; i++) {
-		// 	printf("%llu ", message[i]);
-		// }
-		// printf("\n");
+		printf("Message: ");
+		for (int i = 0; i < size; i++) {
+			printf("%llu ", message[i]);
+		}
+		printf("\n");
 
 		tStart = getTime();
 #endif
