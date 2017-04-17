@@ -11,7 +11,7 @@ FILE *output;
 #endif
 
 int main(int argc, char* argv[]) {
-
+#ifdef DEBUG
 	int pause = PAUSE;
 	if (argc > 1) {
 		pause = 0;
@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
 			i++;
 		}
 	}
-
+#endif
 
 	struct Matrices matrices;
 	ulong publicKey[size * AMOUNT_OF_MEMBERS];
