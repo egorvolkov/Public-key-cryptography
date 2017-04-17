@@ -1,0 +1,21 @@
+#define DEBUG
+
+#define SIZE 16
+#define AMOUNT_OF_MEMBERS SIZE * (SIZE + 1) * (SIZE + 2) / 6
+#define BYTES_FOR_AMOUNT_OF_MEMBER 2
+#define SIZE_OF_VARIABLE 62
+#define MAX_SIZE_OF_MODULE (SIZE_OF_VARIABLE + 1)
+#define MAS_SIZE 5
+#define SIZE_OF_LONG_NUMBER ((MAX_SIZE_OF_MODULE + 3*SIZE_OF_VARIABLE + 7) / 8)
+#define LENGTH_OF_ENCODED_NUMBER (SIZE_OF_LONG_NUMBER + BYTES_FOR_AMOUNT_OF_MEMBER)
+//#define SIZE_OF_PUBLIC_KEY (SIZE*AMOUNT_OF_MEMBERS*MAX_SIZE_OF_MODULE + 7) / 8
+
+
+
+#define PATH_TO_PUBLIC_KEY "../public_key"
+#define PATH_TO_THE_FIRST_FLAG "../flag1"
+#define PATH_TO_THE_SECOND_FLAG "../flag2"
+#ifdef DEBUG
+#define PATH_TO_MESSAGE "../message.txt"
+#define PATH_TO_OUTPUT "../output.txt"
+#endif
