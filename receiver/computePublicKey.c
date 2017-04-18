@@ -3,17 +3,17 @@
 extern const uchar size;
 extern struct Module moduleStruct;
 
-#ifdef DEBUG
+#ifdef PRINT
 extern FILE *output;
 #endif
 
 void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, ulong *publicKey) {
 	ulong bufferMatrix[size * AMOUNT_OF_MEMBERS];
 	cubeOfPolynomials(firstMatrix, bufferMatrix);
-#ifdef DEBUG
-	// fprintf(output, "Cube polynomials\n");
-	// fPrintMatrix(bufferMatrix, size, AMOUNT_OF_MEMBERS);
-	// fprintf(output, "\n");
+#ifdef PRINT
+	fprintf(output, "Cube polynomials\n"); printf("Cube polynomials\n");
+	fPrintMatrix(bufferMatrix, size, AMOUNT_OF_MEMBERS); printMatrix(bufferMatrix, size, AMOUNT_OF_MEMBERS);
+	fprintf(output, "\n"); printf("\n");
 #endif
 	multToSecondMatrix(secondMatrix, bufferMatrix, publicKey);
 }

@@ -11,12 +11,11 @@ void generateSecretKey(struct Matrices *matrices) {
 
 void generateModule() {
 
-#ifdef DEBUG
 	if (pow(getModules(MODULES - MODULES/10), moduleStruct.masSize) < (double)((ulong)1 << SIZE_OF_VARIABLE)) {
-		printf("Too little masSize\n");
+		printf("Too little masSize. Press Enter to exit.\n");
+		getchar();
 		exit(1);
 	}
-#endif
 
 	ulong min = (ulong)1 << SIZE_OF_VARIABLE;
 	ulong max = (ulong)1 << SIZE_OF_MODULE;
@@ -114,13 +113,6 @@ void generateModule() {
 		}
 	} while (moduleStruct.module < ((ulong)1 << SIZE_OF_VARIABLE) || moduleStruct.module >= ((ulong)1 << SIZE_OF_MODULE));
 
-
-#ifdef DEBUG
-	if (moduleStruct.module < ((ulong)1 << SIZE_OF_VARIABLE) || moduleStruct.module >= ((ulong)1 << SIZE_OF_MODULE)) {
-		printf("ERROR OF CREATING A MODULE\n");
-		getchar();
-	}
-#endif
 	computePartsOfModule();
 }
 

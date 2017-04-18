@@ -77,7 +77,7 @@ void longDeg(ulong a, uchar b, uchar *result) {
 		longMult(result, bufA, result);
 	}
 }
-#ifdef DEBUG
+#ifdef PRINT
 void longPrintNumber(uchar *number, int N) {
 	for (int i = 0; i < N; i++) {
 		for (int j = 0; j < 8; j++) {

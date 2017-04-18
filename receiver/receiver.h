@@ -13,8 +13,8 @@
 #define PATH_TO_PUBLIC_KEY "channel/public_key"
 #define PATH_TO_THE_FIRST_FLAG "channel/flag1"
 #define PATH_TO_THE_SECOND_FLAG "channel/flag2"
-#ifdef DEBUG
 #define PATH_TO_MESSAGE "channel/message.txt"
+#ifdef PRINT
 #define PATH_TO_OUTPUT "output.txt"
 #endif
 
@@ -96,7 +96,7 @@ ulong modularInverseMultUniver(ulong a, ulong module);
 ulong euler(ulong n);
 ulong gcd(ulong a, ulong b);
 
-#ifdef DEBUG
+#ifdef PRINT
 void printMatrix(ulong *matrix, uchar size1, uchar size2);
 void fPrintMatrix(ulong *matrix, uchar size1, uchar size2);
 #endif

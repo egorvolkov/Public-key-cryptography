@@ -12,16 +12,16 @@ int main(int argc, char* argv[]) {
 	ulong publicKey[2 * size * AMOUNT_OF_MEMBERS];	//	Correct Factor! It's ineffective memory using
 	uchar encodedMessage[size * LENGTH_OF_ENCODED_NUMBER];
 	ulong message[size];
+#ifdef TIME
 	double tStart, tEnd, middleTimeOfCoding = 0;
-#ifdef DEBUG
+#endif
 	uint count = 0;
 	while (1) {
 		count++;
-#endif
 		getPublicKey(publicKey);
 
 		createMessage(message);
-#ifdef DEBUG
+#ifdef PRINT
 		// printf("\n");
 		// printMatrix(publicKey, size, AMOUNT_OF_MEMBERS);
 		// printf("\n");
@@ -30,29 +30,31 @@ int main(int argc, char* argv[]) {
 			printf("%llu ", message[i]);
 		}
 		printf("\n");
-
+#endif
+#ifdef TIME
 		tStart = getTime();
 #endif
 		coding(message, publicKey, encodedMessage);
-#ifdef DEBUG
+#ifdef TIME
 		tEnd = getTime();
 		printf("Time of coding: %f ms\n", tEnd - tStart);
 		middleTimeOfCoding += tEnd - tStart;
-
+#endif
+#ifdef DEBUG
 		printf("bytes: %d\n", returnEncodedMessage(encodedMessage));
-
-		printf("Middle time:\n\
-			Time of coding:  %f ms\n\
-			", middleTimeOfCoding / count);
-	}
 #endif
 #ifndef DEBUG
-	returnEncodedMessage(encodedMessage);
+		returnEncodedMessage(encodedMessage);
+#endif
+#ifdef TIME
+		printf("Middle time:\n\
+			Time of coding:  %f ms\n", middleTimeOfCoding / count);
+	}
 #endif
 	return 0;
 }
 
-#ifdef DEBUG
+#ifdef PRINT
 void printMatrix(ulong *matrix, uchar size1, uchar size2) {
 	for (int i = 0; i < size1; i++) {
 		for (int j = 0; j < size2; j++) {

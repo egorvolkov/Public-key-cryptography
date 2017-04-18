@@ -1,18 +1,23 @@
 /**
- * If this constant is defined then:
- * 		The program outputs part of an information to console and all information to the file "output.txt";
- *   	The program checks some errors of the algorithm;
- *   	Start an infinite loop with pauses;
- * Else:
- * 		The program works once.
- *
- * You can comment "//" this line to turn off debug-mode.
+ * TIME - if this constant is defined then time will be measured and printed
+ * PRINT - if this constant is defined then all information will be printed to console and to a file "output.txt"
  */
-#define DEBUG
-
+#define TIME
+//#define PRINT
 
 /**
- * AMOUNT_OF_VARIABLES - amount of variables; from 0 to infinity
+ * AMOUNT_OF_LOOP_ITERATIONS - the program will starts a loop with this parameter. Must be more then 0
+ * PAUSE - amount of loop iterations before a pause. Must be more then 0
+ * 		Also you can set this parameter like an argument of execution the program. Parameter has more priority.
+ */
+#define AMOUNT_OF_LOOP_ITERATIONS 10000
+#define PAUSE 100
+
+/**
+ * AMOUNT_OF_VARIABLES - amount of variables; from 0 to infinity (in a theory)
+ * 		But if you want to increase size of coding message we recommend to increase SIZE_OF_VARIABLE
+ * 		because increasing AMOUNT_OF_VARIABLES can cause memory error. Also it will be much faster.
+ * 		For instanse our computer don't execute the program with AMOUNT_OF_VARIABLES more then 28.
  * SIZE_OF_VARIABLE - amount of bits on a variable; from 3 to 62
  * SIZE_OF_MODULE - amount of bits on a module; from 4 to 63
  * 		SIZE_OF_MODULE must be more then SIZE_OF_VARIABLE
@@ -25,21 +30,15 @@
  *   	You can use any meanings you want but our algorithm of module generation isn't perfect.
  * 		Some meanings can cause looping.
  */
-#define AMOUNT_OF_VARIABLES 17
-#define SIZE_OF_VARIABLE 62
-#define SIZE_OF_MODULE (SIZE_OF_VARIABLE + 1)
-#define MAS_SIZE 5
+#define AMOUNT_OF_VARIABLES 16
+#define SIZE_OF_VARIABLE 32
+#define SIZE_OF_MODULE 33
+#define MAS_SIZE 3
 
 /**
  * BYTES_FOR_AMOUNT_OF_MEMBER - this constant is for encoding a long number.
- * 		AMOUNT_OF_VARIABLES < 11		then BYTES_FOR_AMOUNT_OF_MEMBER is 1;
+ * 		AMOUNT_OF_VARIABLES < 11		then BYTES_FOR_AMOUNT_OF_MEMBER is 1 or 2;
  * 		11 <= AMOUNT_OF_VARIABLES < 73	then BYTES_FOR_AMOUNT_OF_MEMBER is 2;
+ * 		You don't need more meanings.
  */
 #define BYTES_FOR_AMOUNT_OF_MEMBER 2
-
-/**
- * You can set the PAUSE - amount of loop iterations before pause.
- * Also you can set it like the first argument of the program.
- * Argument has more priority
- */
-#define PAUSE 1

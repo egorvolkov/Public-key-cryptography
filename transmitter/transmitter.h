@@ -11,10 +11,7 @@
 #define PATH_TO_PUBLIC_KEY "channel/public_key"
 #define PATH_TO_THE_FIRST_FLAG "channel/flag1"
 #define PATH_TO_THE_SECOND_FLAG "channel/flag2"
-#ifdef DEBUG
 #define PATH_TO_MESSAGE "channel/message.txt"
-#define PATH_TO_OUTPUT "output.txt"
-#endif
 
 typedef unsigned long long ulong;
 typedef unsigned long uint;
@@ -34,7 +31,7 @@ void longAddEncoded(uchar *a, uchar *b, uchar *result);
 void longMult(uchar *a, uchar *b, uchar *result);
 void longMultToChar(uchar *a, uchar b, uchar *result);
 void longDeg(ulong a, uchar b, uchar *result);
-#ifdef DEBUG
+#ifdef PRINT
 void longPrintNumber(uchar *number, int N);
 #endif
 void longToZero(uchar *number);

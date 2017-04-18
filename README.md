@@ -15,7 +15,9 @@ This implementation allows to test the algorithm with the next input data:
 These restrictions are caused by this particular implementation. One of the most important our tasks was a maximum optimization. So we desided to use native arithmetic of C because a long arithmetic must work longer.
 Now we understand that we need to break the restrictions. So we will implement a version of the program with a long arithmetic and without any restrictions.
 
-There are two programs: "receiver" (Bob) and "transmitter" (Alisa). The connection between them occurs through the files in the folder "channel".
+There are two programs: "receiver" (Bob) and "transmitter" (Alice). The connection between them occurs through the files in the folder "channel".
+
+The program create a message itself randomly. It is for example.
 
 SET AN INPUT DATA
 -----------------

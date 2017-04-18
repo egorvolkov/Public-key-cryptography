@@ -1,9 +1,0 @@
-*.*
-!*.h
-!*.hpp
-!*.c
-!*.cpp
-!*.txt
-!*.md
-!.gitignore
-!Makefile
