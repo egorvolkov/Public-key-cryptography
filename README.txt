@@ -17,8 +17,6 @@ Now we understand that we need to break the restrictions. So we will implement a
 
 There are two programs: "receiver" (Bob) and "transmitter" (Alice). The connection between them occurs through the files in the folder "channel".
 
-The program create a message itself randomly. It is for example.
-
 SET AN INPUT DATA
 -----------------
 

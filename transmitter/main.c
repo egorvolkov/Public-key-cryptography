@@ -14,6 +14,7 @@ int main(int argc, char* argv[]) {
 	ulong message[size];
 #ifdef TIME
 	double tStart, tEnd, middleTimeOfCoding = 0;
+	double tStartRDTSC, tEndRDTSC, middleTimeOfCodingRDTSC = 0;
 #endif
 	uint count = 0;
 	while (1) {
@@ -33,12 +34,15 @@ int main(int argc, char* argv[]) {
 #endif
 #ifdef TIME
 		tStart = getTime();
+		tStartRDTSC = timeRDTSC();
 #endif
 		coding(message, publicKey, encodedMessage);
 #ifdef TIME
 		tEnd = getTime();
+		tEndRDTSC = timeRDTSC();
 		printf("Time of coding: %f ms\n", tEnd - tStart);
 		middleTimeOfCoding += tEnd - tStart;
+		middleTimeOfCodingRDTSC += tEndRDTSC - tStartRDTSC;
 #endif
 #ifdef DEBUG
 		printf("bytes: %d\n", returnEncodedMessage(encodedMessage));
@@ -48,7 +52,7 @@ int main(int argc, char* argv[]) {
 #endif
 #ifdef TIME
 		printf("Middle time:\n\
-			Time of coding:  %f ms\n", middleTimeOfCoding / count);
+			Time of coding:  %f ms; %f Hz\n", middleTimeOfCoding / count, middleTimeOfCodingRDTSC / count);
 	}
 #endif
 	return 0;

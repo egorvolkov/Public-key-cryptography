@@ -30,10 +30,10 @@
  *   	You can use any meanings you want but our algorithm of module generation isn't perfect.
  * 		Some meanings can cause looping.
  */
-#define AMOUNT_OF_VARIABLES 16
-#define SIZE_OF_VARIABLE 32
-#define SIZE_OF_MODULE 33
-#define MAS_SIZE 3
+#define AMOUNT_OF_VARIABLES 8
+#define SIZE_OF_VARIABLE 16
+#define SIZE_OF_MODULE 17
+#define MAS_SIZE 1
 
 /**
  * BYTES_FOR_AMOUNT_OF_MEMBER - this constant is for encoding a long number.

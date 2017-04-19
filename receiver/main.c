@@ -31,7 +31,8 @@ int main(int argc, char* argv[]) {
 	}
 
 #ifdef TIME
-	double tStart, tEnd, timeOfSecretKey = 0, timeOfPublicKey = 0, timeOfGettingMessage = 0, timeOfDecoding = 0;
+	double tStart, tEnd, timeOfSecretKey = 0, timeOfPublicKey = 0, timeOfDecoding = 0;
+	double tStartRDTSC, tEndRDTSC, timeOfSecretKeyRDTSC = 0, timeOfPublicKeyRDTSC = 0, timeOfDecodingRDTSC = 0;
 #endif
 
 	FILE *file = NULL;
@@ -46,12 +47,15 @@ int main(int argc, char* argv[]) {
 		//moduleStruct.module = 1;
 #ifdef TIME
 		tStart = getTime();
+		tStartRDTSC = timeRDTSC();
 #endif
 		generateSecretKey(&matrices);
 #ifdef TIME
 		tEnd = getTime();
+		tEndRDTSC = timeRDTSC();
 		printf("Time of generation a secret key: %f ms\n", tEnd - tStart);
 		timeOfSecretKey += tEnd - tStart;
+		timeOfSecretKeyRDTSC += tEndRDTSC - tStartRDTSC;
 #endif
 #ifdef PRINT
 		fprintf(output, "SIZE: %d\nSIZE_OF_VARIABLE: %d\nSIZE_OF_MODULE: %d\n", size, SIZE_OF_VARIABLE, SIZE_OF_MODULE); printf("SIZE: %d\nSIZE_OF_VARIABLE: %d\nSIZE_OF_MODULE: %d\n", size, SIZE_OF_VARIABLE, SIZE_OF_MODULE);
@@ -81,12 +85,15 @@ int main(int argc, char* argv[]) {
 #endif
 #ifdef TIME
 		tStart = getTime();
+		tStartRDTSC = timeRDTSC();
 #endif
 		computePublicKey(matrices.firstMatrix, matrices.secondMatrix, publicKey);
 #ifdef TIME
 		tEnd = getTime();
+		tEndRDTSC = timeRDTSC();
 		printf("Time of computing a public key: %f ms\n", tEnd - tStart);
 		timeOfPublicKey += tEnd - tStart;
+		timeOfPublicKeyRDTSC += tEndRDTSC - tStartRDTSC;
 #endif
 #ifdef PRINT
 		fprintf(output, "Public key\n"); printf("Public key\n");
@@ -99,15 +106,8 @@ int main(int argc, char* argv[]) {
 		returnPublicKey(publicKey);
 #endif
 		transmitterConnection();
-#ifdef TIME
-		tStart = getTime();
-#endif
+
 		getEncodedMessage(encodedOrRealMessage);
-#ifdef TIME
-		tEnd = getTime();
-		printf("Time of getting message: %f ms\n", tEnd - tStart);
-		timeOfGettingMessage += tEnd - tStart;
-#endif
 #ifdef PRINT
 		fprintf(output, "Encoded message by module: "); printf("Encoded message by module: ");
 		for (int i = 0; i < size; i++) {
@@ -117,12 +117,15 @@ int main(int argc, char* argv[]) {
 #endif
 #ifdef TIME
 		tStart = getTime();
+		tStartRDTSC = timeRDTSC();
 #endif
 		decoding(matrices.firstInverseMatrix, matrices.secondInverseMatrix, encodedOrRealMessage);
 #ifdef TIME
 		tEnd = getTime();
-		printf("Time of decoding: %f ms\n", tEnd - tStart);
+		tEndRDTSC = timeRDTSC();
+		printf("Time of decoding: %f ms\n", tEndRDTSC - tStartRDTSC);
 		timeOfDecoding += tEnd - tStart;
+		timeOfDecodingRDTSC += tEndRDTSC - tStartRDTSC;
 #endif
 #ifdef PRINT
 		fprintf(output, "Message: "); printf("Message: ");
@@ -133,10 +136,13 @@ int main(int argc, char* argv[]) {
 #endif
 #ifdef TIME
 		printf("\nMiddle time (iteration %u)\n\
-			Time of generation a secret key: %f ms\n\
-			Time of computing a public key: %f ms\n\
-			Time of getting message: %f ms\n\
-			Time of decoding: %f ms\n", loop + 1, timeOfSecretKey / (loop + 1), timeOfPublicKey / (loop + 1), timeOfGettingMessage / (loop + 1), timeOfDecoding / (loop + 1));
+			Time of generation a secret key: %f ms; %f Hz\n\
+			Time of computing a public key: %f ms; %f Hz\n\
+			Time of decoding: %f ms; %f Hz\n",\
+		       loop + 1,\
+		       timeOfSecretKey / (loop + 1), timeOfSecretKeyRDTSC / (loop + 1),\
+		       timeOfPublicKey / (loop + 1), timeOfPublicKeyRDTSC / (loop + 1),\
+		       timeOfDecoding / (loop + 1), timeOfDecodingRDTSC / (loop + 1));
 #endif
 		file = fopen(PATH_TO_MESSAGE, "r");
 		for (int i = 0; i < size; i++) {
