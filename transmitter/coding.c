@@ -12,6 +12,9 @@ void coding(ulong *message, ulong *publicKey, uchar *encodedMessage) {
 		for (int j = 0; j < amount; j++) {
 			longGetNumber(publicKey[i * amount + j], bufferPublicKey);
 			for (int h = 0; h < size; h++) {
+				if (publicKey[(size + h) * amount + j] == 0) {
+					continue;
+				}
 				longDeg(message[h], publicKey[(size + h) * amount + j], bufferDeg);
 				longMult(bufferPublicKey, bufferDeg, bufferPublicKey);
 			}
