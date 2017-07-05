@@ -49,8 +49,9 @@ int main(int argc, char* argv[]) {
 		tStart = getTime();
 		tStartRDTSC = timeRDTSC();
 #endif
-		generateSecretKey(&matrices);
+		generateSecretKey(&matrices); //////////////////////////////////////////////////////
 #ifdef TIME
+
 		tEnd = getTime();
 		tEndRDTSC = timeRDTSC();
 		printf("Time of generation a secret key: %f ms\n", tEnd - tStart);
@@ -87,7 +88,7 @@ int main(int argc, char* argv[]) {
 		tStart = getTime();
 		tStartRDTSC = timeRDTSC();
 #endif
-		computePublicKey(matrices.firstMatrix, matrices.secondMatrix, publicKey);
+		computePublicKey(matrices.firstMatrix, matrices.secondMatrix, publicKey); ///////////////////////////////////////////
 #ifdef TIME
 		tEnd = getTime();
 		tEndRDTSC = timeRDTSC();
@@ -103,7 +104,7 @@ int main(int argc, char* argv[]) {
 		printf("Bytes written: %d\n", returnPublicKey(publicKey));
 #endif
 #ifndef PRINT
-		returnPublicKey(publicKey);
+		returnPublicKey(publicKey); ///////////////////////////////////////
 #endif
 		transmitterConnection();
 

@@ -2,8 +2,8 @@
  * TIME - if this constant is defined then time will be measured and printed
  * PRINT - if this constant is defined then all information will be printed to console and to a file "output.txt"
  */
-#define TIME
-//#define PRINT
+//#define TIME
+#define PRINT
 
 /**
  * AMOUNT_OF_LOOP_ITERATIONS - the program will starts a loop with this parameter. Must be more then 0
@@ -23,17 +23,17 @@
  * 		SIZE_OF_MODULE must be more then SIZE_OF_VARIABLE
  * MAS_SIZE - amount of multipliers of which the module consist; We recommend the next meanings:
  * 		SIZE_OF_MODULE < 21			then MAS_SIZE is 1
- * 		21 <= SIZE_OF_MODULE < 33	then MAS_SIZE is 2
- * 		33 <= SIZE_OF_MODULE < 47	then MAS_SIZE is 3
+ * 		21 <= SIZE_OF_MODULE < 29	then MAS_SIZE is 2
+ * 		29 <= SIZE_OF_MODULE < 47	then MAS_SIZE is 3
  * 		47 <= SIZE_OF_MODULE < 56	then MAS_SIZE is 4
  * 		56 <= SIZE_OF_MODULE < 64	then MAS_SIZE is 5
  *   	You can use any meanings you want but our algorithm of module generation isn't perfect.
  * 		Some meanings can cause looping.
  */
-#define AMOUNT_OF_VARIABLES 10
-#define SIZE_OF_VARIABLE 62
+#define AMOUNT_OF_VARIABLES 4
+#define SIZE_OF_VARIABLE 32
 #define SIZE_OF_MODULE (SIZE_OF_VARIABLE + 1)
-#define MAS_SIZE 5
+#define MAS_SIZE 2
 
 /**
  * BYTES_FOR_AMOUNT_OF_MEMBER - this constant is for encoding a long number.

@@ -12,9 +12,11 @@ static ulong seed;
 void prepare(ulong *preSeed)
 {
 	//seed = (ulong)preSeed;   // Seed initialization as a adress number in common scope with other generator functions
-	struct timespec t;
-	clock_gettime (CLOCK_MONOTONIC, &t);
-	seed = t.tv_nsec;
+	//struct timespec t;
+	//clock_gettime (CLOCK_MONOTONIC, &t);
+	//seed = t.tv_nsec;
+	srand(time(NULL));
+	seed = rand();
 }
 
 ulong randMain()

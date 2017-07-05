@@ -30,6 +30,9 @@ ulong modularMult(ulong a, ulong b) {
 	// if (a < ((ulong)1 << 32) && b < ((ulong)1 << 32)) {
 	// 	return littleModularMultUniver(a, b, moduleStruct.module);
 	// }
+	if (a % moduleStruct.module == 0 || b % moduleStruct.module == 0) {
+		return 0;
+	}
 	if (moduleStruct.module < ((ulong)1 << 32)) {
 		return littleModularMultUniver(a, b, moduleStruct.module);
 	}
@@ -84,8 +87,7 @@ ulong modularInverseMult(ulong a)
 
 void modularMatrixMult(ulong *mat1, ulong *mat2, ulong *result) {
 	ulong i, j, k;
-	for (i = 0; i < size; i++)
-	{
+	for (i = 0; i < size; i++) {
 		for (k = 0; k < size; k++) {
 			result[i * size + k] = 0;
 			for (j = 0; j < size; j++) {

@@ -1,8 +1,11 @@
 #include <stdio.h>
-
-#include "myTime.h"
+#include <stdlib.h>
 
 #include "../defines.h"
+
+#ifdef TIME
+#include "myTime.h"
+#endif
 
 
 #define AMOUNT_OF_MEMBERS (AMOUNT_OF_VARIABLES * (AMOUNT_OF_VARIABLES + 1) * (AMOUNT_OF_VARIABLES + 2) / 6)
