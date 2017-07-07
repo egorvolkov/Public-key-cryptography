@@ -120,7 +120,7 @@ int main(int argc, char* argv[]) {
 		tStart = getTime();
 		tStartRDTSC = timeRDTSC();
 #endif
-		decoding(matrices.firstInverseMatrix, matrices.secondInverseMatrix, encodedOrRealMessage);
+		decoding(matrices.firstInverseMatrix, matrices.secondInverseMatrix, encodedOrRealMessage, matrices.constants);
 #ifdef TIME
 		tEnd = getTime();
 		tEndRDTSC = timeRDTSC();

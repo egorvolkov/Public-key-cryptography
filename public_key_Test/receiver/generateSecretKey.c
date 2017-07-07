@@ -7,6 +7,10 @@ void generateSecretKey(struct Matrices *matrices) {
 	generateModule();
 	generateFirstMatrices_rare(matrices->firstMatrix, matrices->firstInverseMatrix);
 	generateSecondMatrices(matrices->secondMatrix, matrices->secondInverseMatrix);
+	//Temp for testing
+	for(int i = 0; i < AMOUNT_OF_VARIABLES; i++){
+		matrices->constants[i]=0;
+	}
 }
 
 void generateModule() {

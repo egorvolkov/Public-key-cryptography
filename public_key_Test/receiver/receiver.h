@@ -41,6 +41,7 @@ struct Matrices {
 	ulong firstInverseMatrix[AMOUNT_OF_VARIABLES * AMOUNT_OF_VARIABLES];
 	ulong secondMatrix[AMOUNT_OF_VARIABLES * AMOUNT_OF_VARIABLES];
 	ulong secondInverseMatrix[AMOUNT_OF_VARIABLES * AMOUNT_OF_VARIABLES];
+	ulong constants[AMOUNT_OF_VARIABLES];
 };
 
 typedef struct CubePolynomial {
@@ -77,7 +78,7 @@ uint returnPublicKey(FullCubePolynomial *publicKey);
 void transmitterConnection();
 void getEncodedMessage(ulong *encodedOrRealMessage);
 
-void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *encodedOrRealMessage);
+void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *encodedOrRealMessage, ulong *constants);
 
 uchar inArray(ulong *arr, uint length, ulong element);
 uint getModules(uint index);
