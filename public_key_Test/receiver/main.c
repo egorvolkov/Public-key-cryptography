@@ -88,7 +88,7 @@ int main(int argc, char* argv[]) {
 		tStart = getTime();
 		tStartRDTSC = timeRDTSC();
 #endif
-		computePublicKey(matrices.firstMatrix, matrices.secondMatrix, publicKey); ///////////////////////////////////////////
+		computePublicKey(matrices.firstMatrix, matrices.secondMatrix, publicKey, matrices.constants); ///////////////////////////////////////////
 #ifdef TIME
 		tEnd = getTime();
 		tEndRDTSC = timeRDTSC();
@@ -214,7 +214,7 @@ void fPrintCubePolynomials(CubePolynomial *cubePolynomials) {
 			}
 			fprintf(output, "%llu", cubePolynomials[i].factor[j]);
 			for (int k = 0; k < 3; k++) {
-				fprintf(output, "*x%u", getFromVar(cubePolynomials[i].vars[j], k));
+				fprintf(output, "*x%lu", getFromVar(cubePolynomials[i].vars[j], k));
 			}
 		}
 		fprintf(output, "\n");
@@ -232,7 +232,7 @@ void printFullCubePolynomials(FullCubePolynomial *cubePolynomials) {
 			}
 			printf("%llu", cubePolynomials[i].factor[j]);
 			for (int k = 0; k < 3; k++) {
-				printf("*x%u", getFromVar(cubePolynomials[i].vars[j], k));
+				printf("*x%lu", getFromVar(cubePolynomials[i].vars[j], k));
 			}
 		}
 		printf("\n");

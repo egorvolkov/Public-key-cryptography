@@ -12,7 +12,7 @@
 #define AMOUNT_OF_MEMBERS (AMOUNT_OF_VARIABLES * (AMOUNT_OF_VARIABLES + 1) * (AMOUNT_OF_VARIABLES + 2) / 6)
 #define SIZE_OF_LONG_NUMBER ((SIZE_OF_MODULE + 3*SIZE_OF_VARIABLE + 7) / 8)
 #define LENGTH_OF_ENCODED_NUMBER (SIZE_OF_LONG_NUMBER + BYTES_FOR_AMOUNT_OF_MEMBER)
-#define MAX_TERMS (AMOUNT_OF_VARIABLES * AMOUNT_OF_VAR_IN_LINE * (AMOUNT_OF_VAR_IN_LINE + 1) * (AMOUNT_OF_VAR_IN_LINE + 2) / 6)
+#define MAX_TERMS (AMOUNT_OF_VARIABLES * (AMOUNT_OF_VAR_IN_LINE + 1) * (AMOUNT_OF_VAR_IN_LINE + 2) * (AMOUNT_OF_VAR_IN_LINE + 3) / 6)
 
 #define PATH_TO_PUBLIC_KEY "channel/public_key"
 #define PATH_TO_THE_FIRST_FLAG "channel/flag1"
@@ -63,14 +63,15 @@ void computeInverseMatrix(ulong *matrixDown, ulong *matrixUp, ulong *inverseMatr
 void getRandTriangleMatrix(ulong *matrix, uchar dir);
 
 void generateFirstMatrices_rare(ulong *firstMatrix, ulong *firstInverseMatrix);
+void generateConstants(ulong *constants);
 ulong determinant(ulong *matrix, ulong size);
 void commonComputeInverseMatrix(ulong *inmatrix, ulong* outmatrix, ulong size, ulong det);
 void tenzorMult(ulong *A, ulong *B, ulong *result, ulong N);
 void swap(ulong *line1, ulong *line2, ulong length);
 void shake(ulong *matrix, ulong *invert_matrix, ulong lines, ulong columns);
 
-void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, FullCubePolynomial *publicKey);
-void cubeOfPolynomials(ulong *matrix, CubePolynomial bufferMatrix[]);
+void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, FullCubePolynomial *publicKey, ulong *constans);
+void cubeOfPolynomials(ulong *matrix, CubePolynomial bufferMatrix[], ulong *constants);
 void polynomialCube(ulong *polyn, CubePolynomial *bufferPolyn);
 void multToSecondMatrix(ulong *matrix, CubePolynomial *bufferMatrix, FullCubePolynomial *publicKey);
 

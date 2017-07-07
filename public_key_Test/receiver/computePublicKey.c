@@ -9,10 +9,10 @@ uint bitsForVar;
 extern FILE *output;
 #endif
 
-void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, FullCubePolynomial *publicKey) {
+void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, FullCubePolynomial *publicKey, ulong *constants) {
 	bitsForVar = bitsForVariable();
-	CubePolynomial bufferMatrix[size];
-	cubeOfPolynomials(firstMatrix, bufferMatrix);
+	CubePolynomial bufferMatrix[MAX_TERMS / AMOUNT_OF_VARIABLES];
+	cubeOfPolynomials(firstMatrix, bufferMatrix, constants);
 #ifdef PRINT
 	fprintf(output, "Cube polynomials\n"); printf("Cube polynomials\n");
 	fPrintCubePolynomials(bufferMatrix); printCubePolynomials(bufferMatrix);
@@ -22,11 +22,16 @@ void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, FullCubePolynomia
 }
 
 
-void cubeOfPolynomials(ulong *matrix, CubePolynomial bufferMatrix[]) {
+void cubeOfPolynomials(ulong *matrix, CubePolynomial bufferMatrix[], ulong *constants) {
 	CubePolynomial *buf;
-	for (int i = 0; i < size; i++) {
+	ulong polinom[size + 1];
+	for (uint i = 0; i < size; i++) {
+		for (uint j = 0; j < size; j++){
+			polinom[j] = matrix[j + i*size];
+		}
+		polinom[size] = constants[i];
 		buf = &(bufferMatrix[i]);
-		polynomialCube(matrix + i * size, buf);
+		polynomialCube(polinom, buf);
 	}
 }
 
@@ -34,7 +39,7 @@ void polynomialCube(ulong *polyn, CubePolynomial *bufferMatrix) {
 	uint cur = 0;
 	ulong bufferFactor;
 
-	for (uint i = 0; i < size; i++) {
+	for (uint i = 0; i < size + 1; i++) {
 		bufferFactor = modularDeg(polyn[i], 3);
 		if (bufferFactor == 0) {
 			continue;
@@ -80,6 +85,31 @@ void polynomialCube(ulong *polyn, CubePolynomial *bufferMatrix) {
 				cur++;
 			}
 		}
+	}
+
+	for (uint i = 0; i < size; i++) {
+		for(uint j = i; j < size; j++) {
+			bufferFactor = modularMult(3, modularMult(polyn[size + 1], modularMult(polyn[i], polyn[j])));
+			if (bufferFactor == 0) {
+				continue;
+			}
+			bufferMatrix->factor[cur] = bufferFactor;
+			bufferMatrix->vars[cur] = 0;
+			writeToVar(bufferMatrix->vars + cur, i + 1, 0);
+			writeToVar(bufferMatrix->vars + cur, j + 1, 1);
+			cur++;
+		}
+	}
+
+	for(uint i = 0; i < size ; i++) {
+		bufferFactor = modularMult(3, modularMult(modularDeg(polyn[size + 1], 2), polyn[i]));
+		if (bufferFactor == 0) {
+			continue;
+		}
+		bufferMatrix->factor[cur] = bufferFactor;
+		bufferMatrix->vars[cur] = 0;
+		writeToVar(bufferMatrix->vars + cur, i + 1, 0);
+		cur++;
 	}
 
 	for (cur; cur < MAX_TERMS/AMOUNT_OF_VARIABLES; cur++) {

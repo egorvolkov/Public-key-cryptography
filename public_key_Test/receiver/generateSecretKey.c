@@ -7,10 +7,7 @@ void generateSecretKey(struct Matrices *matrices) {
 	generateModule();
 	generateFirstMatrices_rare(matrices->firstMatrix, matrices->firstInverseMatrix);
 	generateSecondMatrices(matrices->secondMatrix, matrices->secondInverseMatrix);
-	//Temp for testing
-	for(int i = 0; i < AMOUNT_OF_VARIABLES; i++){
-		matrices->constants[i]=0;
-	}
+	generateConstants(matrices->constants);
 }
 
 void generateModule() {
@@ -118,6 +115,12 @@ void generateModule() {
 	} while (moduleStruct.module < ((ulong)1 << SIZE_OF_VARIABLE) || moduleStruct.module >= ((ulong)1 << SIZE_OF_MODULE));
 
 	computePartsOfModule();
+}
+
+void generateConstants(ulong *constants){
+	for (uint i = 0; i < size; i++) {
+		constants[i] = getRandom(moduleStruct.module);
+	}
 }
 
 // int canCreate(int n, ulong min, ulong max) {
