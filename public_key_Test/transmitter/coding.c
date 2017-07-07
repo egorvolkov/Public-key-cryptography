@@ -10,12 +10,12 @@ void coding(ulong *message, FullCubePolynomial *publicKey, uchar *encodedMessage
 	for (int i = 0; i < size; i++) {
 		longToZeroEncoded(encodedMessage + i * LENGTH_OF_ENCODED_NUMBER);
 		for (int j = 0; j < MAX_TERMS; j++) {
-			if (publicKey[i].factor[j] == 0) {
-				continue;
-			}
+			//if (publicKey[i].factor[j] == 0) {
+			//	continue;
+			//}
 			longGetNumber(publicKey[i].factor[j], bufferPublicKey);
 			for (uint h = 0; h < 3; h++) {
-				var = getFromVar(publicKey[i].vars[j], h);
+				var = getFromVar(publicKey[i].vars[j], h); 
 				if (var == 0) {
 					continue;
 				}

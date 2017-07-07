@@ -14,6 +14,11 @@ void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, FullCubePolynomia
 	CubePolynomial bufferMatrix[MAX_TERMS / AMOUNT_OF_VARIABLES];
 	cubeOfPolynomials(firstMatrix, bufferMatrix, constants);
 #ifdef PRINT
+	printf("Constants:\n");
+	for(uint i = 0; i < size; i++){
+		printf("%u ", constants[i]);
+	}
+	printf("\n\n");
 	fprintf(output, "Cube polynomials\n"); printf("Cube polynomials\n");
 	fPrintCubePolynomials(bufferMatrix); printCubePolynomials(bufferMatrix);
 	fprintf(output, "\n"); printf("\n");
@@ -39,7 +44,7 @@ void polynomialCube(ulong *polyn, CubePolynomial *bufferMatrix) {
 	uint cur = 0;
 	ulong bufferFactor;
 
-	for (uint i = 0; i < size + 1; i++) {
+	for (uint i = 0; i < size; i++) {
 		bufferFactor = modularDeg(polyn[i], 3);
 		if (bufferFactor == 0) {
 			continue;
@@ -101,7 +106,7 @@ void polynomialCube(ulong *polyn, CubePolynomial *bufferMatrix) {
 		}
 	}
 
-	for(uint i = 0; i < size ; i++) {
+	for(uint i = 0; i < size; i++) {
 		bufferFactor = modularMult(3, modularMult(modularDeg(polyn[size + 1], 2), polyn[i]));
 		if (bufferFactor == 0) {
 			continue;

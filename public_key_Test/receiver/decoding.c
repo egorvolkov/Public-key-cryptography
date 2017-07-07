@@ -28,7 +28,7 @@ void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *enco
 		//	Вычисляем кубический корень. Нашли результат начального многочлена
 		cube[i] = modularDeg(cube[i], inverseDegree);
 		//  Вычитаем столбец констант
-		cube[i] = modularAdd(cube[i], constants[i]);
+		cube[i] = modularAdd(cube[i], modularInverseAdd(constants[i]));
 	}
 #ifdef PRINT
 	fprintf(output, "\nCube-root: "); printf("\nCube-root: ");
