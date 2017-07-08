@@ -94,7 +94,7 @@ void polynomialCube(ulong *polyn, CubePolynomial *bufferMatrix) {
 
 	for (uint i = 0; i < size; i++) {
 		for(uint j = i; j < size; j++) {
-			bufferFactor = modularMult(3, modularMult(polyn[size + 1], modularMult(polyn[i], polyn[j])));
+			bufferFactor = modularMult(i==j?3:6, modularMult(polyn[size], modularMult(polyn[i], polyn[j])));
 			if (bufferFactor == 0) {
 				continue;
 			}
@@ -107,7 +107,7 @@ void polynomialCube(ulong *polyn, CubePolynomial *bufferMatrix) {
 	}
 
 	for(uint i = 0; i < size; i++) {
-		bufferFactor = modularMult(3, modularMult(modularDeg(polyn[size + 1], 2), polyn[i]));
+		bufferFactor = modularMult(3, modularMult(modularDeg(polyn[size], 2), polyn[i]));
 		if (bufferFactor == 0) {
 			continue;
 		}

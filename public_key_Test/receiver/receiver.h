@@ -57,18 +57,22 @@ typedef struct FullCubePolynomial {
 void generateSecretKey(struct Matrices *matrices);
 void generateModule();
 void computePartsOfModule();
-void generateFirstMatrices(ulong *firstMatrix, ulong *firstInverseMatrix);
-void generateSecondMatrices(ulong *secondMatrix, ulong *secondInverseMatrix);
-void computeInverseMatrix(ulong *matrixDown, ulong *matrixUp, ulong *inverseMatrix);
-void getRandTriangleMatrix(ulong *matrix, uchar dir);
+
+void generateFirstMatrices(ulong *firstMatrix, ulong *firstInverseMatrix, ulong lines);
+void generateSecondMatrices(ulong *secondMatrix, ulong *secondInverseMatrix, ulong lines);
+void computeInverseMatrix(ulong *matrixDown, ulong *matrixUp, ulong *inverseMatrix, ulong lines);
+void getRandTriangleMatrix(ulong *matrix, uchar dir, ulong lines);
 
 void generateFirstMatrices_rare(ulong *firstMatrix, ulong *firstInverseMatrix);
-void generateConstants(ulong *constants);
+void generateSecondMatrices_rare(ulong *secondMatrix, ulong *secondInverseMatrix);
 ulong determinant(ulong *matrix, ulong size);
 void commonComputeInverseMatrix(ulong *inmatrix, ulong* outmatrix, ulong size, ulong det);
-void tenzorMult(ulong *A, ulong *B, ulong *result, ulong N);
+uchar tenzorMult(ulong *A, ulong *B, ulong *result, ulong N, uchar check);
 void swap(ulong *line1, ulong *line2, ulong length);
 void shake(ulong *matrix, ulong *invert_matrix, ulong lines, ulong columns);
+
+void generateConstants(ulong *constants);
+
 
 void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, FullCubePolynomial *publicKey, ulong *constans);
 void cubeOfPolynomials(ulong *matrix, CubePolynomial bufferMatrix[], ulong *constants);
@@ -98,7 +102,7 @@ ulong modularMult(ulong a, ulong b);
 ulong modularDeg(ulong a, ulong b);
 ulong modularInverseAdd(ulong a);
 ulong modularInverseMult(ulong a);
-void modularMatrixMult(ulong *mat1, ulong *mat2, ulong *result);
+void modularMatrixMult(ulong *mat1, ulong *mat2, ulong *result, ulong lines);
 
 /**
  *	This block for operations with an any module
