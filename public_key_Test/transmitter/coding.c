@@ -15,7 +15,7 @@ void coding(ulong *message, FullCubePolynomial *publicKey, uchar *encodedMessage
 			//}
 			longGetNumber(publicKey[i].factor[j], bufferPublicKey);
 			for (uint h = 0; h < 3; h++) {
-				var = getFromVar(publicKey[i].vars[j], h); 
+				var = getFromVar_test(publicKey[i].vars, (3 * j) + h); 
 				if (var == 0) {
 					continue;
 				}

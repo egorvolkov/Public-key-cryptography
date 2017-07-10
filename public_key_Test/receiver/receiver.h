@@ -136,3 +136,9 @@ void printCubePolynomials(CubePolynomial *cubePolynomials);
 void fPrintCubePolynomials(CubePolynomial *cubePolynomials);
 void printFullCubePolynomials(FullCubePolynomial *cubePolynomials);
 void fPrintFullCubePolynomials(FullCubePolynomial *cubePolynomials);
+
+void writeVar_test(uint*, uint, uint);
+void print_bin(uint, uint);
+uint getFromVar_test(uint*, uint);
+ulong get3Vars_test (uint*, uint);
+void write3Vars_test(uint*, uint*, uint, uint);

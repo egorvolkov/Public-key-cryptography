@@ -11,7 +11,7 @@
  * 		Also you can set this parameter like an argument of execution the program. Parameter has more priority.
  */
 #define AMOUNT_OF_LOOP_ITERATIONS 10000
-#define PAUSE 10
+#define PAUSE 10000
 
 /**
  * AMOUNT_OF_VARIABLES - amount of variables; from 0 to infinity (in a theory)
@@ -30,11 +30,11 @@
  *   	You can use any meanings you want but our algorithm of module generation isn't perfect.
  * 		Some meanings can cause looping.
  */
-#define AMOUNT_OF_VARIABLES 2
-#define AMOUNT_OF_VAR_IN_LINE 2
-#define SIZE_OF_VARIABLE 7
+#define AMOUNT_OF_VARIABLES 21
+#define AMOUNT_OF_VAR_IN_LINE 3
+#define SIZE_OF_VARIABLE 62
 #define SIZE_OF_MODULE (SIZE_OF_VARIABLE + 1)
-#define MAS_SIZE 1
+#define MAS_SIZE 5
 
 /**
  * BYTES_FOR_AMOUNT_OF_MEMBER - this constant is for encoding a long number.
