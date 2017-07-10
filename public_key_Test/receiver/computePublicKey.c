@@ -1,6 +1,6 @@
 #include "receiver.h"
 
-extern const uchar size;
+extern const uint size;
 extern struct Module moduleStruct;
 
 uint bitsForVar;
@@ -11,7 +11,7 @@ extern FILE *output;
 
 void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, FullCubePolynomial *publicKey, ulong *constants) {
 	bitsForVar = bitsForVariable();
-	CubePolynomial bufferMatrix[MAX_TERMS];
+	CubePolynomial bufferMatrix[size];
 	cubeOfPolynomials(firstMatrix, bufferMatrix, constants);
 #ifdef PRINT
 	printf("Constants:\n");
@@ -117,7 +117,7 @@ void polynomialCube(ulong *polyn, CubePolynomial *bufferMatrix) {
 		cur++;
 	}
 
-	for (cur; cur < MAX_TERMS/AMOUNT_OF_VARIABLES; cur++) {
+	for (cur; cur < MAX_TERMS_IN_CUBE; cur++) {
 		bufferMatrix->factor[cur] = 0;
 		bufferMatrix->vars[cur] = 0;
 	}
@@ -128,7 +128,7 @@ void multToSecondMatrix(ulong *matrix, CubePolynomial *bufferMatrix, FullCubePol
 	for (uint i = 0; i < size; i++) {
 		cur = 0;
 		for (uint j = 0; j < size; j++) {
-			for (uint k = 0; k < MAX_TERMS/AMOUNT_OF_VARIABLES; k++) {
+			for (uint k = 0; k < MAX_TERMS_IN_CUBE; k++) {
 				if (bufferMatrix[j].factor[k] == 0) {
 					break;
 				}
@@ -141,12 +141,15 @@ void multToSecondMatrix(ulong *matrix, CubePolynomial *bufferMatrix, FullCubePol
 				}
 				if (p >= cur) {
 					publicKey[i].factor[cur] = modularMult(matrix[i*size + j], bufferMatrix[j].factor[k]);
+					if (publicKey[i].factor[cur] == 0) {
+						break;
+					}
 					publicKey[i].vars[cur] = bufferMatrix[j].vars[k];
 					cur++;
 				}
 			}
 		}
-		for (cur; cur < MAX_TERMS; cur++) {
+		for (cur; cur < MAX_TERMS_IN_KEY; cur++) {
 			publicKey[i].factor[cur] = 0;
 			publicKey[i].vars[cur] = 0;
 		}

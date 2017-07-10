@@ -1,14 +1,14 @@
 #include "myTime.h"
 
 
-double getTime() {
+/*double getTime() {
 	//#ifdef TIME
 	struct timespec t;
 	clock_gettime (CLOCK_MONOTONIC, &t);
 	return (double)t.tv_sec * 1000 + (double)t.tv_nsec / 1000000;
 	//#endif
 	//return 0;
-}
+}*/
 
 double timeRDTSC() {
 	//#ifdef TIME

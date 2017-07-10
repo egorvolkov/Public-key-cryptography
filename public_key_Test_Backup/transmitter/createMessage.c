@@ -1,6 +1,6 @@
 #include "transmitter.h"
 
-extern const uchar size;
+extern const uint size;
 
 void createMessage(ulong *message) {
 	FILE *fout = fopen(PATH_TO_MESSAGE, "w");

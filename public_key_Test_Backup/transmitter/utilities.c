@@ -1,7 +1,7 @@
 #include "transmitter.h"
 #include <sys/time.h>
 
-extern const uchar size;
+extern const uint size;
 
 // Static global for current file seed variable for correct work
 static ulong seed;

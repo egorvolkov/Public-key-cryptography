@@ -1,7 +1,7 @@
 #include "receiver.h"
 #include <sys/time.h>
 
-extern const uchar size;
+extern const uint size;
 extern struct Module moduleStruct;
 
 uchar inArray(ulong *arr, uint length, ulong element) {

@@ -1,6 +1,6 @@
 #include "receiver.h"
 
-extern const uchar size;
+extern const uint size;
 extern struct Module moduleStruct;
 
 void generateSecretKey(struct Matrices *matrices) {
@@ -265,7 +265,7 @@ void getRandTriangleMatrix(ulong *matrix, uchar dir,ulong lines) {
 }
 
 void generateFirstMatrices_rare(ulong *firstMatrix, ulong *firstInverseMatrix) {
-	const ulong N = AMOUNT_OF_VAR_IN_LINE, K = size / N;
+	const ulong N = AMOUNT_OF_VAR_IN_LINE_FIRST, K = size / N;
 	ulong A[K], B[N * N], inv_B[N * N];
 	do
 	{
@@ -286,7 +286,7 @@ void generateFirstMatrices_rare(ulong *firstMatrix, ulong *firstInverseMatrix) {
 }
 
 void generateSecondMatrices_rare(ulong *secondMatrix, ulong *secondInverseMatrix) {
-	const ulong N = AMOUNT_OF_VAR_IN_LINE, K = size / N;
+	const ulong N = AMOUNT_OF_VAR_IN_LINE_SECOND, K = size / N;
 	ulong A[K], B[N * N], inv_B[N * N];
 	for (ulong i = 0; i < K; i++) {
 		A[i] = getRandom(moduleStruct.module - 1) + 1;

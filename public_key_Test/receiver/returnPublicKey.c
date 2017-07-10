@@ -1,6 +1,6 @@
 #include "receiver.h"
 
-extern const uchar size;
+extern const uint size;
 extern struct Module moduleStruct;
 
 uint returnPublicKey(FullCubePolynomial *publicKey) {
@@ -15,10 +15,10 @@ uint returnPublicKey(FullCubePolynomial *publicKey) {
 	}
 
 	for (int i = 0; i < size; i++) {
-		for (int j = 0; j < MAX_TERMS; j++) {
+		for (int j = 0; j < MAX_TERMS_IN_KEY; j++) {
 			fwrite(&publicKey[i].factor[j], 8, 1, fout);
 		}
-		for (int j = 0; j < MAX_TERMS; j++) {
+		for (int j = 0; j < MAX_TERMS_IN_KEY; j++) {
 			fwrite(&publicKey[i].vars[j], 4, 1, fout);
 		}
 	}

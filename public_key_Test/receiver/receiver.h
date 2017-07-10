@@ -12,7 +12,8 @@
 #define AMOUNT_OF_MEMBERS (AMOUNT_OF_VARIABLES * (AMOUNT_OF_VARIABLES + 1) * (AMOUNT_OF_VARIABLES + 2) / 6)
 #define SIZE_OF_LONG_NUMBER ((SIZE_OF_MODULE + 3*SIZE_OF_VARIABLE + 7) / 8)
 #define LENGTH_OF_ENCODED_NUMBER (SIZE_OF_LONG_NUMBER + BYTES_FOR_AMOUNT_OF_MEMBER)
-#define MAX_TERMS (AMOUNT_OF_VARIABLES * (AMOUNT_OF_VAR_IN_LINE + 1) * (AMOUNT_OF_VAR_IN_LINE + 2) * (AMOUNT_OF_VAR_IN_LINE + 3) / 6)
+#define MAX_TERMS_IN_CUBE ((AMOUNT_OF_VAR_IN_LINE_FIRST + 1) * (AMOUNT_OF_VAR_IN_LINE_FIRST + 2) * (AMOUNT_OF_VAR_IN_LINE_FIRST + 3) / 6)
+#define MAX_TERMS_IN_KEY (AMOUNT_OF_VAR_IN_LINE_SECOND * MAX_TERMS_IN_CUBE)
 
 #define PATH_TO_PUBLIC_KEY "channel/public_key"
 #define PATH_TO_THE_FIRST_FLAG "channel/flag1"
@@ -45,13 +46,13 @@ struct Matrices {
 };
 
 typedef struct CubePolynomial {
-	ulong factor[MAX_TERMS / AMOUNT_OF_VARIABLES];
-	uint vars[MAX_TERMS / AMOUNT_OF_VARIABLES];
+	ulong factor[MAX_TERMS_IN_CUBE];
+	uint vars[MAX_TERMS_IN_CUBE];
 } CubePolynomial;
 
 typedef struct FullCubePolynomial {
-	ulong factor[MAX_TERMS];
-	uint vars[MAX_TERMS];
+	ulong factor[MAX_TERMS_IN_KEY];
+	uint vars[MAX_TERMS_IN_KEY];
 } FullCubePolynomial;
 
 void generateSecretKey(struct Matrices *matrices);
@@ -124,8 +125,8 @@ ulong euler(ulong n);
 ulong gcd(ulong a, ulong b);
 
 #ifdef PRINT
-void printMatrix(ulong *matrix, uchar size1, uchar size2);
-void fPrintMatrix(ulong *matrix, uchar size1, uchar size2);
+void printMatrix(ulong *matrix, uint size1, uint size2);
+void fPrintMatrix(ulong *matrix, uint size1, uint size2);
 #endif
 
 void writeToVar(uint *var, uint number, uint pos);

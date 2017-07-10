@@ -1,6 +1,6 @@
 #include "transmitter.h"
 
-extern const uchar size;
+extern const uint size;
 
 uint returnEncodedMessage(uchar *encodedMessage) {
 	FILE* fout;

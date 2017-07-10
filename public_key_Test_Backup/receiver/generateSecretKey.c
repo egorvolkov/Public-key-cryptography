@@ -1,12 +1,13 @@
 #include "receiver.h"
 
-extern const uchar size;
+extern const uint size;
 extern struct Module moduleStruct;
 
 void generateSecretKey(struct Matrices *matrices) {
 	generateModule();
 	generateFirstMatrices_rare(matrices->firstMatrix, matrices->firstInverseMatrix);
-	generateSecondMatrices(matrices->secondMatrix, matrices->secondInverseMatrix);
+	generateSecondMatrices_rare(matrices->secondMatrix, matrices->secondInverseMatrix);
+	generateConstants(matrices->constants);
 }
 
 void generateModule() {
@@ -116,6 +117,12 @@ void generateModule() {
 	computePartsOfModule();
 }
 
+void generateConstants(ulong *constants){
+	for (uint i = 0; i < size; i++) {
+		constants[i] = getRandom(moduleStruct.module);
+	}
+}
+
 // int canCreate(int n, ulong min, ulong max) {
 // 	int downLine = MODULES/3;
 // 	int upLine = MODULES - MODULES/3;
@@ -141,21 +148,21 @@ void computePartsOfModule() {
 	}
 }
 
-void generateFirstMatrices(ulong *firstMatrix, ulong *firstInverseMatrix) {
-	ulong matrixUp[size * size];
-	ulong matrixDown[size * size];
+void generateFirstMatrices(ulong *firstMatrix, ulong *firstInverseMatrix, ulong lines) {
+	ulong matrixUp[lines * lines];
+	ulong matrixDown[lines * lines];
 
 	ulong h = 1;
 	//ulong det = 1;
 
 	while (h) {
 		h = 0; //det = 1;
-		getRandTriangleMatrix(matrixDown, 0);
-		getRandTriangleMatrix(matrixUp, 1);
-		modularMatrixMult(matrixDown, matrixUp, firstMatrix);
-		for (int i = 0; i < size; i++) {
-			for (int j = 0; j < size; j++) {
-				if (!cube(firstMatrix[i * size + j])) {
+		getRandTriangleMatrix(matrixDown, 0, lines);
+		getRandTriangleMatrix(matrixUp, 1, lines);
+		modularMatrixMult(matrixDown, matrixUp, firstMatrix, lines);
+		for (int i = 0; i < lines; i++) {
+			for (int j = 0; j < lines; j++) {
+				if (!cube(firstMatrix[i * lines + j])) {
 					h++;
 				}
 			}
@@ -163,68 +170,49 @@ void generateFirstMatrices(ulong *firstMatrix, ulong *firstInverseMatrix) {
 		if (h) {
 			continue;
 		}
-		// for (int i = 0; i < size; i++) {
-		// 	det = modularMult(det, matrixUp[i * size + i]);
-		// }
-		// if ((det == 0) || (gcd(det, moduleStruct.module) != 1)) {
-		// 	h++;
-		// }
 	}
-
-	computeInverseMatrix(matrixDown, matrixUp, firstInverseMatrix);
+	computeInverseMatrix(matrixDown, matrixUp, firstInverseMatrix,lines);
 }
 
-void generateSecondMatrices(ulong *secondMatrix, ulong *secondInverseMatrix) {
-	ulong matrixUp[size * size];
-	ulong matrixDown[size * size];
+void generateSecondMatrices(ulong *secondMatrix, ulong *secondInverseMatrix, ulong lines) {
+	ulong matrixUp[lines * lines];
+	ulong matrixDown[lines * lines];
 
-	ulong h = 1;
-	//ulong det = 1;
+	getRandTriangleMatrix(matrixDown, 0, lines);
+	getRandTriangleMatrix(matrixUp, 1, lines);
+	modularMatrixMult(matrixDown, matrixUp, secondMatrix, lines);
 
-	while (h) {
-		h = 0;// det = 1;
-		getRandTriangleMatrix(matrixDown, 0);
-		getRandTriangleMatrix(matrixUp, 1);
-		modularMatrixMult(matrixDown, matrixUp, secondMatrix);
-		// for (i = 0; i < size; i++) {
-		// 	det = modularMult(det, matrixUp[i * size + i]);
-		// }
-		// if ((det == 0) || (gcd(det, moduleStruct.module) != 1)) {
-		// 	h++;
-		// }
-	}
-
-	computeInverseMatrix(matrixDown, matrixUp, secondInverseMatrix);
+	computeInverseMatrix(matrixDown, matrixUp, secondInverseMatrix, lines);
 }
 
-void computeInverseMatrix(ulong *matrixDown, ulong *matrixUp, ulong *inverseMatrix) {
+void computeInverseMatrix(ulong *matrixDown, ulong *matrixUp, ulong *inverseMatrix, ulong lines) {
 	ulong sum;
-	for (int i = size - 1; i >= 0; i--) {
-		for (int j = size - 1; j >= 0; j--) {
+	for (int i = lines - 1; i >= 0; i--) {
+		for (int j = lines - 1; j >= 0; j--) {
 			sum = 0;
 			if (i == j) {
-				for (int k = j + 1; k < size; k++) {
-					sum = modularAdd(sum, modularMult(matrixUp[i * size + k], inverseMatrix[k * size + i]));
+				for (int k = j + 1; k < lines; k++) {
+					sum = modularAdd(sum, modularMult(matrixUp[i * lines + k], inverseMatrix[k * lines + i]));
 				}
-				inverseMatrix[i * size + i] = modularDiv(modularSub(1, sum), matrixUp[i * size + i]);
+				inverseMatrix[i * lines + i] = modularDiv(modularSub(1, sum), matrixUp[i * lines + i]);
 			}
 			else if (i < j) {
-				for (int k = i + 1; k < size; k++) {
-					sum = modularAdd(sum, modularMult(matrixUp[i * size + k], inverseMatrix[k * size + j]));
+				for (int k = i + 1; k < lines; k++) {
+					sum = modularAdd(sum, modularMult(matrixUp[i * lines + k], inverseMatrix[k * lines + j]));
 				}
-				inverseMatrix[i * size + j] = modularDiv(modularSub(0, sum), matrixUp[i * size + i]);
+				inverseMatrix[i * lines + j] = modularDiv(modularSub(0, sum), matrixUp[i * lines + i]);
 			}
 			else {
-				for (int k = j + 1; k < size; k++) {
-					sum = modularAdd(sum, modularMult(matrixDown[k * size + j], inverseMatrix[i * size + k]));
+				for (int k = j + 1; k < lines; k++) {
+					sum = modularAdd(sum, modularMult(matrixDown[k * lines + j], inverseMatrix[i * lines + k]));
 				}
-				inverseMatrix[i * size + j] = modularSub(0, sum);
+				inverseMatrix[i * lines + j] = modularSub(0, sum);
 			}
 		}
 	}
 }
 
-void getRandTriangleMatrix(ulong *matrix, uchar dir) {
+void getRandTriangleMatrix(ulong *matrix, uchar dir,ulong lines) {
 	// Locale variables declaration
 	ulong temp;
 	ulong mult = 1;
@@ -233,31 +221,31 @@ void getRandTriangleMatrix(ulong *matrix, uchar dir) {
 	// Fill TOP triangle (some trash)
 	if (dir)
 	{
-		for (int i = 0; i < size; i++) {
+		for (int i = 0; i < lines; i++) {
 			for (int j = 0; j < i; j++) {
-				matrix[i * size + j] = 0;
+				matrix[i * lines + j] = 0;
 			}
-			for (int j = i + 1; j < size; j++) {
-				matrix[i * size + j] = getRandom(moduleStruct.module);
+			for (int j = i + 1; j < lines; j++) {
+				matrix[i * lines + j] = getRandom(moduleStruct.module);
 			}
 		}
 	}
 	// Fill DOWN triangle (some trash)
 	else {
-		for (int i = 0; i < size; i++) {
+		for (int i = 0; i < lines; i++) {
 			for (int j = 0; j < i; j++) {
-				matrix[i * size + j] = getRandom(moduleStruct.module);
+				matrix[i * lines + j] = getRandom(moduleStruct.module);
 			}
-			for (int j = i + 1; j < size; j++) {
-				matrix[i * size + j] = 0;
+			for (int j = i + 1; j < lines; j++) {
+				matrix[i * lines + j] = 0;
 			}
 		}
 	}
 
 	// Fill diagonal right numbers
-	for (int i = 0; i < size; i++) {
+	for (int i = 0; i < lines; i++) {
 		if (!dir) {
-			matrix[i * size + i] = 1;
+			matrix[i * lines + i] = 1;
 		}
 		else {
 			temp = getRandom(moduleStruct.module - 1) + 1;    // exclude zero
@@ -270,103 +258,68 @@ void getRandTriangleMatrix(ulong *matrix, uchar dir) {
 			}
 
 			mult = preMult;
-			matrix[i * size + i] = temp;
+			matrix[i * lines + i] = temp;
 		}
 	}
 	return;
 }
 
 void generateFirstMatrices_rare(ulong *firstMatrix, ulong *firstInverseMatrix) {
-	const ulong N = AMOUNT_OF_VAR_IN_LINE, K = size / N;
+	const ulong N = AMOUNT_OF_VAR_IN_LINE_FIRST, K = size / N;
 	ulong A[K], B[N * N], inv_B[N * N];
-	ulong det = 1, temp_det = 0;
+	do
+	{
+		for (ulong i = 0; i < K; i++) {
+			A[i] = getRandom(moduleStruct.module - 1) + 1;
+			while (gcd(A[i], moduleStruct.module) != 1) {
+				A[i] = getRandom(moduleStruct.module - 1) + 1;
+			}
+		}
+		generateSecondMatrices(B,inv_B,N);
+	}
+	while (tenzorMult(A, B, firstMatrix, N, 1));
+	for (ulong i = 0; i < K; i++) {
+		A[i] = modularDiv(1, A[i]);
+	}
+	tenzorMult(A, inv_B, firstInverseMatrix, N, 0);
+	shake(firstMatrix, firstInverseMatrix, size, size);
+}
+
+void generateSecondMatrices_rare(ulong *secondMatrix, ulong *secondInverseMatrix) {
+	const ulong N = AMOUNT_OF_VAR_IN_LINE_SECOND, K = size / N;
+	ulong A[K], B[N * N], inv_B[N * N];
 	for (ulong i = 0; i < K; i++) {
 		A[i] = getRandom(moduleStruct.module - 1) + 1;
 		while (gcd(A[i], moduleStruct.module) != 1) {
 			A[i] = getRandom(moduleStruct.module - 1) + 1;
 		}
-		det *= A[i];
 	}
-	det = modularDeg(det, N);
-	do {
-		for (ulong i = 0; i < N * N; i++) {
-			B[i] = getRandom(moduleStruct.module - 1) + 1;
-		}
-		temp_det = determinant(B, N);
-	} while (gcd(temp_det, moduleStruct.module) != 1);
-	ulong /*result[P * P], invert_result[P * P],*/ mult[size * size];
-	commonComputeInverseMatrix(B, inv_B, N, temp_det);
-	tenzorMult(A, B, firstMatrix, N);
+	generateSecondMatrices(B,inv_B,N);
+	tenzorMult(A, B, secondMatrix, N, 0);
 	for (ulong i = 0; i < K; i++) {
 		A[i] = modularDiv(1, A[i]);
 	}
-	tenzorMult(A, inv_B, firstInverseMatrix, N);
-	shake(firstMatrix, firstInverseMatrix, size, size);
-	// modularMatrixMult(firstMatrix, firstInverseMatrix, mult);
-	// printMatrix(firstMatrix, size, size);
-	// printMatrix(firstInverseMatrix, size, size);
-	// printMatrix(mult, size, size);
+	tenzorMult(A, inv_B, secondInverseMatrix, N, 0);
+	shake(secondMatrix, secondInverseMatrix, size, size);
 }
 
-ulong determinant(ulong *matrix, ulong size) {
-	if (size == 1) {
-		return matrix[0];
-	}
-	if (size == 2) {
-		return modularSub(modularMult(matrix[0], matrix[3]), modularMult(matrix[1], matrix[2]));
-	}
-	else {
-		ulong i, j = 0, k;
-		long long r = 1;
-		ulong m = 0;
-		ulong *b = (ulong*)calloc(size * size, sizeof(ulong));  // Убрать динамику
-		for (i = 0; i < size; i++) {
-			if (matrix[i] != 0) {
-				k = 0;
-				for (j = size; j < size * size; j++) {
-					if (j % size != i) {
-						b[k] = matrix[j];
-						k++;
-					}
-				}
-				if (r > 0) {
-					m = modularAdd(m, modularMult(determinant(b, size - 1), matrix[i]));
-				}
-				else {
-					m = modularSub(m, modularMult(determinant(b, size - 1), matrix[i]));
+uchar tenzorMult(ulong *A, ulong *B, ulong *result, ulong N, uchar check) {
+	if (check){
+		for (ulong i = 0; i < size; i++) {
+			for ( ulong j = 0; j < size; j++) {
+				result[i * size + j] = (i / N == j / N) ? modularMult(A[i / N] , B[(i % N)*N + (j % N)]) : 0;
+				if (!cube(result[i * size + j]) && (i / N == j / N)){
+					return 1;
 				}
 			}
-			r = -1 * r;
 		}
-		free(b);
-		return m;
+		return 0;
 	}
-}
-
-void commonComputeInverseMatrix(ulong *inmatrix, ulong* outmatrix, ulong size, ulong det) {
-	ulong z = modularDiv(1, det);
-	ulong i = 0, j = 0, k = 0, p, n;
-	ulong *b = (ulong*)calloc(size * size, sizeof(ulong));
-	for (i = 0; i < size * size; i++) {
-		k = 0;
-		for (j = 0; j < size * size; j++) {
-			if (((j % size) != (i % size)) && ((j / size) != (i / size))) {
-				b[k] = inmatrix[j];
-				k++;
+	else{
+		for (ulong i = 0; i < size; i++) {
+			for ( ulong j = 0; j < size; j++) {
+				result[i * size + j] = (i / N == j / N) ? modularMult(A[i / N] , B[(i % N)*N + (j % N)]) : 0;
 			}
-		}
-		outmatrix[(i % size)*size + (i / size)] = modularMult(determinant(b, size - 1), z);
-		if (((i / size) + i % size) % 2 == 1) {
-			outmatrix[(i % size)*size + (i / size)] = modularSub(0, outmatrix[(i % size) * size + (i / size)]);
-		}
-	}
-	return;
-}
-
-void tenzorMult(ulong *A, ulong *B, ulong *result, ulong N) {
-	for (ulong i = 0; i < size; i++) {
-		for ( ulong j = 0; j < size; j++) {
-			result[i * size + j] = (i / N == j / N) ? modularMult(A[i / N] , B[(i % N)*N + (j % N)]) : 0;
 		}
 	}
 }

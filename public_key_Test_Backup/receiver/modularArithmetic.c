@@ -1,6 +1,6 @@
 #include "receiver.h"
 
-extern const uchar size;
+extern const uint size;
 extern struct Module moduleStruct;
 
 /**
@@ -85,13 +85,13 @@ ulong modularInverseMult(ulong a)
 	return modularDeg(a, euler(moduleStruct.module) - 1);
 }
 
-void modularMatrixMult(ulong *mat1, ulong *mat2, ulong *result) {
+void modularMatrixMult(ulong *mat1, ulong *mat2, ulong *result, ulong lines) {
 	ulong i, j, k;
-	for (i = 0; i < size; i++) {
-		for (k = 0; k < size; k++) {
-			result[i * size + k] = 0;
-			for (j = 0; j < size; j++) {
-				result[i * size + k] = modularAdd(result[i * size + k], modularMult(mat1[i * size + j], mat2[j * size + k]));
+	for (i = 0; i < lines; i++) {
+		for (k = 0; k < lines; k++) {
+			result[i * lines + k] = 0;
+			for (j = 0; j < lines; j++) {
+				result[i * lines + k] = modularAdd(result[i * lines + k], modularMult(mat1[i * lines + j], mat2[j * lines + k]));
 			}
 		}
 	}

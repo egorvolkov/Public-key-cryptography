@@ -1,6 +1,6 @@
 #include "transmitter.h"
 
-extern const uchar size;
+extern const uint size;
 
 void getPublicKey(FullCubePolynomial *publicKey) {
 	FILE* fin = NULL;
@@ -20,10 +20,10 @@ void getPublicKey(FullCubePolynomial *publicKey) {
 	}
 
 	for (int i = 0; i < size; i++) {
-		for (int j = 0; j < MAX_TERMS; j++) {
+		for (int j = 0; j < MAX_TERMS_IN_KEY; j++) {
 			fread(&publicKey[i].factor[j], 8, 1, fin);
 		}
-		for (int j = 0; j < MAX_TERMS; j++) {
+		for (int j = 0; j < MAX_TERMS_IN_KEY; j++) {
 			fread(&publicKey[i].vars[j], 4, 1, fin);
 		}
 	}

@@ -6,7 +6,7 @@ void printMatrix(ulong *matrix, uchar size1, uchar size2);
 /**
  *	Main block
  */
-const uchar size = AMOUNT_OF_VARIABLES;
+const uint size = AMOUNT_OF_VARIABLES;
 uint bitsForVar;
 
 int main(int argc, char* argv[]) {
@@ -72,7 +72,7 @@ void printMatrix(ulong *matrix, uchar size1, uchar size2) {
 
 void printFullCubePolynomials(FullCubePolynomial *cubePolynomials) {
 	for (int i = 0; i < size; i++) {
-		for (int j = 0; j < MAX_TERMS; j++) {
+		for (int j = 0; j < MAX_TERMS_IN_KEY; j++) {
 			if (cubePolynomials[i].factor[j] == 0) {
 				break;
 			}

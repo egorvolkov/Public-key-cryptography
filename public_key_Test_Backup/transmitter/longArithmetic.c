@@ -1,6 +1,6 @@
 #include "transmitter.h"
 
-extern const uchar size;
+extern const uint size;
 
 void longAdd(uchar *a, uchar *b, uchar *result) {
 	int overflow = 0;

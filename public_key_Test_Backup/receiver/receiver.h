@@ -12,7 +12,8 @@
 #define AMOUNT_OF_MEMBERS (AMOUNT_OF_VARIABLES * (AMOUNT_OF_VARIABLES + 1) * (AMOUNT_OF_VARIABLES + 2) / 6)
 #define SIZE_OF_LONG_NUMBER ((SIZE_OF_MODULE + 3*SIZE_OF_VARIABLE + 7) / 8)
 #define LENGTH_OF_ENCODED_NUMBER (SIZE_OF_LONG_NUMBER + BYTES_FOR_AMOUNT_OF_MEMBER)
-#define MAX_TERMS (AMOUNT_OF_VARIABLES * AMOUNT_OF_VAR_IN_LINE * (AMOUNT_OF_VAR_IN_LINE + 1) * (AMOUNT_OF_VAR_IN_LINE + 2) / 6)
+#define MAX_TERMS_IN_CUBE ((AMOUNT_OF_VAR_IN_LINE_FIRST + 1) * (AMOUNT_OF_VAR_IN_LINE_FIRST + 2) * (AMOUNT_OF_VAR_IN_LINE_FIRST + 3) / 6)
+#define MAX_TERMS_IN_KEY (AMOUNT_OF_VAR_IN_LINE_SECOND * MAX_TERMS_IN_CUBE)
 
 #define PATH_TO_PUBLIC_KEY "channel/public_key"
 #define PATH_TO_THE_FIRST_FLAG "channel/flag1"
@@ -41,35 +42,41 @@ struct Matrices {
 	ulong firstInverseMatrix[AMOUNT_OF_VARIABLES * AMOUNT_OF_VARIABLES];
 	ulong secondMatrix[AMOUNT_OF_VARIABLES * AMOUNT_OF_VARIABLES];
 	ulong secondInverseMatrix[AMOUNT_OF_VARIABLES * AMOUNT_OF_VARIABLES];
+	ulong constants[AMOUNT_OF_VARIABLES];
 };
 
 typedef struct CubePolynomial {
-	ulong factor[MAX_TERMS / AMOUNT_OF_VARIABLES];
-	uint vars[MAX_TERMS / AMOUNT_OF_VARIABLES];
+	ulong factor[MAX_TERMS_IN_CUBE];
+	uint vars[MAX_TERMS_IN_CUBE];
 } CubePolynomial;
 
 typedef struct FullCubePolynomial {
-	ulong factor[MAX_TERMS];
-	uint vars[MAX_TERMS];
+	ulong factor[MAX_TERMS_IN_KEY];
+	uint vars[MAX_TERMS_IN_KEY];
 } FullCubePolynomial;
 
 void generateSecretKey(struct Matrices *matrices);
 void generateModule();
 void computePartsOfModule();
-void generateFirstMatrices(ulong *firstMatrix, ulong *firstInverseMatrix);
-void generateSecondMatrices(ulong *secondMatrix, ulong *secondInverseMatrix);
-void computeInverseMatrix(ulong *matrixDown, ulong *matrixUp, ulong *inverseMatrix);
-void getRandTriangleMatrix(ulong *matrix, uchar dir);
+
+void generateFirstMatrices(ulong *firstMatrix, ulong *firstInverseMatrix, ulong lines);
+void generateSecondMatrices(ulong *secondMatrix, ulong *secondInverseMatrix, ulong lines);
+void computeInverseMatrix(ulong *matrixDown, ulong *matrixUp, ulong *inverseMatrix, ulong lines);
+void getRandTriangleMatrix(ulong *matrix, uchar dir, ulong lines);
 
 void generateFirstMatrices_rare(ulong *firstMatrix, ulong *firstInverseMatrix);
+void generateSecondMatrices_rare(ulong *secondMatrix, ulong *secondInverseMatrix);
 ulong determinant(ulong *matrix, ulong size);
 void commonComputeInverseMatrix(ulong *inmatrix, ulong* outmatrix, ulong size, ulong det);
-void tenzorMult(ulong *A, ulong *B, ulong *result, ulong N);
+uchar tenzorMult(ulong *A, ulong *B, ulong *result, ulong N, uchar check);
 void swap(ulong *line1, ulong *line2, ulong length);
 void shake(ulong *matrix, ulong *invert_matrix, ulong lines, ulong columns);
 
-void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, FullCubePolynomial *publicKey);
-void cubeOfPolynomials(ulong *matrix, CubePolynomial bufferMatrix[]);
+void generateConstants(ulong *constants);
+
+
+void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, FullCubePolynomial *publicKey, ulong *constans);
+void cubeOfPolynomials(ulong *matrix, CubePolynomial bufferMatrix[], ulong *constants);
 void polynomialCube(ulong *polyn, CubePolynomial *bufferPolyn);
 void multToSecondMatrix(ulong *matrix, CubePolynomial *bufferMatrix, FullCubePolynomial *publicKey);
 
@@ -77,7 +84,7 @@ uint returnPublicKey(FullCubePolynomial *publicKey);
 void transmitterConnection();
 void getEncodedMessage(ulong *encodedOrRealMessage);
 
-void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *encodedOrRealMessage);
+void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *encodedOrRealMessage, ulong *constants);
 
 uchar inArray(ulong *arr, uint length, ulong element);
 uint getModules(uint index);
@@ -96,7 +103,7 @@ ulong modularMult(ulong a, ulong b);
 ulong modularDeg(ulong a, ulong b);
 ulong modularInverseAdd(ulong a);
 ulong modularInverseMult(ulong a);
-void modularMatrixMult(ulong *mat1, ulong *mat2, ulong *result);
+void modularMatrixMult(ulong *mat1, ulong *mat2, ulong *result, ulong lines);
 
 /**
  *	This block for operations with an any module
@@ -118,8 +125,8 @@ ulong euler(ulong n);
 ulong gcd(ulong a, ulong b);
 
 #ifdef PRINT
-void printMatrix(ulong *matrix, uchar size1, uchar size2);
-void fPrintMatrix(ulong *matrix, uchar size1, uchar size2);
+void printMatrix(ulong *matrix, uint size1, uint size2);
+void fPrintMatrix(ulong *matrix, uint size1, uint size2);
 #endif
 
 void writeToVar(uint *var, uint number, uint pos);

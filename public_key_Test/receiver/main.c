@@ -3,7 +3,7 @@
 /**
  *	Main block
  */
-const uchar size = AMOUNT_OF_VARIABLES;
+const uint size = AMOUNT_OF_VARIABLES;
 struct Module moduleStruct = {1, MAS_SIZE};
 
 #ifdef PRINT
@@ -169,7 +169,7 @@ int main(int argc, char* argv[]) {
 }
 
 #ifdef PRINT
-void printMatrix(ulong *matrix, uchar size1, uchar size2) {
+void printMatrix(ulong *matrix, uint size1, uint size2) {
 	for (int i = 0; i < size1; i++) {
 		for (int j = 0; j < size2; j++) {
 			printf("%llu ", matrix[i * size2 + j]);
@@ -177,7 +177,7 @@ void printMatrix(ulong *matrix, uchar size1, uchar size2) {
 		printf("\n");
 	}
 }
-void fPrintMatrix(ulong *matrix, uchar size1, uchar size2) {
+void fPrintMatrix(ulong *matrix, uint size1, uint size2) {
 	for (int i = 0; i < size1; i++) {
 		for (int j = 0; j < size2; j++) {
 			fprintf(output, "%llu ", matrix[i * size2 + j]);
@@ -188,7 +188,7 @@ void fPrintMatrix(ulong *matrix, uchar size1, uchar size2) {
 
 void printCubePolynomials(CubePolynomial *cubePolynomials) {
 	for (int i = 0; i < size; i++) {
-		for (int j = 0; j < MAX_TERMS/AMOUNT_OF_VARIABLES; j++) {
+		for (int j = 0; j < MAX_TERMS_IN_CUBE; j++) {
 			if (cubePolynomials[i].factor[j] == 0) {
 				break;
 			}
@@ -205,7 +205,7 @@ void printCubePolynomials(CubePolynomial *cubePolynomials) {
 }
 void fPrintCubePolynomials(CubePolynomial *cubePolynomials) {
 	for (int i = 0; i < size; i++) {
-		for (int j = 0; j < MAX_TERMS/AMOUNT_OF_VARIABLES; j++) {
+		for (int j = 0; j < MAX_TERMS_IN_CUBE; j++) {
 			if (cubePolynomials[i].factor[j] == 0) {
 				break;
 			}
@@ -223,7 +223,7 @@ void fPrintCubePolynomials(CubePolynomial *cubePolynomials) {
 
 void printFullCubePolynomials(FullCubePolynomial *cubePolynomials) {
 	for (int i = 0; i < size; i++) {
-		for (int j = 0; j < MAX_TERMS; j++) {
+		for (int j = 0; j < MAX_TERMS_IN_KEY; j++) {
 			if (cubePolynomials[i].factor[j] == 0) {
 				break;
 			}
@@ -240,7 +240,7 @@ void printFullCubePolynomials(FullCubePolynomial *cubePolynomials) {
 }
 void fPrintFullCubePolynomials(FullCubePolynomial *cubePolynomials) {
 	for (int i = 0; i < size; i++) {
-		for (int j = 0; j < MAX_TERMS; j++) {
+		for (int j = 0; j < MAX_TERMS_IN_KEY; j++) {
 			if (cubePolynomials[i].factor[j] == 0) {
 				break;
 			}
