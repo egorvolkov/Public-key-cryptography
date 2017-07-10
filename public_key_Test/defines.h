@@ -30,9 +30,9 @@
  *   	You can use any meanings you want but our algorithm of module generation isn't perfect.
  * 		Some meanings can cause looping.
  */
-#define AMOUNT_OF_VARIABLES 40
-#define AMOUNT_OF_VAR_IN_LINE 8
-#define SIZE_OF_VARIABLE 10
+#define AMOUNT_OF_VARIABLES 2
+#define AMOUNT_OF_VAR_IN_LINE 2
+#define SIZE_OF_VARIABLE 7
 #define SIZE_OF_MODULE (SIZE_OF_VARIABLE + 1)
 #define MAS_SIZE 1
 

@@ -11,7 +11,7 @@ extern FILE *output;
 
 void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, FullCubePolynomial *publicKey, ulong *constants) {
 	bitsForVar = bitsForVariable();
-	CubePolynomial bufferMatrix[MAX_TERMS / AMOUNT_OF_VARIABLES];
+	CubePolynomial bufferMatrix[MAX_TERMS];
 	cubeOfPolynomials(firstMatrix, bufferMatrix, constants);
 #ifdef PRINT
 	printf("Constants:\n");
