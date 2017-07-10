@@ -197,7 +197,7 @@ void printCubePolynomials(CubePolynomial *cubePolynomials) {
 			}
 			printf("%llu", cubePolynomials[i].factor[j]);
 			for (int k = 0; k < 3; k++) {
-				printf("*x%u", getFromVar(cubePolynomials[i].vars[j], k));
+				printf("*x%u", getFromVar_test(cubePolynomials[i].vars, (3 * j) + k));
 			}
 		}
 		printf("\n");
@@ -214,7 +214,7 @@ void fPrintCubePolynomials(CubePolynomial *cubePolynomials) {
 			}
 			fprintf(output, "%llu", cubePolynomials[i].factor[j]);
 			for (int k = 0; k < 3; k++) {
-				fprintf(output, "*x%lu", getFromVar(cubePolynomials[i].vars[j], k));
+				fprintf(output, "*x%lu", getFromVar_test(cubePolynomials[i].vars, (3 * j) + k));
 			}
 		}
 		fprintf(output, "\n");
@@ -232,7 +232,7 @@ void printFullCubePolynomials(FullCubePolynomial *cubePolynomials) {
 			}
 			printf("%llu", cubePolynomials[i].factor[j]);
 			for (int k = 0; k < 3; k++) {
-				printf("*x%lu", getFromVar(cubePolynomials[i].vars[j], k));
+				printf("*x%lu", getFromVar_test(cubePolynomials[i].vars, (3 * j) + k));
 			}
 		}
 		printf("\n");
@@ -249,7 +249,7 @@ void fPrintFullCubePolynomials(FullCubePolynomial *cubePolynomials) {
 			}
 			fprintf(output, "%llu", cubePolynomials[i].factor[j]);
 			for (int k = 0; k < 3; k++) {
-				fprintf(output, "*x%u", getFromVar(cubePolynomials[i].vars[j], k));
+				fprintf(output, "*x%u", getFromVar_test(cubePolynomials[i].vars, (3 * j) + k));
 			}
 		}
 		fprintf(output, "\n");

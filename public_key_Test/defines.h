@@ -35,7 +35,7 @@
 #define AMOUNT_OF_VAR_IN_LINE_SECOND 2
 #define SIZE_OF_VARIABLE 7
 #define SIZE_OF_MODULE (SIZE_OF_VARIABLE + 1)
-#define MAS_SIZE 1
+#define MAS_SIZE 5
 
 /**
  * BYTES_FOR_AMOUNT_OF_MEMBER - this constant is for encoding a long number.
