@@ -3,14 +3,11 @@
 extern const uint size;
 extern struct Module moduleStruct;
 
-uint bitsForVar;
-
 #ifdef PRINT
 extern FILE *output;
 #endif
 
 void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, FullCubePolynomial *publicKey, ulong *constants) {
-	bitsForVar = bitsForVariable();
 	CubePolynomial bufferMatrix[size];
 	cubeOfPolynomials(firstMatrix, bufferMatrix, constants);
 #ifdef PRINT
@@ -43,7 +40,10 @@ void cubeOfPolynomials(ulong *matrix, CubePolynomial bufferMatrix[], ulong *cons
 void polynomialCube(ulong *polyn, CubePolynomial *bufferMatrix) {
 	uint cur = 0;
 	ulong bufferFactor;
-	//for(uint i = 0; i < size; i++) bufferMatrix->vars[i] = 0;
+
+	for (uint i = 0; i < MAX_VARS_IN_CUBE; i++) {
+		bufferMatrix->vars[i] = 0;
+	}
 
 	for (uint i = 0; i < size; i++) {
 		bufferFactor = modularDeg(polyn[i], 3);
@@ -51,7 +51,7 @@ void polynomialCube(ulong *polyn, CubePolynomial *bufferMatrix) {
 			continue;
 		}
 		bufferMatrix->factor[cur] = bufferFactor;
-		bufferMatrix->vars[cur] = 0;
+		//bufferMatrix->vars[cur] = 0;
 		for (uint j = 0; j < 3; j++) {
 			writeVar_test(bufferMatrix->vars, i + 1, (3 * cur) + j);
 		}
@@ -67,7 +67,7 @@ void polynomialCube(ulong *polyn, CubePolynomial *bufferMatrix) {
 				continue;
 			}
 			bufferMatrix->factor[cur] = bufferFactor;
-			bufferMatrix->vars[cur] = 0;
+			//bufferMatrix->vars[cur] = 0;
 			for (uint k = 0; k < 2; k++) {
 				writeVar_test(bufferMatrix->vars, i + 1, (3 * cur) + k);
 			}
@@ -84,7 +84,7 @@ void polynomialCube(ulong *polyn, CubePolynomial *bufferMatrix) {
 					continue;
 				}
 				bufferMatrix->factor[cur] = bufferFactor;
-				bufferMatrix->vars[cur] = 0;
+				//bufferMatrix->vars[cur] = 0;
 				writeVar_test(bufferMatrix->vars, i + 1, (3 * cur) + 0);
 				writeVar_test(bufferMatrix->vars, j + 1, (3 * cur) + 1);
 				writeVar_test(bufferMatrix->vars, k + 1, (3 * cur) + 2);
@@ -100,7 +100,7 @@ void polynomialCube(ulong *polyn, CubePolynomial *bufferMatrix) {
 				continue;
 			}
 			bufferMatrix->factor[cur] = bufferFactor;
-			bufferMatrix->vars[cur] = 0;
+			//bufferMatrix->vars[cur] = 0;
 			writeVar_test(bufferMatrix->vars, i + 1, (3 * cur) + 0);
 			writeVar_test(bufferMatrix->vars, j + 1, (3 * cur) + 1);
 			cur++;
@@ -113,19 +113,24 @@ void polynomialCube(ulong *polyn, CubePolynomial *bufferMatrix) {
 			continue;
 		}
 		bufferMatrix->factor[cur] = bufferFactor;
-		bufferMatrix->vars[cur] = 0;
+		//bufferMatrix->vars[cur] = 0;
 		writeVar_test(bufferMatrix->vars, i + 1, (3 * cur) + 0);
 		cur++;
 	}
 
 	for (cur; cur < MAX_TERMS_IN_CUBE; cur++) {
 		bufferMatrix->factor[cur] = 0;
-		bufferMatrix->vars[cur] = 0;
+		//bufferMatrix->vars[cur] = 0;
 	}
 }
 
 void multToSecondMatrix(ulong *matrix, CubePolynomial *bufferMatrix, FullCubePolynomial *publicKey) {
 	ulong cur;
+	for(uint i = 0; i < size; i++) {
+		for (uint j = 0; j < MAX_VARS_IN_KEY; j++) {
+			publicKey[i].vars[j] = 0;
+		}
+	}
 	for (uint i = 0; i < size; i++) {
 		cur = 0;
 		for (uint j = 0; j < size; j++) {
@@ -156,29 +161,18 @@ void multToSecondMatrix(ulong *matrix, CubePolynomial *bufferMatrix, FullCubePol
 		}
 		for (cur; cur < MAX_TERMS_IN_KEY; cur++) {
 			publicKey[i].factor[cur] = 0;
-			publicKey[i].vars[cur] = 0;
 		}
 	}
 }
 
 void writeVar(uint *var, uint number, uint pos) {
-	for (uint i = 0; i < bitsForVar; i++) {
-		*var &= (~(1 << (31 - i - bitsForVar * pos)));
+	for (uint i = 0; i < SIZE_OF_AVAR; i++) {
+		*var &= (~(1 << (31 - i - SIZE_OF_AVAR * pos)));
 	}
-	*var |= number << (32 - bitsForVar * pos - bitsForVar);
+	*var |= number << (32 - SIZE_OF_AVAR * pos - SIZE_OF_AVAR);
 }
 
 uint getFromVar(uint var, uint pos) {
-	uint g = (1 << bitsForVar) - 1;
-	return (var >> (32 - bitsForVar - bitsForVar * pos)) & g;
-}
-
-uint bitsForVariable() {
-	uint i = 0;
-	uint vars = AMOUNT_OF_VARIABLES;
-	while (vars > 0) {
-		vars >>= 1;
-		i++;
-	}
-	return i;
+	uint g = (1 << SIZE_OF_AVAR) - 1;
+	return (var >> (32 - SIZE_OF_AVAR - SIZE_OF_AVAR * pos)) & g;
 }

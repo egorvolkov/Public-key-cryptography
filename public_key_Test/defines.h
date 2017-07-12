@@ -10,7 +10,7 @@
  * PAUSE - amount of loop iterations before a pause. Must be more then 0
  * 		Also you can set this parameter like an argument of execution the program. Parameter has more priority.
  */
-#define AMOUNT_OF_LOOP_ITERATIONS 10000
+#define AMOUNT_OF_LOOP_ITERATIONS 100000
 #define PAUSE 10000
 
 /**
@@ -30,12 +30,13 @@
  *   	You can use any meanings you want but our algorithm of module generation isn't perfect.
  * 		Some meanings can cause looping.
  */
-#define AMOUNT_OF_VARIABLES 2
-#define AMOUNT_OF_VAR_IN_LINE_FIRST 2
-#define AMOUNT_OF_VAR_IN_LINE_SECOND 2
-#define SIZE_OF_VARIABLE 7
+#define SIZE_OF_AVAR 4
+#define AMOUNT_OF_VARIABLES 15
+#define AMOUNT_OF_VAR_IN_LINE_FIRST 5                                                                                                     
+#define AMOUNT_OF_VAR_IN_LINE_SECOND 5
+#define SIZE_OF_VARIABLE 21
 #define SIZE_OF_MODULE (SIZE_OF_VARIABLE + 1)
-#define MAS_SIZE 5
+#define MAS_SIZE 2
 
 /**
  * BYTES_FOR_AMOUNT_OF_MEMBER - this constant is for encoding a long number.
@@ -44,3 +45,8 @@
  * 		You don't need more meanings.
  */
 #define BYTES_FOR_AMOUNT_OF_MEMBER 2
+
+// 7 120 12 12 20 - 7.0mb 29m28s
+// 7 120 10 10 20 - 3.7mb 6m28s
+// 7 120  8  8 20 - 1.7mb 2m7s
+// 7 120  4  4 20 - 184kb 0m6.5s

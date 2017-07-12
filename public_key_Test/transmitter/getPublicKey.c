@@ -20,12 +20,8 @@ void getPublicKey(FullCubePolynomial *publicKey) {
 	}
 
 	for (int i = 0; i < size; i++) {
-		for (int j = 0; j < MAX_TERMS_IN_KEY; j++) {
-			fread(&publicKey[i].factor[j], 8, 1, fin);
-		}
-		for (int j = 0; j < MAX_TERMS_IN_KEY; j++) {
-			fread(&publicKey[i].vars[j], 4, 1, fin);
-		}
+		fread(publicKey[i].factor, 8, MAX_TERMS_IN_KEY, fin);
+		fread(publicKey[i].vars, 4, MAX_VARS_IN_KEY, fin);
 	}
 
 

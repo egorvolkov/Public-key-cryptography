@@ -7,7 +7,6 @@ void printMatrix(ulong *matrix, uchar size1, uchar size2);
  *	Main block
  */
 const uint size = AMOUNT_OF_VARIABLES;
-uint bitsForVar;
 
 int main(int argc, char* argv[]) {
 	FullCubePolynomial publicKey[size];	//	Correct Factor! It's ineffective memory using
@@ -18,7 +17,6 @@ int main(int argc, char* argv[]) {
 	double tStartRDTSC, tEndRDTSC, middleTimeOfCodingRDTSC = 0;
 #endif
 	uint count = 0;
-	bitsForVar = bitsForVariable();
 	while (1) {
 		count++;
 		getPublicKey(publicKey);
@@ -91,17 +89,6 @@ void printFullCubePolynomials(FullCubePolynomial *cubePolynomials) {
 
 
 uint getFromVar(uint var, uint pos) {
-	uint g = (1 << bitsForVar) - 1;
-	return (var >> (32 - bitsForVar - bitsForVar * pos)) & g;
-}
-
-
-uint bitsForVariable() {
-	uint i = 0;
-	uint vars = AMOUNT_OF_VARIABLES;
-	while (vars > 0) {
-		vars >>= 1;
-		i++;
-	}
-	return i;
+	uint g = (1 << SIZE_OF_AVAR) - 1;
+	return (var >> (32 - SIZE_OF_AVAR - SIZE_OF_AVAR * pos)) & g;
 }
