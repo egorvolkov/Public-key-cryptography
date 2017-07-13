@@ -1,12 +1,12 @@
 #include "transmitter.h"
 
 void writeVar_test(uint* var, uint num, uint pos){
-    uint cur = pos * SIZE_OF_AVAR; // Где мы сейчас находимся (можно передавать как аргумент, если нам потребуется идти не подряд по массиву)
+    uint cur = pos * SIZE_OF_AVAR; // Р“РґРµ РјС‹ СЃРµР№С‡Р°СЃ РЅР°С…РѕРґРёРјСЃСЏ (РјРѕР¶РЅРѕ РїРµСЂРµРґР°РІР°С‚СЊ РєР°Рє Р°СЂРіСѓРјРµРЅС‚, РµСЃР»Рё РЅР°Рј РїРѕС‚СЂРµР±СѓРµС‚СЃСЏ РёРґС‚Рё РЅРµ РїРѕРґСЂСЏРґ РїРѕ РјР°СЃСЃРёРІСѓ)
     uint bits = sizeof(var[0]) * 8;
-    if(bits - (cur % bits) >= SIZE_OF_AVAR){ // Если число влезает, то записываем в одну ячейку
+    if(bits - (cur % bits) >= SIZE_OF_AVAR){ // Р•СЃР»Рё С‡РёСЃР»Рѕ РІР»РµР·Р°РµС‚, С‚Рѕ Р·Р°РїРёСЃС‹РІР°РµРј РІ РѕРґРЅСѓ СЏС‡РµР№РєСѓ
         var[cur / bits] |= num << (bits - cur - SIZE_OF_AVAR);
         cur += SIZE_OF_AVAR;
-    } else { //Если число не влезает, то делим его на две части раскидываем в соседние ячейки
+    } else { //Р•СЃР»Рё С‡РёСЃР»Рѕ РЅРµ РІР»РµР·Р°РµС‚, С‚Рѕ РґРµР»РёРј РµРіРѕ РЅР° РґРІРµ С‡Р°СЃС‚Рё СЂР°СЃРєРёРґС‹РІР°РµРј РІ СЃРѕСЃРµРґРЅРёРµ СЏС‡РµР№РєРё
         uint shift_help = SIZE_OF_AVAR - (bits - (cur % bits));
         var[cur / bits] |= num >> shift_help;
         var[(cur / bits) + 1] |= num << (bits - shift_help);
@@ -18,9 +18,9 @@ uint getFromVar_test(uint* var, uint pos) {
     uint cur = pos * SIZE_OF_AVAR;
     uint result = 0;
     uint bits = sizeof(var[0]) * 8;
-    if(bits - (cur % bits) >= SIZE_OF_AVAR){ // Достаём число, если оно лежало в одной ячейке
+    if(bits - (cur % bits) >= SIZE_OF_AVAR){ // Р”РѕСЃС‚Р°С‘Рј С‡РёСЃР»Рѕ, РµСЃР»Рё РѕРЅРѕ Р»РµР¶Р°Р»Рѕ РІ РѕРґРЅРѕР№ СЏС‡РµР№РєРµ
         result = (var[cur / bits] << (cur % bits)) >> (32 - SIZE_OF_AVAR);
-    } else { // Достаём число, если оно было разбито на 2 части
+    } else { // Р”РѕСЃС‚Р°С‘Рј С‡РёСЃР»Рѕ, РµСЃР»Рё РѕРЅРѕ Р±С‹Р»Рѕ СЂР°Р·Р±РёС‚Рѕ РЅР° 2 С‡Р°СЃС‚Рё
         uint mask = (1 << (bits - (cur % bits))) - 1;
         uint shift_help = SIZE_OF_AVAR - (bits - (cur % bits));
         uint firstPart = (var[cur/bits] & mask) << shift_help;
