@@ -21,7 +21,7 @@ void getEncodedMessage(ulong *encodedOrRealMessage) {	// TO IMPROVE THE ALGORITH
 #ifdef PRINT
 	fprintf(output, "Encoded message:\n"); printf("Encoded message:\n");
 #endif
-	for (int i = 0; i < size; i++) {
+	for (int i = 0; i < AMOUNT_OF_POLYNOMS; i++) {
 		encodedOrRealMessage[i] = 0;
 		for (int j = 0; j < LENGTH_OF_ENCODED_NUMBER; j++) {
 			fread(&bufChar, 1, 1, fin);

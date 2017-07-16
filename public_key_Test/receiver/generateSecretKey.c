@@ -1,25 +1,80 @@
 #include "receiver.h"
-
+#include <sys/time.h>
+#include <time.h>
 extern const uint size;
 extern struct Module moduleStruct;
+void swap_ulong(ulong *a, ulong *b){
+    ulong temp = *a;
+    *a = *b;
+    *b = temp;
+}
 
-void generateSecretKey(struct Matrices *matrices) {
-	generateModule();
-	generateFirstMatrices_rare(matrices->firstMatrix, matrices->firstInverseMatrix);
-	generateSecondMatrices_rare(matrices->secondMatrix, matrices->secondInverseMatrix);
+void generateVector(ulong *array){
+    srand(time(NULL));
+    ulong index = 0;
+    while(getModules(index) < moduleStruct.module && getModules(index) != 0){
+      index++;
+    }
+
+    ulong selector[index];
+    for(ulong i = 0; i < index; i++){
+        selector[i] = i;
+    }
+    ulong random = 0;
+    for(ulong i = 0; i < AMOUNT_OF_POLYNOMS; i++){
+        random = rand() % (index - i) + i;
+        swap_ulong(&selector[i], &selector[random]);
+    }
+    for(ulong i = 0; i < AMOUNT_OF_POLYNOMS; i++){
+        array[i] = getModules(selector[i]);
+    }
+    ulong min = 0;
+    for(ulong i = 0; i < AMOUNT_OF_POLYNOMS; i++){
+        if(array[min] > array[i]){
+            min = i;
+        }
+    }
+    swap_ulong(&array[0], &array[min]);
+}
+void generatePows(ulong *array, ulong radix, ulong lastPow) {
+    //Заносит в массив с указателем array
+    //степени числа radix, степень соответствует индексу
+    //надо проверить чтобы длина массива была не меньше lastPow
+    ulong i=0;
+    array[i] = 1;
+    i++;
+    for (i; i<=lastPow; i++) {
+        array[i] = array[i-1]*radix;
+    }
+}
+
+void generateSecretKey(struct Matrices *matrices, ulong *secretVector, ulong *answers) {
+  ulong minModule = answers[AMOUNT_OF_VARIABLES - 1] * RADIX - 1;
+	generateModule(minModule);
+  generateVector(secretVector);
+  printf("secretVector : ");
+  for (int i = 0; i < AMOUNT_OF_POLYNOMS; i++){
+    printf("%llu ", secretVector[i]);
+  }
+  printf("\n");
+	full_gcd(secretVector, answers, matrices->firstMatrix);
+	generateSecondMatrices(matrices->secondMatrix, matrices->secondInverseMatrix, AMOUNT_OF_POLYNOMS);
 	generateConstants(matrices->constants);
 }
 
-void generateModule() {
+void generateModule(ulong minModule) {
 
-	if (pow(getModules(MODULES - MODULES / 10), moduleStruct.masSize) < (double)((ulong)1 << SIZE_OF_VARIABLE)) {
-		printf("Too little masSize. Press Enter to exit.\n");
-		getchar();
-		exit(1);
-	}
-
-	ulong min = (ulong)1 << SIZE_OF_VARIABLE;
-	ulong max = (ulong)1 << SIZE_OF_MODULE;
+	// if (pow(getModules(MODULES - MODULES / 10), moduleStruct.masSize) < (double)((ulong)1 << SIZE_OF_VARIABLE)) {
+	// 	printf("Too little masSize. Press Enter to exit.\n");
+	// 	getchar();
+	// 	exit(1);
+	// }
+  int bit = 0;
+  while (minModule >>= 1){
+    bit++;
+  }
+	ulong min = (ulong)1 << (bit + 1);
+	ulong max = (ulong)1 << (bit + 2);
 	ulong k[moduleStruct.masSize];
 	ulong i, a = 0, p1, p2;
 
@@ -79,7 +134,6 @@ void generateModule() {
 		i++;
 	} while (min > a);
 	p1 = i - 1;
-
 	do {
 		fread(&a, 4, 1, fin);
 		i++;
@@ -118,7 +172,7 @@ void generateModule() {
 }
 
 void generateConstants(ulong *constants){
-	for (uint i = 0; i < size; i++) {
+	for (uint i = 0; i < AMOUNT_OF_POLYNOMS; i++) {
 		constants[i] = getRandom(moduleStruct.module);
 	}
 }

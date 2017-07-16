@@ -1,5 +1,6 @@
 #include "receiver.h"
 #include <sys/time.h>
+#include <time.h>
 
 extern const uint size;
 extern struct Module moduleStruct;

@@ -7,15 +7,16 @@ void coding(ulong *message, FullCubePolynomial *publicKey, uchar *encodedMessage
 	uchar bufMult[SIZE_OF_LONG_NUMBER];
 	uchar bufferPublicKey[SIZE_OF_LONG_NUMBER];
 
-	for (int i = 0; i < size; i++) {
+	for (int i = 0; i < AMOUNT_OF_POLYNOMS; i++) {
 		longToZeroEncoded(encodedMessage + i * LENGTH_OF_ENCODED_NUMBER);
+		int a = MAX_TERMS_IN_KEY;
 		for (int j = 0; j < MAX_TERMS_IN_KEY; j++) {
 			//if (publicKey[i].factor[j] == 0) {
 			//	continue;
 			//}
 			longGetNumber(publicKey[i].factor[j], bufferPublicKey);
 			for (uint h = 0; h < 3; h++) {
-				var = getFromVar_test(publicKey[i].vars, (3 * j) + h); 
+				var = getFromVar_test(publicKey[i].vars, (3 * j) + h);
 				if (var == 0) {
 					continue;
 				}

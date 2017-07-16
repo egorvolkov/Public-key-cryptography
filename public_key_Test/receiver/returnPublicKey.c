@@ -14,13 +14,10 @@ uint returnPublicKey(FullCubePolynomial *publicKey) {
 		return 1;
 	}
 
-	for (int i = 0; i < size; i++) {
-		for (int j = 0; j < MAX_TERMS_IN_KEY; j++) {
-			fwrite(&publicKey[i].factor[j], 8, 1, fout);
-		}
-		for (int j = 0; j < MAX_TERMS_IN_KEY; j++) {
-			fwrite(&publicKey[i].vars[j], 4, 1, fout);
-		}
+	int a = AMOUNT_OF_POLYNOMS, b = MAX_TERMS_IN_KEY, c = MAX_VARS_IN_KEY;
+	for (int i = 0; i < AMOUNT_OF_POLYNOMS; i++) {
+		fwrite(publicKey[i].factor, 8, MAX_TERMS_IN_KEY, fout);
+		fwrite(publicKey[i].vars, 4, MAX_VARS_IN_KEY, fout);
 	}
 
 	// uint bufSize = (size * amount * SIZE_OF_MODULE + 7) / 8;

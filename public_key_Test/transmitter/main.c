@@ -7,29 +7,27 @@ void printMatrix(ulong *matrix, uchar size1, uchar size2);
  *	Main block
  */
 const uint size = AMOUNT_OF_VARIABLES;
-uint bitsForVar;
 
 int main(int argc, char* argv[]) {
-	FullCubePolynomial publicKey[size];	//	Correct Factor! It's ineffective memory using
-	uchar encodedMessage[size * LENGTH_OF_ENCODED_NUMBER];
-	ulong message[size];
+	FullCubePolynomial publicKey[AMOUNT_OF_VARIABLES];	//	Correct Factor! It's ineffective memory using
+	uchar encodedMessage[AMOUNT_OF_VARIABLES * LENGTH_OF_ENCODED_NUMBER];
+	ulong message[AMOUNT_OF_VARIABLES];
 #ifdef TIME
 	double tStart, tEnd, middleTimeOfCoding = 0;
 	double tStartRDTSC, tEndRDTSC, middleTimeOfCodingRDTSC = 0;
 #endif
 	uint count = 0;
-	bitsForVar = bitsForVariable();
 	while (1) {
 		count++;
 		getPublicKey(publicKey);
 
 		createMessage(message);
 #ifdef PRINT
-		// printf("\n");
-		//printFullCubePolynomials(publicKey);
-		// printf("\n");
+		printf("\n");
+		printFullCubePolynomials(publicKey);
+		printf("\n");
 		printf("Message: ");
-		for (int i = 0; i < size; i++) {
+		for (int i = 0; i < AMOUNT_OF_VARIABLES; i++) {
 			printf("%llu ", message[i]);
 		}
 		printf("\n");
@@ -71,7 +69,7 @@ void printMatrix(ulong *matrix, uchar size1, uchar size2) {
 }
 
 void printFullCubePolynomials(FullCubePolynomial *cubePolynomials) {
-	for (int i = 0; i < size; i++) {
+	for (int i = 0; i < AMOUNT_OF_POLYNOMS; i++) {
 		for (int j = 0; j < MAX_TERMS_IN_KEY; j++) {
 			if (cubePolynomials[i].factor[j] == 0) {
 				break;
@@ -81,7 +79,7 @@ void printFullCubePolynomials(FullCubePolynomial *cubePolynomials) {
 			}
 			printf("%llu", cubePolynomials[i].factor[j]);
 			for (int k = 0; k < 3; k++) {
-				printf("*x%u", getFromVar(cubePolynomials[i].vars[j], k));
+				printf("*x%u", getFromVar_test(cubePolynomials[i].vars, (3 * j) + k));
 			}
 		}
 		printf("\n");
@@ -91,17 +89,6 @@ void printFullCubePolynomials(FullCubePolynomial *cubePolynomials) {
 
 
 uint getFromVar(uint var, uint pos) {
-	uint g = (1 << bitsForVar) - 1;
-	return (var >> (32 - bitsForVar - bitsForVar * pos)) & g;
-}
-
-
-uint bitsForVariable() {
-	uint i = 0;
-	uint vars = AMOUNT_OF_VARIABLES;
-	while (vars > 0) {
-		vars >>= 1;
-		i++;
-	}
-	return i;
+	uint g = (1 << SIZE_OF_AVAR) - 1;
+	return (var >> (32 - SIZE_OF_AVAR - SIZE_OF_AVAR * pos)) & g;
 }
