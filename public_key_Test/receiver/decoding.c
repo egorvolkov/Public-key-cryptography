@@ -59,7 +59,7 @@ void scalar(ulong *a, ulong *b, ulong *result, ulong N){
 }
 void translateFromDecimal(ulong decimal, ulong system, ulong *array) {
     ulong i = 0;
-    while (decimal) {
+    while (i < AMOUNT_OF_VARIABLES) {
         array[i++] = decimal % system;
         decimal /= system;
     }

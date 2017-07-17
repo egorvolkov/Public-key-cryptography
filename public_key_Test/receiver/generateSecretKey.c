@@ -63,18 +63,13 @@ void generateSecretKey(struct Matrices *matrices, ulong *secretVector, ulong *an
 }
 
 void generateModule(ulong minModule) {
-
-	// if (pow(getModules(MODULES - MODULES / 10), moduleStruct.masSize) < (double)((ulong)1 << SIZE_OF_VARIABLE)) {
-	// 	printf("Too little masSize. Press Enter to exit.\n");
-	// 	getchar();
-	// 	exit(1);
-	// }
-  int bit = 0;
-  while (minModule >>= 1){
-    bit++;
-  }
+	int bit = 0;
+	 while (minModule >>= 1){
+		bit++;
+	 }
 	ulong min = (ulong)1 << (bit + 1);
 	ulong max = (ulong)1 << (bit + 2);
+
 	ulong k[moduleStruct.masSize];
 	ulong i, a = 0, p1, p2;
 
@@ -115,17 +110,17 @@ void generateModule(ulong minModule) {
 		if (i == MODULES) {
 			break;
 		}
-	} while (((ulong)1 << SIZE_OF_MODULE) > a);
+	} while (((ulong)1 << (bit+2)) > a);
 	p1 = i - 2;
 
 	do {
 		k[0] = getModules(getRandom(p1));
-	} while (pow(getModules(MODULES - MODULES / 10), moduleStruct.masSize - 1) < (double)((ulong)1 << SIZE_OF_VARIABLE) / k[0] || k[0] >= ((ulong)1 << SIZE_OF_VARIABLE));
+	} while (pow(getModules(MODULES - MODULES / 10), moduleStruct.masSize - 1) < (double)((ulong)1 << (bit+1)) / k[0] || k[0] >= ((ulong)1 << (bit+1)));
 	moduleStruct.module *= k[0];
 	moduleStruct.partsOfModule[0] = k[0];
 
-	min = (ulong)ceil(pow((double)((ulong)1 << SIZE_OF_VARIABLE) / k[0], (double)1 / (moduleStruct.masSize - 1)));
-	max = (ulong)floor(pow((double)((ulong)1 << SIZE_OF_MODULE) / k[0], (double)1 / (moduleStruct.masSize - 1)));
+	min = (ulong)ceil(pow((double)((ulong)1 << (bit+1)) / k[0], (double)1 / (moduleStruct.masSize - 1)));
+	max = (ulong)floor(pow((double)((ulong)1 << (bit+2)) / k[0], (double)1 / (moduleStruct.masSize - 1)));
 
 	i = 0;
 	fseek(fin, 0, SEEK_SET);
@@ -134,6 +129,7 @@ void generateModule(ulong minModule) {
 		i++;
 	} while (min > a);
 	p1 = i - 1;
+
 	do {
 		fread(&a, 4, 1, fin);
 		i++;
@@ -166,7 +162,7 @@ void generateModule(ulong minModule) {
 			moduleStruct.module *= k[j];
 			moduleStruct.partsOfModule[j] = k[j];
 		}
-	} while (moduleStruct.module < ((ulong)1 << SIZE_OF_VARIABLE) || moduleStruct.module >= ((ulong)1 << SIZE_OF_MODULE));
+	} while (moduleStruct.module < ((ulong)1 << (bit+1)) || moduleStruct.module >= ((ulong)1 << (bit+2)));
 
 	computePartsOfModule();
 }
