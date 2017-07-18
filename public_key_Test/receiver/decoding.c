@@ -39,6 +39,7 @@ void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *enco
 	fprintf(output, "\nCube-root: "); printf("\nCube-root: ");
 	for (int i = 0; i < size; i++) {
 		fprintf(output, "%llu ", cube[i]);
+		printf("%llu ", cube[i]);
 	}
 	fprintf(output, "\n"); printf("\n");
 #endif

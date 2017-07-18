@@ -158,8 +158,8 @@ int main(int argc, char* argv[]) {
 		fclose(file);
 #ifdef PRINT
 		fclose(output);
-		printf("\n____________________________________\n");
 #endif
+		printf("\n____________________________________\n");
 		if ((loop + 1) % pause == 0) {
 			printf("PAUSE (Press Enter to continue)\n");
 			getchar();
