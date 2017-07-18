@@ -88,7 +88,7 @@ int main(int argc, char* argv[]) {
 		tStart = getTime();
 		tStartRDTSC = timeRDTSC();
 #endif
-		computePublicKey(matrices.firstMatrix, matrices.secondMatrix, publicKey, matrices.constants); ///////////////////////////////////////////
+		computePublicKey(matrices.firstMatrix, matrices.secondMatrix, publicKey, matrices.constants, matrices.constants3); ///////////////////////////////////////////
 #ifdef TIME
 		tEnd = getTime();
 		tEndRDTSC = timeRDTSC();
@@ -120,7 +120,7 @@ int main(int argc, char* argv[]) {
 		tStart = getTime();
 		tStartRDTSC = timeRDTSC();
 #endif
-		decoding(matrices.firstInverseMatrix, matrices.secondInverseMatrix, encodedOrRealMessage, matrices.constants);
+		decoding(matrices.firstInverseMatrix, matrices.secondInverseMatrix, encodedOrRealMessage, matrices.constants, matrices.constants3);
 #ifdef TIME
 		tEnd = getTime();
 		tEndRDTSC = timeRDTSC();
@@ -188,9 +188,16 @@ void fPrintMatrix(ulong *matrix, uint size1, uint size2) {
 
 void printCubePolynomials(CubePolynomial *cubePolynomials) {
 	for (int i = 0; i < size; i++) {
+		int zero = 0;
 		for (int j = 0; j < MAX_TERMS_IN_CUBE; j++) {
 			if (cubePolynomials[i].factor[j] == 0) {
-				break;
+				if (zero || (cubePolynomials[i].vars[j]!=0)) {
+					break;
+				}
+				else
+				{
+					zero++;
+				}
 			}
 			if (j != 0) {
 				printf(" + ");
@@ -205,9 +212,16 @@ void printCubePolynomials(CubePolynomial *cubePolynomials) {
 }
 void fPrintCubePolynomials(CubePolynomial *cubePolynomials) {
 	for (int i = 0; i < size; i++) {
+		int zero = 0;
 		for (int j = 0; j < MAX_TERMS_IN_CUBE; j++) {
 			if (cubePolynomials[i].factor[j] == 0) {
-				break;
+				if (zero) {
+					break;
+				}
+				else
+				{
+					zero++;
+				}
 			}
 			if (j != 0) {
 				fprintf(output, " + ");

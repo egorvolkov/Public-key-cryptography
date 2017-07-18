@@ -7,21 +7,26 @@ extern struct Module moduleStruct;
 extern FILE *output;
 #endif
 
-void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *encodedOrRealMessage, ulong *constants) {
+void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *encodedOrRealMessage, ulong *constants, ulong *constants3) {
 	ulong cube[size];
 	ulong inverseDegree = modularInverseMultUniver(3, euler(moduleStruct.module));	//	Считаем степень, которая будет соответствовать кубическому корню из числа
 #ifdef PRINT
 	fprintf(output, "InversedDegree: %llu\n", inverseDegree); printf("inverseDegree: %llu\n", inverseDegree);
 	fprintf(output, "Cube: "); printf("Cube: ");
 #endif
+
+	for (int i = 0; i < size; i++) {
+		// Добавляем вектор кубических констант к многочлену
+		encodedOrRealMessage[i] = modularAdd(encodedOrRealMessage[i],constants3[i]);
+	}
+
 	for (int i = 0; i < size; i++) {
 		cube[i] = 0;
-		//	Умножаем обратную вторую матрицу на результат каждого многочлена. Получаем куб результата первого многочлена без констант
+		//	Умножаем обратную вторую матрицу на результат каждого многочлена. Получаем куб результата первого многочлена
 		for (int j = 0; j < size; j++) {
 			cube[i] = modularAdd(cube[i], modularMult(secondInverseMatrix[i * size + j], encodedOrRealMessage[j]));
 		}
-		// Добавляем вектор констант в кубе к многочлену
-		cube[i] = modularAdd(cube[i],modularDeg(constants[i],3));
+
 #ifdef PRINT
 		fprintf(output, "%llu ", cube[i]); printf("%llu ", cube[i]);
 #endif
