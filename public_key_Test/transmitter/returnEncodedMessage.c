@@ -12,8 +12,8 @@ uint returnEncodedMessage(uchar *encodedMessage) {
 		return 1;
 	}
 
-	fwrite(encodedMessage, 1, AMOUNT_OF_VARIABLES*LENGTH_OF_ENCODED_NUMBER, fout);
-	bytes += AMOUNT_OF_VARIABLES*LENGTH_OF_ENCODED_NUMBER;
+	fwrite(encodedMessage, 1, size*LENGTH_OF_ENCODED_NUMBER, fout);
+	bytes += size*LENGTH_OF_ENCODED_NUMBER;
 
 	fclose(fout);
 

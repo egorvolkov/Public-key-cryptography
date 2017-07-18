@@ -40,11 +40,11 @@ struct Module {
 };
 
 struct Matrices {
-	ulong firstMatrix[AMOUNT_OF_POLYNOMS * AMOUNT_OF_VARIABLES];
+	ulong firstMatrix[AMOUNT_OF_VARIABLES * AMOUNT_OF_VARIABLES];
 	ulong firstInverseMatrix[AMOUNT_OF_VARIABLES * AMOUNT_OF_VARIABLES];
-	ulong secondMatrix[AMOUNT_OF_POLYNOMS* AMOUNT_OF_POLYNOMS];
-	ulong secondInverseMatrix[AMOUNT_OF_POLYNOMS * AMOUNT_OF_POLYNOMS];
-	ulong constants[AMOUNT_OF_POLYNOMS];
+	ulong secondMatrix[AMOUNT_OF_VARIABLES * AMOUNT_OF_VARIABLES];
+	ulong secondInverseMatrix[AMOUNT_OF_VARIABLES * AMOUNT_OF_VARIABLES];
+	ulong constants[AMOUNT_OF_VARIABLES];
 };
 
 typedef struct CubePolynomial {
@@ -57,7 +57,7 @@ typedef struct FullCubePolynomial {
 	uint vars[MAX_VARS_IN_KEY];
 } FullCubePolynomial;
 
-void generateSecretKey(struct Matrices *matrices, ulong *secretVector, ulong *answers);
+void generateSecretKey(struct Matrices *matrices);
 void generateModule();
 void computePartsOfModule();
 
@@ -86,7 +86,7 @@ uint returnPublicKey(FullCubePolynomial *publicKey);
 void transmitterConnection();
 void getEncodedMessage(ulong *encodedOrRealMessage);
 
-void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *encodedMessage, ulong *realMessage, ulong *constants, ulong *secretVector);
+void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *encodedOrRealMessage, ulong *constants);
 
 uchar inArray(ulong *arr, uint length, ulong element);
 uint getModules(uint index);
@@ -122,13 +122,10 @@ ulong modularInverseMultUniver(ulong a, ulong module);
 /**
  *	Other
  */
-void scalar(ulong *a, ulong *b, ulong *result, ulong N);
-void translateFromDecimal(ulong decimal, ulong system, ulong *array);
+
 ulong euler(ulong n);
 ulong gcd(ulong a, ulong b);
-ulong isModuleOk (ulong module);
-void generatePows(ulong *array, ulong radix, ulong lastPow);
-void full_gcd(ulong* coef_vector, ulong* answer_vector, ulong* root_matrix);
+
 #ifdef PRINT
 void printMatrix(ulong *matrix, uint size1, uint size2);
 void fPrintMatrix(ulong *matrix, uint size1, uint size2);

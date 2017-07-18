@@ -2,41 +2,24 @@
 
 extern const uint size;
 extern struct Module moduleStruct;
-ulong isModuleOk (ulong module){
-    //огромный if с условиями, возможно нам понадобится
-    //выбирать множители модуля из диапазона [a..b] как в
-    //статье
-    if (euler(module) % 3 != 0) {   //условия для модуля
-        return 1;   //подходит
-    }
-    else{
-        return 0;   //не подходит!
-    }
-}
-ulong getModByMaxNumber(ulong number){
-    //Возвращает число k-ое число после number, функция эйлера от которого
-    //не делится на три, i = 0 если хочешь получить первое подходящее
-    ulong module=number+1;  //чтобы number был максимальным модуль должен быть минимум на 1 больше           //считаем подходяещие под условие модуля числа после number
-    while (!isModuleOk(module)) {
-        module++;
-    }
-    return module;
-}
 
 /**
  *	This block for operations with the common module
  */
 
-ulong modularAdd(ulong a, ulong b) {
+ulong modularAdd(ulong a, ulong b)
+{
 	return ((a % moduleStruct.module) + (b % moduleStruct.module)) % moduleStruct.module;
 }
 
-ulong modularSub(ulong a, ulong b) {
+ulong modularSub(ulong a, ulong b)
+{
 	return modularAdd(a, modularInverseAdd(b));
 }
 
 
-ulong modularDiv(ulong a, ulong b) {
+ulong modularDiv(ulong a, ulong b)
+{
 	ulong a_new = a % moduleStruct.module;
 	ulong b_new = b % moduleStruct.module;
 	return modularMult(a_new, modularInverseMult(b_new));
@@ -72,26 +55,33 @@ ulong modularMult(ulong a, ulong b) {
 }
 
 //быстрое возведение в степень для модуля>2^32
-ulong modularDeg(ulong a, ulong k) {
+ulong modularDeg(ulong a, ulong k)
+{
 	a %= moduleStruct.module;
 	ulong res = 1;
-	while (k > 0) {
-		if (k % (ulong)2 == (ulong)1) {
+	while (k > 0)
+	{
+		if (k % (ulong)2 == (ulong)1)
+		{
 			k--;
 			res = modularMult(res, a);
+
 		}
 		k /= (ulong)2;
 		a = modularMult(a, a);
+
 	}
 	return res;
 }
 
-ulong modularInverseAdd(ulong a) {
+ulong modularInverseAdd(ulong a)
+{
 	return moduleStruct.module - (a % moduleStruct.module);
 }
 
 //быстрый поиск обратного по умножению для модуля>2^32
-ulong modularInverseMult(ulong a) {
+ulong modularInverseMult(ulong a)
+{
 	return modularDeg(a, euler(moduleStruct.module) - 1);
 }
 
@@ -111,15 +101,18 @@ void modularMatrixMult(ulong *mat1, ulong *mat2, ulong *result, ulong lines) {
  *	This block for operations with an any module
  */
 
-ulong modularAddUniver(ulong a, ulong b, ulong module) {
+ulong modularAddUniver(ulong a, ulong b, ulong module)
+{
 	return ((a % module) + (b % module)) % module;
 }
 
-ulong modularSubUniver(ulong a, ulong b, ulong module) {
+ulong modularSubUniver(ulong a, ulong b, ulong module)
+{
 	return modularAddUniver(a, modularInverseAddUniver(b, module), module);
 }
 
-ulong modularDivUniver(ulong a, ulong b, ulong module) {
+ulong modularDivUniver(ulong a, ulong b, ulong module)
+{
 	ulong a_new = a % module;
 	ulong b_new = b % module;
 	return modularMultUniver(a_new, modularInverseMultUniver(b_new, module), module);
@@ -130,13 +123,16 @@ ulong littleModularMultUniver(ulong a, ulong b, ulong littleModule) {
 	return (((ulong)a % (ulong)littleModule) * ((ulong)b % (ulong)littleModule)) % (ulong)littleModule;
 }
 
-ulong modularMultUniver(ulong a, ulong b, ulong module) {
+ulong modularMultUniver(ulong a, ulong b, ulong module)
+{
 	if (module < ((ulong)1 << 32)) {
 		return littleModularMultUniver(a, b, module);
 	}
 	ulong res = 0;
-	while (b > 0) {
-		if (b % (ulong)2 == (ulong)1) {
+	while (b > 0)
+	{
+		if (b % (ulong)2 == (ulong)1)
+		{
 			b--;
 			res = modularAddUniver(res, a, module);
 
@@ -148,10 +144,13 @@ ulong modularMultUniver(ulong a, ulong b, ulong module) {
 	return res;
 }
 
-ulong modularDegUniver(ulong a, ulong k, ulong module) {
+ulong modularDegUniver(ulong a, ulong k, ulong module)
+{
 	ulong res = 1;
-	while (k > 0) {
-		if (k % (ulong)2 == (ulong)1){
+	while (k > 0)
+	{
+		if (k % (ulong)2 == (ulong)1)
+		{
 			k--;
 			res = modularMultUniver(res, a, module);
 
@@ -163,11 +162,13 @@ ulong modularDegUniver(ulong a, ulong k, ulong module) {
 	return res;
 }
 
-ulong modularInverseAddUniver(ulong a, ulong module){
+ulong modularInverseAddUniver(ulong a, ulong module)
+{
 	return module - (a % module);
 }
 
-ulong modularInverseMultUniver(ulong a, ulong module){
+ulong modularInverseMultUniver(ulong a, ulong module)
+{
 	return modularDegUniver(a, euler(module) - 1, module);
 }
 

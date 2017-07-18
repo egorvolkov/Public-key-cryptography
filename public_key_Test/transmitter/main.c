@@ -9,9 +9,9 @@ void printMatrix(ulong *matrix, uchar size1, uchar size2);
 const uint size = AMOUNT_OF_VARIABLES;
 
 int main(int argc, char* argv[]) {
-	FullCubePolynomial publicKey[AMOUNT_OF_VARIABLES];	//	Correct Factor! It's ineffective memory using
-	uchar encodedMessage[AMOUNT_OF_VARIABLES * LENGTH_OF_ENCODED_NUMBER];
-	ulong message[AMOUNT_OF_VARIABLES];
+	FullCubePolynomial publicKey[size];	//	Correct Factor! It's ineffective memory using
+	uchar encodedMessage[size * LENGTH_OF_ENCODED_NUMBER];
+	ulong message[size];
 #ifdef TIME
 	double tStart, tEnd, middleTimeOfCoding = 0;
 	double tStartRDTSC, tEndRDTSC, middleTimeOfCodingRDTSC = 0;
@@ -23,11 +23,11 @@ int main(int argc, char* argv[]) {
 
 		createMessage(message);
 #ifdef PRINT
-		printf("\n");
-		printFullCubePolynomials(publicKey);
-		printf("\n");
+		// printf("\n");
+		//printFullCubePolynomials(publicKey);
+		// printf("\n");
 		printf("Message: ");
-		for (int i = 0; i < AMOUNT_OF_VARIABLES; i++) {
+		for (int i = 0; i < size; i++) {
 			printf("%llu ", message[i]);
 		}
 		printf("\n");
@@ -69,7 +69,7 @@ void printMatrix(ulong *matrix, uchar size1, uchar size2) {
 }
 
 void printFullCubePolynomials(FullCubePolynomial *cubePolynomials) {
-	for (int i = 0; i < AMOUNT_OF_POLYNOMS; i++) {
+	for (int i = 0; i < size; i++) {
 		for (int j = 0; j < MAX_TERMS_IN_KEY; j++) {
 			if (cubePolynomials[i].factor[j] == 0) {
 				break;
@@ -79,7 +79,7 @@ void printFullCubePolynomials(FullCubePolynomial *cubePolynomials) {
 			}
 			printf("%llu", cubePolynomials[i].factor[j]);
 			for (int k = 0; k < 3; k++) {
-				printf("*x%u", getFromVar_test(cubePolynomials[i].vars, (3 * j) + k));
+				printf("*x%u", getFromVar(cubePolynomials[i].vars[j], k));
 			}
 		}
 		printf("\n");

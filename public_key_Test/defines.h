@@ -30,7 +30,6 @@
  *   	You can use any meanings you want but our algorithm of module generation isn't perfect.
  * 		Some meanings can cause looping.
  */
-
 #define SIZE_OF_AVAR 4
 #define AMOUNT_OF_VARIABLES 15
 #define AMOUNT_OF_VAR_IN_LINE_FIRST 5                                                                                                     

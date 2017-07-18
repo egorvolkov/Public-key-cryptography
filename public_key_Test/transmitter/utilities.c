@@ -1,6 +1,5 @@
 #include "transmitter.h"
 #include <sys/time.h>
-#include <time.h>
 
 extern const uint size;
 

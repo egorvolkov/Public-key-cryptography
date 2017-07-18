@@ -1,6 +1,5 @@
 #include "receiver.h"
-#include <time.h>
-#include <sys/time.h>
+
 extern const uint size;
 extern struct Module moduleStruct;
 
@@ -9,13 +8,12 @@ extern FILE *output;
 #endif
 
 void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, FullCubePolynomial *publicKey, ulong *constants) {
-
 	CubePolynomial bufferMatrix[size];
 	cubeOfPolynomials(firstMatrix, bufferMatrix, constants);
 #ifdef PRINT
 	printf("Constants:\n");
-	for(uint i = 0; i < AMOUNT_OF_POLYNOMS; i++){
-		printf("%llu ", constants[i]);
+	for(uint i = 0; i < size; i++){
+		printf("%u ", constants[i]);
 	}
 	printf("\n\n");
 	fprintf(output, "Cube polynomials\n"); printf("Cube polynomials\n");
@@ -28,12 +26,12 @@ void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, FullCubePolynomia
 
 void cubeOfPolynomials(ulong *matrix, CubePolynomial bufferMatrix[], ulong *constants) {
 	CubePolynomial *buf;
-	ulong polinom[AMOUNT_OF_VARIABLES + 1];
-	for (uint i = 0; i < AMOUNT_OF_POLYNOMS; i++) {
-		for (uint j = 0; j < AMOUNT_OF_VARIABLES; j++){
-			polinom[j] = matrix[j + i * AMOUNT_OF_VARIABLES];
+	ulong polinom[size + 1];
+	for (uint i = 0; i < size; i++) {
+		for (uint j = 0; j < size; j++){
+			polinom[j] = matrix[j + i*size];
 		}
-		polinom[AMOUNT_OF_VARIABLES] = constants[i];
+		polinom[size] = constants[i];
 		buf = &(bufferMatrix[i]);
 		polynomialCube(polinom, buf);
 	}
@@ -47,11 +45,7 @@ void polynomialCube(ulong *polyn, CubePolynomial *bufferMatrix) {
 		bufferMatrix->vars[i] = 0;
 	}
 
-	for (uint i = 0; i < MAX_VARS_IN_CUBE; i++) {
-		bufferMatrix->vars[i] = 0;
-	}
-
-	for (uint i = 0; i < AMOUNT_OF_VARIABLES; i++) {
+	for (uint i = 0; i < size; i++) {
 		bufferFactor = modularDeg(polyn[i], 3);
 		if (bufferFactor == 0) {
 			continue;
@@ -64,8 +58,8 @@ void polynomialCube(ulong *polyn, CubePolynomial *bufferMatrix) {
 		cur++;
 	}
 
-	for (uint i = 0; i < AMOUNT_OF_VARIABLES; i++) {
-		for (uint j = 0; j < AMOUNT_OF_VARIABLES; j++) {
+	for (uint i = 0; i < size; i++) {
+		for (uint j = 0; j < size; j++) {
 			if (i == j)
 				continue;
 			bufferFactor = modularMult(3, modularMult(modularDeg(polyn[i], 2), polyn[j]));
@@ -82,9 +76,9 @@ void polynomialCube(ulong *polyn, CubePolynomial *bufferMatrix) {
 		}
 	}
 
-	for (uint i = 0; i < AMOUNT_OF_VARIABLES; i++) {
-		for (uint j = i + 1; j < AMOUNT_OF_VARIABLES; j++) {
-			for (uint k = j + 1; k < AMOUNT_OF_VARIABLES; k++) {
+	for (uint i = 0; i < size; i++) {
+		for (uint j = i + 1; j < size; j++) {
+			for (uint k = j + 1; k < size; k++) {
 				bufferFactor = modularMult(6, modularMult(modularMult(polyn[i], polyn[j]), polyn[k]));
 				if (bufferFactor == 0) {
 					continue;
@@ -99,9 +93,9 @@ void polynomialCube(ulong *polyn, CubePolynomial *bufferMatrix) {
 		}
 	}
 
-	for (uint i = 0; i < AMOUNT_OF_VARIABLES; i++) {
-		for(uint j = i; j < AMOUNT_OF_VARIABLES; j++) {
-			bufferFactor = modularMult(i==j?3:6, modularMult(polyn[AMOUNT_OF_VARIABLES], modularMult(polyn[i], polyn[j])));
+	for (uint i = 0; i < size; i++) {
+		for(uint j = i; j < size; j++) {
+			bufferFactor = modularMult(i==j?3:6, modularMult(polyn[size], modularMult(polyn[i], polyn[j])));
 			if (bufferFactor == 0) {
 				continue;
 			}
@@ -113,8 +107,8 @@ void polynomialCube(ulong *polyn, CubePolynomial *bufferMatrix) {
 		}
 	}
 
-	for(uint i = 0; i < AMOUNT_OF_VARIABLES; i++) {
-		bufferFactor = modularMult(3, modularMult(modularDeg(polyn[AMOUNT_OF_VARIABLES], 2), polyn[i]));
+	for(uint i = 0; i < size; i++) {
+		bufferFactor = modularMult(3, modularMult(modularDeg(polyn[size], 2), polyn[i]));
 		if (bufferFactor == 0) {
 			continue;
 		}
@@ -139,7 +133,7 @@ void multToSecondMatrix(ulong *matrix, CubePolynomial *bufferMatrix, FullCubePol
 	}
 	for (uint i = 0; i < size; i++) {
 		cur = 0;
-		for (uint j = 0; j < AMOUNT_OF_POLYNOMS; j++) {
+		for (uint j = 0; j < size; j++) {
 			for (uint k = 0; k < MAX_TERMS_IN_CUBE; k++) {
 				if (bufferMatrix[j].factor[k] == 0) {
 					break;
@@ -147,12 +141,12 @@ void multToSecondMatrix(ulong *matrix, CubePolynomial *bufferMatrix, FullCubePol
 				uint p;
 				for (p = 0; p < cur; p++) {
 					if (get3Vars_test(bufferMatrix[j].vars, k) == get3Vars_test(publicKey[i].vars, p)) {
-						publicKey[i].factor[p] = modularAdd(publicKey[i].factor[p], modularMult(matrix[i*AMOUNT_OF_POLYNOMS + j], bufferMatrix[j].factor[k]));
+						publicKey[i].factor[p] = modularAdd(publicKey[i].factor[p], modularMult(matrix[i*size + j], bufferMatrix[j].factor[k]));
 						break;
 					}
 				}
 				if (p >= cur) {
-					publicKey[i].factor[cur] = modularMult(matrix[i*AMOUNT_OF_POLYNOMS + j], bufferMatrix[j].factor[k]);
+					publicKey[i].factor[cur] = modularMult(matrix[i*size + j], bufferMatrix[j].factor[k]);
 					if(publicKey[i].factor[cur] == 0) {
 						break;
 					}
