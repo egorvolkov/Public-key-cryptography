@@ -1,9 +1,0 @@
-{
-    "files.associations": {
-        "main.c": "cpp",
-        "receiver.h": "c",
-        "transmitter.h": "c",
-        "stdio2.h": "c",
-        "defines.h": "c"
-    }
-}
