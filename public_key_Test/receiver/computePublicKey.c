@@ -178,7 +178,7 @@ void solve(ulong *vector, ulong N, ulong answer, ulong *result){
     result[i] = rand() % (moduleStruct.module - 1) + 1;
     temp = modularAddUniver(temp, modularMultUniver(modularInverseAddUniver(vector[i],module), result[i], module), module);
   }
-  result[1] = modularMultUniver(temp, modularInverseMultUniver(vector[1],module), module);
+  result[1] = modularMultUniver(temp, modularInverseMultUniver(vector[1],module), module) % moduleStruct.module;
   if (result[1] == 0){
     result[1] = module;
   }
@@ -192,14 +192,14 @@ void solve(ulong *vector, ulong N, ulong answer, ulong *result){
 /*coef_vector - коэффициенты уравнения, answer_vector - правые части, root_matrix - выходная матрица столбцов*/
 void full_gcd(ulong* coef_vector, ulong* answer_vector, ulong* root_matrix){
 	ulong k = 0;
-	ulong	root_vector[AMOUNT_OF_POLYNOMS];
-	for (ulong i = 0; i < AMOUNT_OF_VARIABLES; ++i)
+	ulong	root_vector[LENGTH_OF_SECRET_VECTOR];
+	for (ulong i = 0; i < AMOUNT_OF_VARIABLES*NUMBER_OF_RADIX; ++i)
 	{
 		/* code */
-		solve(coef_vector, AMOUNT_OF_POLYNOMS, answer_vector[i], root_vector);
-		for (ulong j = 0; j < AMOUNT_OF_POLYNOMS; ++j)
+		solve(coef_vector, LENGTH_OF_SECRET_VECTOR, answer_vector[i], root_vector);
+		for (ulong j = 0; j < LENGTH_OF_SECRET_VECTOR; ++j)
 		{
-			root_matrix[j*AMOUNT_OF_VARIABLES + i] = root_vector[j];
+			root_matrix[(i/AMOUNT_OF_VARIABLES)*LENGTH_OF_SECRET_VECTOR*AMOUNT_OF_VARIABLES+j*AMOUNT_OF_VARIABLES + i%AMOUNT_OF_VARIABLES] = root_vector[j];
 		}
 	}
 }

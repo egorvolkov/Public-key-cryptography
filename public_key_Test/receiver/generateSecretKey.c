@@ -10,54 +10,74 @@ void swap_ulong(ulong *a, ulong *b){
 }
 
 void generateVector(ulong *array){
-    srand(time(NULL));
-    ulong index = 0;
-    while(getModules(index) < moduleStruct.module && getModules(index) != 0){
-      index++;
+	srand(time(NULL));
+	ulong max_amount = 4807;
+	ulong selector[max_amount / 2];
+	for(uint i = 0; i < max_amount / 2; i++){
+		selector[i] = i;
+	}
+	uint random = 0;
+	for(uint i = 0; i < LENGTH_OF_SECRET_VECTOR * 2; i++){
+		random = rand() % (max_amount / 2 - i) + i;
+    if(gcd(getModules(random), moduleStruct.module) == 1){
+      i--;
+      continue;
     }
+		swap_ulong(&selector[i], &selector[random]);
+	}
+	for(uint i = 0; i < LENGTH_OF_SECRET_VECTOR * 2; i++){
+    array[i / 2] = getModules(selector[i]) * getModules(selector[i + 1]);
+	}
+	uint min = 0;
+	for(uint i = 0; i < LENGTH_OF_SECRET_VECTOR; i++){
+		if(array[min] > array[i]){
+			min = i;
+		}
+	}
+	swap_ulong(&array[0], &array[min]);
+}
 
-    ulong selector[index];
-    for(ulong i = 0; i < index; i++){
-        selector[i] = i;
+void matricesTransposition(ulong *matrices, ulong *transposition){
+    srand(time(NULL));
+    for(ulong i = 0 ; i < AMOUNT_OF_VARIABLES; i++){
+        transposition[i] = i;
     }
     ulong random = 0;
-    for(ulong i = 0; i < AMOUNT_OF_POLYNOMS; i++){
-        random = rand() % (index - i) + i;
-        swap_ulong(&selector[i], &selector[random]);
-    }
-    for(ulong i = 0; i < AMOUNT_OF_POLYNOMS; i++){
-        array[i] = getModules(selector[i]);
-    }
-    ulong min = 0;
-    for(ulong i = 0; i < AMOUNT_OF_POLYNOMS; i++){
-        if(array[min] > array[i]){
-            min = i;
+    for(ulong i = 0; i < AMOUNT_OF_VARIABLES; i++){
+        random = rand() % (AMOUNT_OF_VARIABLES - i) + i;
+        swap_ulong(&transposition[i], &transposition[random]);
+        for(ulong j = 0; j < AMOUNT_OF_POLYNOMS; j++){
+            swap_ulong(&matrices[i + j * AMOUNT_OF_VARIABLES], &matrices[random + j * AMOUNT_OF_VARIABLES]);
         }
     }
-    swap_ulong(&array[0], &array[min]);
 }
-void generatePows(ulong *array, ulong radix, ulong lastPow) {
+
+void generatePows(ulong *result, ulong *radixes, ulong lastPow) {
     //Заносит в массив с указателем array
     //степени числа radix, степень соответствует индексу
     //надо проверить чтобы длина массива была не меньше lastPow
-    ulong i=0;
-    array[i] = 1;
-    i++;
-    for (i; i<=lastPow; i++) {
-        array[i] = array[i-1]*radix;
+    ulong i = 0;
+    for (int j = 0;j < NUMBER_OF_RADIX; j++){
+      result[i] = 1;
+      i++;
+      for (int k = 1; k<=lastPow; k++) {
+          result[i] = result[i-1]*radixes[j];
+          i++;
+      }
     }
 }
 
-void generateSecretKey(struct Matrices *matrices, ulong *secretVector, ulong *answers) {
+void generateSecretKey(struct Matrices *matrices, ulong *secretVector, ulong *answers, ulong *transposition) {
   ulong minModule = answers[AMOUNT_OF_VARIABLES - 1] * RADIX - 1;
 	generateModule(minModule);
   generateVector(secretVector);
   printf("secretVector : ");
-  for (int i = 0; i < AMOUNT_OF_POLYNOMS; i++){
+  for (int i = 0; i < LENGTH_OF_SECRET_VECTOR; i++){
     printf("%llu ", secretVector[i]);
   }
   printf("\n");
 	full_gcd(secretVector, answers, matrices->firstMatrix);
+  //matricesTransposition(matrices->firstMatrix, transposition);
 	generateSecondMatrices(matrices->secondMatrix, matrices->secondInverseMatrix, AMOUNT_OF_POLYNOMS);
 	generateConstants(matrices->constants);
 }
@@ -178,6 +198,7 @@ void generateConstants(ulong *constants){
 // 	int upLine = MODULES - MODULES/3;
 
 // 	int downMult = 1;
+
 // 	int upMult = 1;
 
 // 	for (int i = 0; i < n; i++) {
@@ -190,7 +211,12 @@ void generateConstants(ulong *constants){
 // 	}
 // 	return 0;
 // }
-
+void computeRadixes(ulong *radixes, ulong radix) {
+	for (int i = 0; i < NUMBER_OF_RADIX; i++) {
+		radixes[i + NUMBER_OF_RADIX * 1] = radix / radixes[i];
+	  radixes[i + NUMBER_OF_RADIX * 2] = modularInverseMultUniver(radixes[i + NUMBER_OF_RADIX * 1], radixes[i]);
+	}
+}
 void computePartsOfModule() {
 	for (int i = 0; i < moduleStruct.masSize; i++) {
 		moduleStruct.partsOfModule[i + moduleStruct.masSize * 1] = moduleStruct.module / moduleStruct.partsOfModule[i];
