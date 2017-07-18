@@ -170,10 +170,10 @@ void generateConstants(ulong *constants){
 // }
 
 void computePartsOfModule() {
-	for (int i = 0; i < moduleStruct.masSize; i++) {
-		moduleStruct.partsOfModule[i + moduleStruct.masSize * 1] = moduleStruct.module / moduleStruct.partsOfModule[i];
-		moduleStruct.partsOfModule[i + moduleStruct.masSize * 2] = modularInverseMultUniver(moduleStruct.partsOfModule[i + moduleStruct.masSize * 1], moduleStruct.partsOfModule[i]);
-	}
+    for (int i = 0; i < moduleStruct.masSize; i++) {
+        moduleStruct.partsOfModule[i + moduleStruct.masSize * 1] = moduleStruct.module / moduleStruct.partsOfModule[i];
+        moduleStruct.partsOfModule[i + moduleStruct.masSize * 2] = modularInverseMultUniver(moduleStruct.partsOfModule[i + moduleStruct.masSize * 1], moduleStruct.partsOfModule[i]);
+    }
 }
 
 void generateFirstMatrices(ulong *firstMatrix, ulong *firstInverseMatrix, ulong lines) {
@@ -186,7 +186,7 @@ void generateFirstMatrices(ulong *firstMatrix, ulong *firstInverseMatrix, ulong 
 		h = 0; //det = 1;
 		getRandTriangleMatrix(LUmatrices, 0, lines);
 		getRandTriangleMatrix(LUmatrices, 1, lines);
-		modularMatrixMult(LUmatrices, firstMatrix, lines);
+		modularTriangleMatrixMult(LUmatrices, firstMatrix, lines);
 		for (int i = 0; i < lines; i++) {
 			for (int j = 0; j < lines; j++) {
 				if (!cube(firstMatrix[i * lines + j])) {
@@ -204,10 +204,9 @@ void generateFirstMatrices(ulong *firstMatrix, ulong *firstInverseMatrix, ulong 
 void generateSecondMatrices(ulong *secondMatrix, ulong *secondInverseMatrix, ulong lines) {
 	ulong LUmatrices[lines * lines];
 
-	getRandTriangleMatrix(LUmatrices, 0, lines);
-	getRandTriangleMatrix(LUmatrices, 1, lines);
+	getNewRandTriangleMatrix(LUmatrices, 2, lines);
 
-	modularMatrixMult(LUmatrices, secondMatrix, lines);
+	modularTriangleMatrixMult(LUmatrices, secondMatrix, lines);
 
 	computeInverseMatrix(LUmatrices, secondInverseMatrix, lines);
 }
@@ -263,26 +262,108 @@ void getRandTriangleMatrix(ulong *matrix, uchar dir, ulong lines) {
 			for (int j = 0; j < i; j++) {
 				matrix[i * lines + j] = getRandom(moduleStruct.module);
 			}
+			for (int j = i + 1; j < lines; j++) {
+				matrix[i * lines + j] = 0;
+			}
 		}
 	}
 
 	// Fill diagonal right numbers
-	for (int i = 0; i < lines; i++) {
-		if (dir){
-			temp = getRandom(moduleStruct.module - 1) + 1;    // exclude zero
-			preMult = modularMult(mult, temp);
+    for (int i = 0; i < lines; i++) {
+        if (!dir) {
+            matrix[i * lines + i] = 1;
+        }
+        else {
+            temp = getRandom(moduleStruct.module - 1) + 1;    // exclude zero
+            preMult = modularMult(mult, temp);
 
-			// Choose right number
-			while (gcd(preMult, moduleStruct.module) != 1) {
-				temp = (temp + 1) % moduleStruct.module;
-				preMult = modularMult(mult, temp);
-			}
+            // Choose right number
+            while (gcd(preMult, moduleStruct.module) != 1) {
+                temp = (temp + 1) % moduleStruct.module;
+                preMult = modularMult(mult, temp);
+            }
 
-			mult = preMult;
-			matrix[i * lines + i] = temp;
-		}
-	}
+            mult = preMult;
+            matrix[i * lines + i] = temp;
+        }
+    }
 	return;
+}
+
+/*
+ * Функция для генерации рандомных треугольных матриц. Параметры:
+ * matrix - матрица для записи треугольно матрицы;
+ * lines - размер матрицы;
+ * dir - флаг:
+ *      = 0 - генерация нижнетреугольный матрицы
+ *      = 1 - генерация верхнетреугольной матрицы
+ *      иные значения - генерация обеих треугольных матриц с записью в одну квадратную
+ */
+void getNewRandTriangleMatrix(ulong *matrix, uchar dir, ulong lines) {
+    // Locale variables declaration
+    ulong temp;
+    ulong mult = 1;
+    ulong preMult = 0;
+
+    switch (dir){
+        case 0:
+            for (int i = 0; i < lines; i++) {
+                for (int j = 0; j < i; j++) {
+                    matrix[i * lines + j] = getRandom(moduleStruct.module);
+                }
+                for (int j = i + 1; j < lines; j++) {
+                    matrix[i * lines + j] = 0;
+                }
+            }
+            for (int i = 0; i < lines; i++) {
+                matrix[i * lines + i] = 1;
+            }
+            break;
+        case 1:
+            for (int i = 0; i < lines; i++) {
+                for (int j = 0; j < i; j++) {
+                    matrix[i * lines + j] = 0;
+                }
+                for (int j = i + 1; j < lines; j++) {
+                    matrix[i * lines + j] = getRandom(moduleStruct.module);
+                }
+            }
+            for (int i = 0; i < lines; i++) {
+                temp = getRandom(moduleStruct.module - 1) + 1;    // exclude zero
+                preMult = modularMult(mult, temp);
+
+                // Choose right number
+                while (gcd(preMult, moduleStruct.module) != 1) {
+                    temp = (temp + 1) % moduleStruct.module;
+                    preMult = modularMult(mult, temp);
+                }
+
+                mult = preMult;
+                matrix[i * lines + i] = temp;
+            }
+            break;
+        default:
+            for (int i = 0; i < lines; i++) {
+                for (int j = 0; j < lines; j++) {
+                    matrix[i * lines + j] = getRandom(moduleStruct.module);
+                }
+            }
+            for (int i = 0; i < lines; i++) {
+                temp = getRandom(moduleStruct.module - 1) + 1;    // exclude zero
+                preMult = modularMult(mult, temp);
+
+                // Choose right number
+                while (gcd(preMult, moduleStruct.module) != 1) {
+                    temp = (temp + 1) % moduleStruct.module;
+                    preMult = modularMult(mult, temp);
+                }
+
+                mult = preMult;
+                matrix[i * lines + i] = temp;
+            }
+            break;
+    }
+    return;
 }
 
 void generateFirstMatrices_rare(ulong *firstMatrix, ulong *firstInverseMatrix) {

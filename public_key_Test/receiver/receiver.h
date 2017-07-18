@@ -117,7 +117,8 @@ ulong modularMult(ulong a, ulong b);
 ulong modularDeg(ulong a, ulong b);
 ulong modularInverseAdd(ulong a);
 ulong modularInverseMult(ulong a);
-void modularMatrixMult(ulong *matrices, ulong *result, ulong lines);
+void modularTriangleMatrixMult(ulong *matrices, ulong *result, ulong lines);
+void modularMatrixMult(ulong *mat1, ulong *mat2, ulong *result, ulong lines);
 
 /**
  *	This block for operations with an any module

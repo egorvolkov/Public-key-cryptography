@@ -85,22 +85,36 @@ ulong modularInverseMult(ulong a)
 	return modularDeg(a, euler(moduleStruct.module) - 1);
 }
 
-//для хранения треугольных матриц в одной
-void modularMatrixMult(ulong *matrix, ulong *result, ulong lines) {
-	ulong i, j, k, l;
+void modularMatrixMult(ulong *mat1, ulong *mat2, ulong *result, ulong lines) {
+	ulong i, j, k;
 	for (i = 0; i < lines; i++) {
-		for (j = 0; j < lines; j++) {
-			result[i * lines + j] = 0;
-			for (k = 0; k < i; k++) {
-				result[i * lines + j] = modularAdd(result[i * lines + j], modularMult(matrix[i * lines + k], matrix[k * lines + j]));
-			}
-			result[i * lines + j] = modularAdd(result[i * lines + j], matrix[k * lines + j]);
-			k++;
-			for (l = 0; l < lines - k; l++){
-				result[i * lines + j] = modularAdd(result[i * lines + j], modularMult(matrix[i * lines + k], matrix[k * lines + j]));
+		for (k = 0; k < lines; k++) {
+			result[i * lines + k] = 0;
+			for (j = 0; j < lines; j++) {
+				result[i * lines + k] = modularAdd(result[i * lines + k], modularMult(mat1[i * lines + j], mat2[j * lines + k]));
 			}
 		}
 	}
+}
+
+//для хранения треугольных матриц в одной
+void modularTriangleMatrixMult(ulong *matrix, ulong *result, ulong lines) {
+    long i, j, k;
+    for (i = 0; i < lines; i++) {
+        for (j = 0; j < lines; j++) {
+            result[i * lines + j] = 0;
+            k = 0;
+            for (k; k < i; k++) {
+                if (k > j) {
+                    break;
+                }
+                result[i * lines + j] += matrix[i * lines + k] * matrix[k * lines + j];
+            }
+            if (j >= i) {
+                result[i * lines + j] += matrix[i * lines + j];
+            }
+        }
+    }
 }
 
 /**
