@@ -40,13 +40,6 @@ void cubeOfPolynomials(ulong *matrix, CubePolynomial bufferMatrix[], ulong *cons
 void polynomialCube(ulong *polyn, CubePolynomial *bufferMatrix) {
 	uint cur = 0;
 	ulong bufferFactor;
-<<<<<<< HEAD
-
-	for (uint i = 0; i < MAX_VARS_IN_CUBE; i++) {
-		bufferMatrix->vars[i] = 0;
-	}
-=======
->>>>>>> e66781fc78eea5f2b155432092e3bb49e68e3db7
 
 	for (uint i = 0; i < MAX_VARS_IN_CUBE; i++) {
 		bufferMatrix->vars[i] = 0;
