@@ -45,6 +45,7 @@ struct Matrices {
 	ulong secondMatrix[AMOUNT_OF_VARIABLES * AMOUNT_OF_VARIABLES];
 	ulong secondInverseMatrix[AMOUNT_OF_VARIABLES * AMOUNT_OF_VARIABLES];
 	ulong constants[AMOUNT_OF_VARIABLES];
+	ulong constants3[AMOUNT_OF_VARIABLES];
 };
 
 typedef struct CubePolynomial {
@@ -77,16 +78,16 @@ void shake(ulong *matrix, ulong *invert_matrix, ulong lines, ulong columns);
 void generateConstants(ulong *constants);
 
 
-void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, FullCubePolynomial *publicKey, ulong *constans);
+void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, FullCubePolynomial *publicKey, ulong *constants, ulong *constants3);
 void cubeOfPolynomials(ulong *matrix, CubePolynomial bufferMatrix[], ulong *constants);
 void polynomialCube(ulong *polyn, CubePolynomial *bufferPolyn);
-void multToSecondMatrix(ulong *matrix, CubePolynomial *bufferMatrix, FullCubePolynomial *publicKey);
+void multToSecondMatrix(ulong *matrix, CubePolynomial *bufferMatrix, FullCubePolynomial *publicKey, ulong *constants3);
 
 uint returnPublicKey(FullCubePolynomial *publicKey);
 void transmitterConnection();
 void getEncodedMessage(ulong *encodedOrRealMessage);
 
-void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *encodedOrRealMessage, ulong *constants);
+void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *encodedOrRealMessage, ulong *constants, ulong *constants3);
 
 uchar inArray(ulong *arr, uint length, ulong element);
 uint getModules(uint index);
