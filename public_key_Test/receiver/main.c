@@ -39,10 +39,17 @@ int main(int argc, char* argv[]) {
 	struct Matrices matrices;
 	FullCubePolynomial publicKey[AMOUNT_OF_POLYNOMS];
 	ulong encodedMessage[AMOUNT_OF_POLYNOMS];
-	ulong realMessage[AMOUNT_OF_VARIABLES];
-	ulong answers[AMOUNT_OF_VARIABLES];
-	ulong secretVector[AMOUNT_OF_POLYNOMS];
-	generatePows(answers, RADIX, AMOUNT_OF_VARIABLES - 1);
+	ulong realMessage[AMOUNT_OF_VARIABLES] = {0};
+	ulong radixes[NUMBER_OF_RADIX * 3] = {11,13};
+	ulong answers[AMOUNT_OF_VARIABLES * NUMBER_OF_RADIX];
+	ulong secretVector[LENGTH_OF_SECRET_VECTOR];
+	ulong transposition[AMOUNT_OF_VARIABLES];
+	ulong radix = 1;
+	generatePows(answers, radixes, AMOUNT_OF_VARIABLES - 1);
+	for (int i = 0; i < NUMBER_OF_RADIX; i++){
+		radix *= radixes[i];
+	}
+	computeRadixes(radixes,radix);
 	for (int loop = 0; loop < amountOfLoopIterations; loop++) {
 #ifdef PRINT
 		output = fopen(PATH_TO_OUTPUT, "w");
@@ -52,7 +59,7 @@ int main(int argc, char* argv[]) {
 		tStart = getTime();
 		tStartRDTSC = timeRDTSC();
 #endif
-		generateSecretKey(&matrices, secretVector, answers); //////////////////////////////////////////////////////
+		generateSecretKey(&matrices, secretVector, answers, transposition, radix); //////////////////////////////////////////////////////
 #ifdef TIME
 
 		tEnd = getTime();
@@ -123,7 +130,7 @@ int main(int argc, char* argv[]) {
 		tStart = getTime();
 		tStartRDTSC = timeRDTSC();
 #endif
-		decoding(matrices.firstInverseMatrix, matrices.secondInverseMatrix, encodedMessage,realMessage, matrices.constants, secretVector);
+		decoding(matrices.secondInverseMatrix, encodedMessage,realMessage, matrices.constants, secretVector, radixes, transposition, radix);
 #ifdef TIME
 		tEnd = getTime();
 		tEndRDTSC = timeRDTSC();

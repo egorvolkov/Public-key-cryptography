@@ -30,15 +30,16 @@
  *   	You can use any meanings you want but our algorithm of module generation isn't perfect.
  * 		Some meanings can cause looping.
  */
-#define RADIX 30
+#define NUMBER_OF_RADIX 2
+#define LENGTH_OF_SECRET_VECTOR 1
 #define SIZE_OF_AVAR 5
-#define AMOUNT_OF_VARIABLES 12
-#define AMOUNT_OF_VAR_IN_LINE_FIRST 5                                                                                                     
+#define AMOUNT_OF_VARIABLES 3
+#define AMOUNT_OF_VAR_IN_LINE_FIRST 5
 #define AMOUNT_OF_VAR_IN_LINE_SECOND 5
 #define SIZE_OF_VARIABLE 21
 #define SIZE_OF_MODULE (SIZE_OF_VARIABLE + 1)
-#define MAS_SIZE 5
-#define AMOUNT_OF_POLYNOMS 10
+#define MAS_SIZE 1
+#define AMOUNT_OF_POLYNOMS (NUMBER_OF_RADIX * LENGTH_OF_SECRET_VECTOR)
 
 /**
  * BYTES_FOR_AMOUNT_OF_MEMBER - this constant is for encoding a long number.

@@ -1,3 +1,3 @@
 all:
-	gcc ./receiver/*.c ./receiver/*.h -o receiver1 -lm -g -std=c11
-	gcc ./transmitter/*.c ./transmitter/*.h -o transmitter1 -g -std=c11
+	gcc ./receiver/*.c ./receiver/*.h -o Receiver -lm -g -std=c11 -lrt
+	gcc ./transmitter/*.c ./transmitter/*.h -o Transmitter -g -std=c11 -lrt
