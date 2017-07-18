@@ -12,12 +12,12 @@
 
 double timeRDTSC() {
 	//#ifdef TIME
-	/*union ticks {
+	union ticks {
 		unsigned long long tx;
 		struct dblword { long tl,th; } dw; // little endian
 	} t;
 	asm("rdtsc\n": "=a"(t.dw.tl),"=d"(t.dw.th));
-	return (double)t.tx;*/
+	return (double)t.tx;
 	//#endif
-	return 0;
+	//return 0;
 } // for x86 only!

@@ -3,11 +3,39 @@
 extern const uint size;
 extern struct Module moduleStruct;
 
-void generateSecretKey(struct Matrices *matrices) {
+void generateSecretKey(struct Matrices *matrices, struct NewMatrices *newMatrices) {
 	generateModule();
 	generateFirstMatrices_rare(matrices->firstMatrix, matrices->firstInverseMatrix);
 	generateSecondMatrices_rare(matrices->secondMatrix, matrices->secondInverseMatrix);
 	generateConstants(matrices->constants);
+	for (ulong i = 0; i < AMOUNT_OF_VARIABLES; i++){
+		newMatrices->constants[i] = matrices->constants[i];
+	}
+	ulong i, j, countFirst = 0, countInvFirst = 0, countSecond = 0, countInvSecond = 0;
+	for (i = 0; i < AMOUNT_OF_VARIABLES; i++){
+		for (j = 0; j < AMOUNT_OF_VARIABLES; j++){
+			if (matrices->firstMatrix[AMOUNT_OF_VARIABLES * i + j] != 0){
+				newMatrices->firstMatrix[countFirst] = j;
+				newMatrices->firstMatrix[countFirst + 1] = matrices->firstMatrix[AMOUNT_OF_VARIABLES * i + j];
+				countFirst += 2;
+			}
+			if (matrices->firstInverseMatrix[AMOUNT_OF_VARIABLES * i + j] != 0){
+				newMatrices->firstInverseMatrix[countInvFirst] = j;
+				newMatrices->firstInverseMatrix[countInvFirst + 1] = matrices->firstInverseMatrix[AMOUNT_OF_VARIABLES * i + j];
+				countInvFirst += 2;
+			}
+			if (matrices->secondMatrix[AMOUNT_OF_VARIABLES * i + j] != 0){
+				newMatrices->secondMatrix[countSecond] = j;
+				newMatrices->secondMatrix[countSecond + 1] = matrices->secondMatrix[AMOUNT_OF_VARIABLES * i + j];
+				countSecond += 2;
+			}
+			if (matrices->secondInverseMatrix[AMOUNT_OF_VARIABLES * i + j] != 0){
+				newMatrices->secondInverseMatrix[countInvSecond] = j;
+				newMatrices->secondInverseMatrix[countInvSecond + 1] = matrices->secondInverseMatrix[AMOUNT_OF_VARIABLES * i + j];
+				countInvSecond += 2;
+			}
+		}
+	}
 }
 
 void generateModule() {
@@ -149,17 +177,16 @@ void computePartsOfModule() {
 }
 
 void generateFirstMatrices(ulong *firstMatrix, ulong *firstInverseMatrix, ulong lines) {
-	ulong matrixUp[lines * lines];
-	ulong matrixDown[lines * lines];
+	ulong LUmatrices[lines * lines];
 
 	ulong h = 1;
 	//ulong det = 1;
 
 	while (h) {
 		h = 0; //det = 1;
-		getRandTriangleMatrix(matrixDown, 0, lines);
-		getRandTriangleMatrix(matrixUp, 1, lines);
-		modularMatrixMult(matrixDown, matrixUp, firstMatrix, lines);
+		getRandTriangleMatrix(LUmatrices, 0, lines);
+		getRandTriangleMatrix(LUmatrices, 1, lines);
+		modularMatrixMult(LUmatrices, firstMatrix, lines);
 		for (int i = 0; i < lines; i++) {
 			for (int j = 0; j < lines; j++) {
 				if (!cube(firstMatrix[i * lines + j])) {
@@ -171,21 +198,21 @@ void generateFirstMatrices(ulong *firstMatrix, ulong *firstInverseMatrix, ulong 
 			continue;
 		}
 	}
-	computeInverseMatrix(matrixDown, matrixUp, firstInverseMatrix,lines);
+	computeInverseMatrix(LUmatrices, firstInverseMatrix,lines);
 }
 
 void generateSecondMatrices(ulong *secondMatrix, ulong *secondInverseMatrix, ulong lines) {
-	ulong matrixUp[lines * lines];
-	ulong matrixDown[lines * lines];
+	ulong LUmatrices[lines * lines];
 
-	getRandTriangleMatrix(matrixDown, 0, lines);
-	getRandTriangleMatrix(matrixUp, 1, lines);
-	modularMatrixMult(matrixDown, matrixUp, secondMatrix, lines);
+	getRandTriangleMatrix(LUmatrices, 0, lines);
+	getRandTriangleMatrix(LUmatrices, 1, lines);
 
-	computeInverseMatrix(matrixDown, matrixUp, secondInverseMatrix, lines);
+	modularMatrixMult(LUmatrices, secondMatrix, lines);
+
+	computeInverseMatrix(LUmatrices, secondInverseMatrix, lines);
 }
 
-void computeInverseMatrix(ulong *matrixDown, ulong *matrixUp, ulong *inverseMatrix, ulong lines) {
+void computeInverseMatrix(ulong *LUmatrices, ulong *inverseMatrix, ulong lines) {
 	ulong sum;
 	for (int i = lines - 1; i >= 0; i--) {
 		for (int j = lines - 1; j >= 0; j--) {
@@ -212,7 +239,7 @@ void computeInverseMatrix(ulong *matrixDown, ulong *matrixUp, ulong *inverseMatr
 	}
 }
 
-void getRandTriangleMatrix(ulong *matrix, uchar dir,ulong lines) {
+void getRandTriangleMatrix(ulong *matrix, uchar dir, ulong lines) {
 	// Locale variables declaration
 	ulong temp;
 	ulong mult = 1;
@@ -236,18 +263,12 @@ void getRandTriangleMatrix(ulong *matrix, uchar dir,ulong lines) {
 			for (int j = 0; j < i; j++) {
 				matrix[i * lines + j] = getRandom(moduleStruct.module);
 			}
-			for (int j = i + 1; j < lines; j++) {
-				matrix[i * lines + j] = 0;
-			}
 		}
 	}
 
 	// Fill diagonal right numbers
 	for (int i = 0; i < lines; i++) {
-		if (!dir) {
-			matrix[i * lines + i] = 1;
-		}
-		else {
+		if (dir){
 			temp = getRandom(moduleStruct.module - 1) + 1;    // exclude zero
 			preMult = modularMult(mult, temp);
 
@@ -275,7 +296,7 @@ void generateFirstMatrices_rare(ulong *firstMatrix, ulong *firstInverseMatrix) {
 				A[i] = getRandom(moduleStruct.module - 1) + 1;
 			}
 		}
-		generateSecondMatrices(B,inv_B,N);
+		generateSecondMatrices(B, inv_B, N);
 	}
 	while (tenzorMult(A, B, firstMatrix, N, 1));
 	for (ulong i = 0; i < K; i++) {

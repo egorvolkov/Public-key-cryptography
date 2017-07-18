@@ -85,13 +85,19 @@ ulong modularInverseMult(ulong a)
 	return modularDeg(a, euler(moduleStruct.module) - 1);
 }
 
-void modularMatrixMult(ulong *mat1, ulong *mat2, ulong *result, ulong lines) {
-	ulong i, j, k;
+//для хранения треугольных матриц в одной
+void modularMatrixMult(ulong *matrix, ulong *result, ulong lines) {
+	ulong i, j, k, l;
 	for (i = 0; i < lines; i++) {
-		for (k = 0; k < lines; k++) {
-			result[i * lines + k] = 0;
-			for (j = 0; j < lines; j++) {
-				result[i * lines + k] = modularAdd(result[i * lines + k], modularMult(mat1[i * lines + j], mat2[j * lines + k]));
+		for (j = 0; j < lines; j++) {
+			result[i * lines + j] = 0;
+			for (k = 0; k < i; k++) {
+				result[i * lines + j] = modularAdd(result[i * lines + j], modularMult(matrix[i * lines + k], matrix[k * lines + j]));
+			}
+			result[i * lines + j] = modularAdd(result[i * lines + j], matrix[k * lines + j]);
+			k++;
+			for (l = 0; l < lines - k; l++){
+				result[i * lines + j] = modularAdd(result[i * lines + j], modularMult(matrix[i * lines + k], matrix[k * lines + j]));
 			}
 		}
 	}

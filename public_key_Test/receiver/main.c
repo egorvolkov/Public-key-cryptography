@@ -37,8 +37,11 @@ int main(int argc, char* argv[]) {
 
 	FILE *file = NULL;
 	struct Matrices matrices;
+	struct NewMatrices newMatrices;
 	FullCubePolynomial publicKey[size];
+    FullCubePolynomial newPublicKey[size];
 	ulong encodedOrRealMessage[size];
+    ulong newEncodedOrRealMessage[size];
 
 	for (int loop = 0; loop < amountOfLoopIterations; loop++) {
 #ifdef PRINT
@@ -49,7 +52,7 @@ int main(int argc, char* argv[]) {
 		tStart = getTime();
 		tStartRDTSC = timeRDTSC();
 #endif
-		generateSecretKey(&matrices); //////////////////////////////////////////////////////
+		generateSecretKey(&matrices, &newMatrices); //////////////////////////////////////////////////////
 #ifdef TIME
 
 		tEnd = getTime();
@@ -72,23 +75,48 @@ int main(int argc, char* argv[]) {
 		fPrintMatrix(matrices.firstMatrix, size, size); printMatrix(matrices.firstMatrix, size, size);
 		fprintf(output, "\n"); printf("\n");
 
+        fprintf(output, "New Matrix A\n"); printf("New Matrix A\n");
+        fPrintMatrix(newMatrices.firstMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_FIRST); printMatrix(newMatrices.firstMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_FIRST);
+        fprintf(output, "\n"); printf("\n");
+
 		fprintf(output, "Matrix A^(-1)\n"); printf("Matrix A^(-1)\n");
 		fPrintMatrix(matrices.firstInverseMatrix, size, size); printMatrix(matrices.firstInverseMatrix, size, size);
 		fprintf(output, "\n"); printf("\n");
+
+        fprintf(output, "New Matrix A^(-1)\n"); printf("New Matrix A^(-1)\n");
+        fPrintMatrix(newMatrices.firstInverseMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_FIRST); printMatrix(newMatrices.firstInverseMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_FIRST);
+        fprintf(output, "\n"); printf("\n");
 
 		fprintf(output, "Matrix B\n"); printf("Matrix B\n");
 		fPrintMatrix(matrices.secondMatrix, size, size); printMatrix(matrices.secondMatrix, size, size);
 		fprintf(output, "\n"); printf("\n");
 
+        fprintf(output, "New Matrix B\n"); printf("New Matrix B\n");
+        fPrintMatrix(newMatrices.secondMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_SECOND); printMatrix(newMatrices.secondMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_SECOND);
+        fprintf(output, "\n"); printf("\n");
+
 		fprintf(output, "Matrix B^(-1)\n"); printf("Matrix B^(-1)\n");
 		fPrintMatrix(matrices.secondInverseMatrix, size, size); printMatrix(matrices.secondInverseMatrix, size, size);
 		fprintf(output, "\n"); printf("\n");
+
+        fprintf(output, "New Matrix B^(-1)\n"); printf("New Matrix B^(-1)\n");
+        fPrintMatrix(newMatrices.secondInverseMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_SECOND); printMatrix(newMatrices.secondInverseMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_SECOND);
+        fprintf(output, "\n"); printf("\n");
+
 #endif
 #ifdef TIME
 		tStart = getTime();
 		tStartRDTSC = timeRDTSC();
 #endif
+        computeNewPublicKey(newMatrices.firstMatrix, newMatrices.secondMatrix, publicKey, newMatrices.constants);
 		computePublicKey(matrices.firstMatrix, matrices.secondMatrix, publicKey, matrices.constants); ///////////////////////////////////////////
+        fprintf(output, "Public key\n"); printf("Public key\n");
+        fPrintFullCubePolynomials(publicKey); printFullCubePolynomials(publicKey);
+        fprintf(output, "\n"); printf("\n");
+
+        printf("Bytes written: %d\n", returnPublicKey(publicKey));
+
+        //computeNewPublicKey(newMatrices.firstMatrix, newMatrices.secondMatrix, newPublicKey, newMatrices.constants);
 #ifdef TIME
 		tEnd = getTime();
 		tEndRDTSC = timeRDTSC();
@@ -97,11 +125,11 @@ int main(int argc, char* argv[]) {
 		timeOfPublicKeyRDTSC += tEndRDTSC - tStartRDTSC;
 #endif
 #ifdef PRINT
-		fprintf(output, "Public key\n"); printf("Public key\n");
-		fPrintFullCubePolynomials(publicKey); printFullCubePolynomials(publicKey);
-		fprintf(output, "\n"); printf("\n");
+        //fprintf(output, "New public key\n"); printf("New public key\n");
+        //fPrintFullCubePolynomials(newPublicKey); printFullCubePolynomials(newPublicKey);
+        //fprintf(output, "\n"); printf("\n");
 
-		printf("Bytes written: %d\n", returnPublicKey(publicKey));
+        //printf("Bytes written: %d\n", returnPublicKey(newPublicKey));
 #endif
 #ifndef PRINT
 		returnPublicKey(publicKey); ///////////////////////////////////////
@@ -109,6 +137,9 @@ int main(int argc, char* argv[]) {
 		transmitterConnection();
 
 		getEncodedMessage(encodedOrRealMessage);
+        for (uint i = 0; i < size; i++){
+            newEncodedOrRealMessage[i] = encodedOrRealMessage[i];
+        }
 #ifdef PRINT
 		fprintf(output, "Encoded message by module: "); printf("Encoded message by module: ");
 		for (int i = 0; i < size; i++) {
@@ -121,6 +152,9 @@ int main(int argc, char* argv[]) {
 		tStartRDTSC = timeRDTSC();
 #endif
 		decoding(matrices.firstInverseMatrix, matrices.secondInverseMatrix, encodedOrRealMessage, matrices.constants);
+        //decoding(matrices.firstInverseMatrix, matrices.secondInverseMatrix, newEncodedOrRealMessage, matrices.constants);
+
+        newDecoding(newMatrices.firstInverseMatrix, newMatrices.secondInverseMatrix, newEncodedOrRealMessage, newMatrices.constants);
 #ifdef TIME
 		tEnd = getTime();
 		tEndRDTSC = timeRDTSC();
@@ -134,6 +168,12 @@ int main(int argc, char* argv[]) {
 			fprintf(output, "%llu ", encodedOrRealMessage[i]); printf("%llu ", encodedOrRealMessage[i]);
 		}
 		fprintf(output, "\n"); printf("\n");
+
+        fprintf(output, "New message: "); printf("New message: ");
+        for (int i = 0; i < size; i++) {
+            fprintf(output, "%llu ", newEncodedOrRealMessage[i]); printf("%llu ", newEncodedOrRealMessage[i]);
+        }
+        fprintf(output, "\n"); printf("\n");
 #endif
 #ifdef TIME
 		printf("\nMiddle time (iteration %u)\n\
@@ -149,7 +189,7 @@ int main(int argc, char* argv[]) {
 		for (int i = 0; i < size; i++) {
 			ulong buf;
 			fscanf(file, "%llu", &buf);
-			if (buf != encodedOrRealMessage[i]) {
+			if (buf != newEncodedOrRealMessage[i]) {
 				printf("ERROR!!! Maybe this is error of connection between transmitter and receiver.\n");
 				getchar();
 				break;
