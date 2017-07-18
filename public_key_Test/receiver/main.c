@@ -108,8 +108,10 @@ int main(int argc, char* argv[]) {
 		tStart = getTime();
 		tStartRDTSC = timeRDTSC();
 #endif
+		getchar();
         computeNewPublicKey(newMatrices.firstMatrix, newMatrices.secondMatrix, publicKey, newMatrices.constants);
-		computePublicKey(matrices.firstMatrix, matrices.secondMatrix, publicKey, matrices.constants); ///////////////////////////////////////////
+		getchar();
+		//computePublicKey(matrices.firstMatrix, matrices.secondMatrix, publicKey, matrices.constants); ///////////////////////////////////////////
         fprintf(output, "Public key\n"); printf("Public key\n");
         fPrintFullCubePolynomials(publicKey); printFullCubePolynomials(publicKey);
         fprintf(output, "\n"); printf("\n");

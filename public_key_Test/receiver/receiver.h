@@ -73,6 +73,7 @@ void generateFirstMatrices(ulong *firstMatrix, ulong *firstInverseMatrix, ulong 
 void generateSecondMatrices(ulong *secondMatrix, ulong *secondInverseMatrix, ulong lines);
 void computeInverseMatrix(ulong *matrices, ulong *inverseMatrix, ulong lines);
 void getRandTriangleMatrix(ulong *matrix, uchar dir, ulong lines);
+void getNewRandTriangleMatrix(ulong *matrix, uchar dir, ulong lines);
 
 void generateFirstMatrices_rare(ulong *firstMatrix, ulong *firstInverseMatrix);
 void generateSecondMatrices_rare(ulong *secondMatrix, ulong *secondInverseMatrix);

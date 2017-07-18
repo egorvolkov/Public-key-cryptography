@@ -108,10 +108,10 @@ void modularTriangleMatrixMult(ulong *matrix, ulong *result, ulong lines) {
                 if (k > j) {
                     break;
                 }
-                result[i * lines + j] += matrix[i * lines + k] * matrix[k * lines + j];
+                result[i * lines + j] = modularAdd(result[i * lines + j], modularMult(matrix[i * lines + k], matrix[k * lines + j]));
             }
             if (j >= i) {
-                result[i * lines + j] += matrix[i * lines + j];
+                result[i * lines + j] = modularAdd(result[i * lines + j], matrix[i * lines + j]);
             }
         }
     }
