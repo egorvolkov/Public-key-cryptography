@@ -373,9 +373,8 @@ void getNewRandTriangleMatrix(ulong *matrix, uchar dir, ulong lines) {
 void generateFirstMatrices_rare(ulong *firstMatrix, ulong *firstInverseMatrix) {
 	const ulong N = AMOUNT_OF_VAR_IN_LINE_FIRST, K = size / N;
 	ulong A[K], B[N * N], inv_B[N * N];
-	printf("1");
-	//do
-	//{
+	do
+	{
 		for (ulong i = 0; i < K; i++) {
 			A[i] = getRandom(moduleStruct.module - 1) + 1;
 			while (gcd(A[i], moduleStruct.module) != 1) {
@@ -383,15 +382,9 @@ void generateFirstMatrices_rare(ulong *firstMatrix, ulong *firstInverseMatrix) {
 			}
 		}
 	generateSecondMatrices(B, inv_B, N);
-	printf("\n");
-	printMatrix(B, N, N);
-	printf("\n");
-	//}
-	//while (tenzorMult(A, B, firstMatrix, N, 1));
-		tenzorMult(A, B, firstMatrix, N, 1);
-		printMatrix(firstMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_FIRST);
-		getchar();
-	printf("2");
+	}
+	while (tenzorMult(A, B, firstMatrix, N, 1));
+	tenzorMult(A, B, firstMatrix, N, 1);
 	for (ulong i = 0; i < K; i++) {
 		A[i] = modularDiv(1, A[i]);
 	}
@@ -422,13 +415,13 @@ uchar tenzorMult(ulong *A, ulong *B, ulong *result, ulong N, uchar check) {
 	if (check){
 		for (ulong i = 0; i < size; i++) {
 			cur = 0;
-			for ( ulong j = 0; j < size; j++) {
+			for (ulong j = 0; j < size; j++) {
 				if (i / N == j / N) {
 					result[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + cur] = j;
 					result[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + cur + 1] = modularMult(A[i / N] , B[(i % N)*N + (j % N)]);
-					cur++;
+					cur += 2;
 				}
-				if (!cube(result[i * size + j]) && (i / N == j / N)){
+				if ((i / N == j / N) && !cube(result[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + cur + 1])){
 					return 1;
 				}
 			}
@@ -442,7 +435,7 @@ uchar tenzorMult(ulong *A, ulong *B, ulong *result, ulong N, uchar check) {
 				if (i / N == j / N) {
 					result[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + cur] = j;
 					result[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + cur + 1] = modularMult(A[i / N] , B[(i % N)*N + (j % N)]);
-					cur++;
+					cur += 2;
 				}
 			}
 		}

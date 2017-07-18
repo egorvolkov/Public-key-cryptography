@@ -71,33 +71,33 @@ int main(int argc, char* argv[]) {
 		}
 		fprintf(output, "\n"); printf("\n");
 
-		fprintf(output, "Matrix A\n"); printf("Matrix A\n");
-		fPrintMatrix(matrices.firstMatrix, size, size); printMatrix(matrices.firstMatrix, size, size);
-		fprintf(output, "\n"); printf("\n");
+		// fprintf(output, "Matrix A\n"); printf("Matrix A\n");
+		// fPrintMatrix(matrices.firstMatrix, size, size); printMatrix(matrices.firstMatrix, size, size);
+		// fprintf(output, "\n"); printf("\n");
 
         fprintf(output, "New Matrix A\n"); printf("New Matrix A\n");
         fPrintMatrix(newMatrices.firstMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_FIRST); printMatrix(newMatrices.firstMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_FIRST);
         fprintf(output, "\n"); printf("\n");
 
-		fprintf(output, "Matrix A^(-1)\n"); printf("Matrix A^(-1)\n");
-		fPrintMatrix(matrices.firstInverseMatrix, size, size); printMatrix(matrices.firstInverseMatrix, size, size);
-		fprintf(output, "\n"); printf("\n");
+		// fprintf(output, "Matrix A^(-1)\n"); printf("Matrix A^(-1)\n");
+		// fPrintMatrix(matrices.firstInverseMatrix, size, size); printMatrix(matrices.firstInverseMatrix, size, size);
+		// fprintf(output, "\n"); printf("\n");
 
         fprintf(output, "New Matrix A^(-1)\n"); printf("New Matrix A^(-1)\n");
         fPrintMatrix(newMatrices.firstInverseMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_FIRST); printMatrix(newMatrices.firstInverseMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_FIRST);
         fprintf(output, "\n"); printf("\n");
 
-		fprintf(output, "Matrix B\n"); printf("Matrix B\n");
-		fPrintMatrix(matrices.secondMatrix, size, size); printMatrix(matrices.secondMatrix, size, size);
-		fprintf(output, "\n"); printf("\n");
+		// fprintf(output, "Matrix B\n"); printf("Matrix B\n");
+		// fPrintMatrix(matrices.secondMatrix, size, size); printMatrix(matrices.secondMatrix, size, size);
+		// fprintf(output, "\n"); printf("\n");
 
         fprintf(output, "New Matrix B\n"); printf("New Matrix B\n");
         fPrintMatrix(newMatrices.secondMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_SECOND); printMatrix(newMatrices.secondMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_SECOND);
         fprintf(output, "\n"); printf("\n");
 
-		fprintf(output, "Matrix B^(-1)\n"); printf("Matrix B^(-1)\n");
-		fPrintMatrix(matrices.secondInverseMatrix, size, size); printMatrix(matrices.secondInverseMatrix, size, size);
-		fprintf(output, "\n"); printf("\n");
+		// fprintf(output, "Matrix B^(-1)\n"); printf("Matrix B^(-1)\n");
+		// fPrintMatrix(matrices.secondInverseMatrix, size, size); printMatrix(matrices.secondInverseMatrix, size, size);
+		// fprintf(output, "\n"); printf("\n");
 
         fprintf(output, "New Matrix B^(-1)\n"); printf("New Matrix B^(-1)\n");
         fPrintMatrix(newMatrices.secondInverseMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_SECOND); printMatrix(newMatrices.secondInverseMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_SECOND);
@@ -108,9 +108,7 @@ int main(int argc, char* argv[]) {
 		tStart = getTime();
 		tStartRDTSC = timeRDTSC();
 #endif
-		getchar();
         computeNewPublicKey(newMatrices.firstMatrix, newMatrices.secondMatrix, publicKey, newMatrices.constants);
-		getchar();
 		//computePublicKey(matrices.firstMatrix, matrices.secondMatrix, publicKey, matrices.constants); ///////////////////////////////////////////
         fprintf(output, "Public key\n"); printf("Public key\n");
         fPrintFullCubePolynomials(publicKey); printFullCubePolynomials(publicKey);
@@ -153,7 +151,7 @@ int main(int argc, char* argv[]) {
 		tStart = getTime();
 		tStartRDTSC = timeRDTSC();
 #endif
-		decoding(matrices.firstInverseMatrix, matrices.secondInverseMatrix, encodedOrRealMessage, matrices.constants);
+		//decoding(matrices.firstInverseMatrix, matrices.secondInverseMatrix, encodedOrRealMessage, matrices.constants);
         //decoding(matrices.firstInverseMatrix, matrices.secondInverseMatrix, newEncodedOrRealMessage, matrices.constants);
 
         newDecoding(newMatrices.firstInverseMatrix, newMatrices.secondInverseMatrix, newEncodedOrRealMessage, newMatrices.constants);

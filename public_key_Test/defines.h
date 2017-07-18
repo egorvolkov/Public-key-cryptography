@@ -31,7 +31,7 @@
  * 		Some meanings can cause looping.
  */
 #define SIZE_OF_AVAR 4
-#define AMOUNT_OF_VARIABLES 6
+#define AMOUNT_OF_VARIABLES 4
 #define AMOUNT_OF_VAR_IN_LINE_FIRST 2
 #define AMOUNT_OF_VAR_IN_LINE_SECOND 2
 #define SIZE_OF_VARIABLE 5
