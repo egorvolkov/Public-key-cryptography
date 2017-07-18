@@ -18,8 +18,8 @@ void getPublicKey(FullCubePolynomial *publicKey) {
 		printf("Can't open the file for reading\n");
 		return;
 	}
-		int a = AMOUNT_OF_POLYNOMS, b = MAX_TERMS_IN_KEY, c = MAX_VARS_IN_KEY;
-	for (int i = 0; i < AMOUNT_OF_POLYNOMS; i++) {
+
+	for (int i = 0; i < size; i++) {
 		fread(publicKey[i].factor, 8, MAX_TERMS_IN_KEY, fin);
 		fread(publicKey[i].vars, 4, MAX_VARS_IN_KEY, fin);
 	}

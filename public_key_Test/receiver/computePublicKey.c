@@ -9,7 +9,8 @@ extern FILE *output;
 #endif
 
 void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, FullCubePolynomial *publicKey, ulong *constants) {
-	CubePolynomial bufferMatrix[AMOUNT_OF_POLYNOMS];
+
+	CubePolynomial bufferMatrix[size];
 	cubeOfPolynomials(firstMatrix, bufferMatrix, constants);
 #ifdef PRINT
 	printf("Constants:\n");
@@ -41,6 +42,10 @@ void cubeOfPolynomials(ulong *matrix, CubePolynomial bufferMatrix[], ulong *cons
 void polynomialCube(ulong *polyn, CubePolynomial *bufferMatrix) {
 	uint cur = 0;
 	ulong bufferFactor;
+
+	for (uint i = 0; i < MAX_VARS_IN_CUBE; i++) {
+		bufferMatrix->vars[i] = 0;
+	}
 
 	for (uint i = 0; i < MAX_VARS_IN_CUBE; i++) {
 		bufferMatrix->vars[i] = 0;
@@ -127,12 +132,12 @@ void polynomialCube(ulong *polyn, CubePolynomial *bufferMatrix) {
 
 void multToSecondMatrix(ulong *matrix, CubePolynomial *bufferMatrix, FullCubePolynomial *publicKey) {
 	ulong cur;
-	for(uint i = 0; i < AMOUNT_OF_POLYNOMS; i++) {
+	for(uint i = 0; i < size; i++) {
 		for (uint j = 0; j < MAX_VARS_IN_KEY; j++) {
 			publicKey[i].vars[j] = 0;
 		}
 	}
-	for (uint i = 0; i < AMOUNT_OF_POLYNOMS; i++) {
+	for (uint i = 0; i < size; i++) {
 		cur = 0;
 		for (uint j = 0; j < AMOUNT_OF_POLYNOMS; j++) {
 			for (uint k = 0; k < MAX_TERMS_IN_CUBE; k++) {
@@ -162,44 +167,6 @@ void multToSecondMatrix(ulong *matrix, CubePolynomial *bufferMatrix, FullCubePol
 		}
 		for (cur; cur < MAX_TERMS_IN_KEY; cur++) {
 			publicKey[i].factor[cur] = 0;
-		}
-	}
-}
-
-void solve(ulong *vector, ulong N, ulong answer, ulong *result){
-	if (N == 1){
-		result[0] = modularMult(modularInverseMult(modularInverseAdd(vector[0])),answer);
-		return;
-	}
-  srand(time(NULL));
-  ulong temp = answer;
-  ulong module = vector[0];
-  for (ulong i = 2; i < N; i++){
-    result[i] = rand() % (moduleStruct.module - 1) + 1;
-    temp = modularAddUniver(temp, modularMultUniver(modularInverseAddUniver(vector[i],module), result[i], module), module);
-  }
-  result[1] = modularMultUniver(temp, modularInverseMultUniver(vector[1],module), module);
-  if (result[1] == 0){
-    result[1] = module;
-  }
-  temp = modularInverseAdd(answer);
-  for (int i = 1; i < N; i++){
-		temp = modularAdd(temp, modularMult(result[i], vector[i]));
-  }
-  result[0] = modularDiv(temp,vector[0]);
-}
-
-/*coef_vector - коэффициенты уравнения, answer_vector - правые части, root_matrix - выходная матрица столбцов*/
-void full_gcd(ulong* coef_vector, ulong* answer_vector, ulong* root_matrix){
-	ulong k = 0;
-	ulong	root_vector[AMOUNT_OF_POLYNOMS];
-	for (ulong i = 0; i < AMOUNT_OF_VARIABLES; ++i)
-	{
-		/* code */
-		solve(coef_vector, AMOUNT_OF_POLYNOMS, answer_vector[i], root_vector);
-		for (ulong j = 0; j < AMOUNT_OF_POLYNOMS; ++j)
-		{
-			root_matrix[j*AMOUNT_OF_VARIABLES + i] = root_vector[j];
 		}
 	}
 }

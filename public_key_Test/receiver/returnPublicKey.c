@@ -14,8 +14,7 @@ uint returnPublicKey(FullCubePolynomial *publicKey) {
 		return 1;
 	}
 
-	int a = AMOUNT_OF_POLYNOMS, b = MAX_TERMS_IN_KEY, c = MAX_VARS_IN_KEY;
-	for (int i = 0; i < AMOUNT_OF_POLYNOMS; i++) {
+	for (int i = 0; i < size; i++) {
 		fwrite(publicKey[i].factor, 8, MAX_TERMS_IN_KEY, fout);
 		fwrite(publicKey[i].vars, 4, MAX_VARS_IN_KEY, fout);
 	}
