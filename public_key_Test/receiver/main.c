@@ -11,6 +11,7 @@ FILE *output;
 #endif
 
 int main(int argc, char* argv[]) {
+	printf("Lena, just do it!\n");
 	int amountOfLoopIterations = AMOUNT_OF_LOOP_ITERATIONS;
 	int pause = PAUSE;
 	if (argc > 1) {

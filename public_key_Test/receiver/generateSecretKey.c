@@ -389,7 +389,7 @@ void generateFirstMatrices_rare(ulong *firstMatrix, ulong *firstInverseMatrix) {
 		A[i] = modularDiv(1, A[i]);
 	}
 	tenzorMult(A, inv_B, firstInverseMatrix, N, 0);
-	shake(firstMatrix, firstInverseMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_FIRST);
+	//shake(firstMatrix, firstInverseMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_FIRST);
 }
 
 void generateSecondMatrices_rare(ulong *secondMatrix, ulong *secondInverseMatrix) {
@@ -407,7 +407,7 @@ void generateSecondMatrices_rare(ulong *secondMatrix, ulong *secondInverseMatrix
 		A[i] = modularDiv(1, A[i]);
 	}
 	tenzorMult(A, inv_B, secondInverseMatrix, N, 0);
-	shake(secondMatrix, secondInverseMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_SECOND);
+	//shake(secondMatrix, secondInverseMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_SECOND);
 }
 
 uchar tenzorMult(ulong *A, ulong *B, ulong *result, ulong N, uchar check) {

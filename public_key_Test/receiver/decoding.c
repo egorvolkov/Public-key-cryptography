@@ -79,6 +79,7 @@ void newDecoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *e
 	fprintf(output, "\nCube-root: "); printf("\nCube-root: ");
 	for (int i = 0; i < size; i++) {
 		fprintf(output, "%llu ", cube[i]);
+		printf("%llu ", cube[i]);
 	}
 	fprintf(output, "\n"); printf("\n");
 #endif
@@ -86,8 +87,14 @@ void newDecoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *e
 	for (int i = 0; i < size; i++) {
 		encodedOrRealMessage[i] = 0;
 		for (int j = 0; j < 2 * AMOUNT_OF_VAR_IN_LINE_FIRST;) {
+			//printf("%d %d\n", i, j);
+			//printf("%u\n", encodedOrRealMessage[i]);
+			//printf("%u\n", firstInverseMatrix[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + j]);
+			//printf("%u\n", cube[firstInverseMatrix[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + j]]);
+			//printf("%u\n", firstInverseMatrix[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + j + 1]);
 			encodedOrRealMessage[i] = modularAdd(encodedOrRealMessage[i], modularMult(firstInverseMatrix[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + j + 1], cube[firstInverseMatrix[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + j]]));
 		    j += 2;
         }
 	}
+	//printf("asd");
 }
