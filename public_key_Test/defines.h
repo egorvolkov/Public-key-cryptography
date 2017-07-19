@@ -10,8 +10,8 @@
  * PAUSE - amount of loop iterations before a pause. Must be more then 0
  * 		Also you can set this parameter like an argument of execution the program. Parameter has more priority.
  */
-#define AMOUNT_OF_LOOP_ITERATIONS 100000
-#define PAUSE 10000
+#define AMOUNT_OF_LOOP_ITERATIONS 2000000000
+#define PAUSE 2000000000
 
 /**
  * AMOUNT_OF_VARIABLES - amount of variables; from 0 to infinity (in a theory)
@@ -38,7 +38,7 @@
 #define AMOUNT_OF_VAR_IN_LINE_SECOND 5
 #define SIZE_OF_VARIABLE 21
 #define SIZE_OF_MODULE (SIZE_OF_VARIABLE + 1)
-#define MAS_SIZE 1
+#define MAS_SIZE 2
 #define AMOUNT_OF_POLYNOMS (NUMBER_OF_RADIX * LENGTH_OF_SECRET_VECTOR)
 
 /**

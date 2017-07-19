@@ -9,11 +9,9 @@ extern FILE *output;
 
 void matricesDeTransposition(ulong *matrices, ulong *transposition){
   for(int i = AMOUNT_OF_VARIABLES - 1; i >= 0; i--){
-    for(ulong j = 0; j < 1; j++){
-      ulong tmp = matrices[i + j * AMOUNT_OF_VARIABLES];
-      matrices[i + j * AMOUNT_OF_VARIABLES] = matrices[transposition[i] + j * AMOUNT_OF_VARIABLES];
-      matrices[transposition[i] + j * AMOUNT_OF_VARIABLES] = tmp;
-    }
+    ulong tmp = matrices[i];
+    matrices[i] = matrices[transposition[i]];
+    matrices[transposition[i]] = tmp;
   }
 }
 void decoding(ulong *secondInverseMatrix, ulong *encodedMessage, ulong *realMessage, ulong *constants, ulong *secretVector, ulong *radixes, ulong *transposition, ulong radix) {

@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
 	FullCubePolynomial publicKey[AMOUNT_OF_POLYNOMS];
 	ulong encodedMessage[AMOUNT_OF_POLYNOMS];
 	ulong realMessage[AMOUNT_OF_VARIABLES] = {0};
-	ulong radixes[NUMBER_OF_RADIX * 3] = {11,13};
+	ulong radixes[NUMBER_OF_RADIX * 3] = {41,43};
 	ulong answers[AMOUNT_OF_VARIABLES * NUMBER_OF_RADIX];
 	ulong secretVector[LENGTH_OF_SECRET_VECTOR];
 	ulong transposition[AMOUNT_OF_VARIABLES];
