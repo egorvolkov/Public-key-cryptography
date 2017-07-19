@@ -76,33 +76,49 @@ int main(int argc, char* argv[]) {
 		// fPrintMatrix(matrices.firstMatrix, size, size); printMatrix(matrices.firstMatrix, size, size);
 		// fprintf(output, "\n"); printf("\n");
 
-        fprintf(output, "New Matrix A\n"); printf("New Matrix A\n");
-        fPrintMatrix(newMatrices.firstMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_FIRST); printMatrix(newMatrices.firstMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_FIRST);
-        fprintf(output, "\n"); printf("\n");
+        // fprintf(output, "New Matrix A\n"); printf("New Matrix A\n");
+        // fPrintMatrix(newMatrices.firstMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_FIRST); printMatrix(newMatrices.firstMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_FIRST);
+        // fprintf(output, "\n"); printf("\n");
+
+        printf("New Matrix A\n");
+        printNewMatrix(newMatrices.firstMatrix, size, size, AMOUNT_OF_VAR_IN_LINE_FIRST);
+        printf("\n");
+
+        printf("New Matrix A^(-1)\n");
+        printNewMatrix(newMatrices.firstInverseMatrix, size, size, AMOUNT_OF_VAR_IN_LINE_FIRST);
+        printf("\n");
+
+        printf("New Matrix B\n");
+        printNewMatrix(newMatrices.secondMatrix, size, size, AMOUNT_OF_VAR_IN_LINE_FIRST);
+        printf("\n");
+
+        printf("New Matrix B^(-1)\n");
+        printNewMatrix(newMatrices.secondInverseMatrix, size, size, AMOUNT_OF_VAR_IN_LINE_FIRST);
+        printf("\n");
 
 		// fprintf(output, "Matrix A^(-1)\n"); printf("Matrix A^(-1)\n");
 		// fPrintMatrix(matrices.firstInverseMatrix, size, size); printMatrix(matrices.firstInverseMatrix, size, size);
 		// fprintf(output, "\n"); printf("\n");
 
-        fprintf(output, "New Matrix A^(-1)\n"); printf("New Matrix A^(-1)\n");
-        fPrintMatrix(newMatrices.firstInverseMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_FIRST); printMatrix(newMatrices.firstInverseMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_FIRST);
-        fprintf(output, "\n"); printf("\n");
+        // fprintf(output, "New Matrix A^(-1)\n"); printf("New Matrix A^(-1)\n");
+        // fPrintMatrix(newMatrices.firstInverseMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_FIRST); printMatrix(newMatrices.firstInverseMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_FIRST);
+        // fprintf(output, "\n"); printf("\n");
 
 		// fprintf(output, "Matrix B\n"); printf("Matrix B\n");
 		// fPrintMatrix(matrices.secondMatrix, size, size); printMatrix(matrices.secondMatrix, size, size);
 		// fprintf(output, "\n"); printf("\n");
 
-        fprintf(output, "New Matrix B\n"); printf("New Matrix B\n");
-        fPrintMatrix(newMatrices.secondMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_SECOND); printMatrix(newMatrices.secondMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_SECOND);
-        fprintf(output, "\n"); printf("\n");
+        // fprintf(output, "New Matrix B\n"); printf("New Matrix B\n");
+        // fPrintMatrix(newMatrices.secondMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_SECOND); printMatrix(newMatrices.secondMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_SECOND);
+        // fprintf(output, "\n"); printf("\n");
 
 		// fprintf(output, "Matrix B^(-1)\n"); printf("Matrix B^(-1)\n");
 		// fPrintMatrix(matrices.secondInverseMatrix, size, size); printMatrix(matrices.secondInverseMatrix, size, size);
 		// fprintf(output, "\n"); printf("\n");
 
-        fprintf(output, "New Matrix B^(-1)\n"); printf("New Matrix B^(-1)\n");
-        fPrintMatrix(newMatrices.secondInverseMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_SECOND); printMatrix(newMatrices.secondInverseMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_SECOND);
-        fprintf(output, "\n"); printf("\n");
+        // fprintf(output, "New Matrix B^(-1)\n"); printf("New Matrix B^(-1)\n");
+        // fPrintMatrix(newMatrices.secondInverseMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_SECOND); printMatrix(newMatrices.secondInverseMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_SECOND);
+        // fprintf(output, "\n"); printf("\n");
 
 #endif
 #ifdef TIME
@@ -296,4 +312,25 @@ void fPrintFullCubePolynomials(FullCubePolynomial *cubePolynomials) {
 		fprintf(output, "\n");
 	}
 }
+
+void printNewMatrix(ulong* matrix, int size1, int size2, int amount) {
+	int cur;
+	for (int i = 0; i < size; i++) {
+		cur = 0;
+		for (int j = 0; j < size2; j++) {
+			if (cur == amount) {
+				printf("0 ");
+				continue;
+			}
+			if (matrix[i*2*amount+2*cur] == j) {
+				printf("%u ", matrix[i*2*amount+2*cur + 1]);
+				cur++;
+			} else {
+				printf("0 ");
+			}
+		}
+		printf("\n");
+	}
+}
+
 #endif

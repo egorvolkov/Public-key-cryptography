@@ -152,6 +152,7 @@ void printCubePolynomials(CubePolynomial *cubePolynomials);
 void fPrintCubePolynomials(CubePolynomial *cubePolynomials);
 void printFullCubePolynomials(FullCubePolynomial *cubePolynomials);
 void fPrintFullCubePolynomials(FullCubePolynomial *cubePolynomials);
+void printNewMatrix(ulong* matrix, int size1, int size2, int amount);
 
 void writeVar_test(uint*, uint, uint);
 void print_bin(uint, uint);
