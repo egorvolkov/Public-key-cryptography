@@ -3,11 +3,16 @@
 extern const uint size;
 extern struct Module moduleStruct;
 
-void generateSecretKey(struct Matrices *matrices, struct NewMatrices *newMatrices) {
+void generateSecretKey(struct NewMatrices *matrices) {
+	printf("1\n");
 	generateModule();
-	generateFirstMatrices_rare(newMatrices->firstMatrix, newMatrices->firstInverseMatrix);
-	generateSecondMatrices_rare(newMatrices->secondMatrix, newMatrices->secondInverseMatrix);
-	generateConstants(newMatrices->constants);
+	printf("2\n");
+	generateFirstMatrices_rare(matrices->firstMatrix, matrices->firstInverseMatrix);
+	printf("3\n");
+	generateSecondMatrices_rare(matrices->secondMatrix, matrices->secondInverseMatrix);
+	printf("4\n");
+	generateConstants(matrices->constants);
+	printf("5\n");
 	// for (ulong i = 0; i < AMOUNT_OF_VARIABLES; i++){
 	// 	newMatrices->constants[i] = matrices->constants[i];
 	// }
@@ -381,10 +386,10 @@ void generateFirstMatrices_rare(ulong *firstMatrix, ulong *firstInverseMatrix) {
 				A[i] = getRandom(moduleStruct.module - 1) + 1;
 			}
 		}
-	generateSecondMatrices(B, inv_B, N);
+		generateSecondMatrices(B, inv_B, N);
 	}
 	while (tenzorMult(A, B, firstMatrix, N, 1));
-	tenzorMult(A, B, firstMatrix, N, 1);
+	//tenzorMult(A, B, firstMatrix, N, 1);
 	for (ulong i = 0; i < K; i++) {
 		A[i] = modularDiv(1, A[i]);
 	}
@@ -419,10 +424,10 @@ uchar tenzorMult(ulong *A, ulong *B, ulong *result, ulong N, uchar check) {
 				if (i / N == j / N) {
 					result[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + cur] = j;
 					result[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + cur + 1] = modularMult(A[i / N] , B[(i % N)*N + (j % N)]);
+					if ((i / N == j / N) && !cube(result[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + cur + 1])){
+						return 1;
+					}
 					cur += 2;
-				}
-				if ((i / N == j / N) && !cube(result[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + cur + 1])){
-					return 1;
 				}
 			}
 		}

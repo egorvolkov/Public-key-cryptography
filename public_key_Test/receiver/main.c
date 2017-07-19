@@ -53,7 +53,7 @@ int main(int argc, char* argv[]) {
 		tStart = getTime();
 		tStartRDTSC = timeRDTSC();
 #endif
-		generateSecretKey(&matrices, &newMatrices); //////////////////////////////////////////////////////
+		generateSecretKey(&newMatrices); //////////////////////////////////////////////////////
 #ifdef TIME
 
 		tEnd = getTime();
@@ -127,11 +127,7 @@ int main(int argc, char* argv[]) {
 #endif
         computeNewPublicKey(newMatrices.firstMatrix, newMatrices.secondMatrix, publicKey, newMatrices.constants);
 		//computePublicKey(matrices.firstMatrix, matrices.secondMatrix, publicKey, matrices.constants); ///////////////////////////////////////////
-        fprintf(output, "Public key\n"); printf("Public key\n");
-        fPrintFullCubePolynomials(publicKey); printFullCubePolynomials(publicKey);
-        fprintf(output, "\n"); printf("\n");
 
-        printf("Bytes written: %d\n", returnPublicKey(publicKey));
 
         //computeNewPublicKey(newMatrices.firstMatrix, newMatrices.secondMatrix, newPublicKey, newMatrices.constants);
 #ifdef TIME
@@ -142,6 +138,11 @@ int main(int argc, char* argv[]) {
 		timeOfPublicKeyRDTSC += tEndRDTSC - tStartRDTSC;
 #endif
 #ifdef PRINT
+		fprintf(output, "Public key\n"); printf("Public key\n");
+        fPrintFullCubePolynomials(publicKey); printFullCubePolynomials(publicKey);
+        fprintf(output, "\n"); printf("\n");
+
+        printf("Bytes written: %d\n", returnPublicKey(publicKey));
         //fprintf(output, "New public key\n"); printf("New public key\n");
         //fPrintFullCubePolynomials(newPublicKey); printFullCubePolynomials(newPublicKey);
         //fprintf(output, "\n"); printf("\n");

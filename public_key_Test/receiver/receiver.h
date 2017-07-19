@@ -65,7 +65,7 @@ typedef struct FullCubePolynomial {
 	uint vars[MAX_VARS_IN_KEY];
 } FullCubePolynomial;
 
-void generateSecretKey(struct Matrices *matrices, struct NewMatrices *newMatrices);
+void generateSecretKey(struct NewMatrices *matrices);
 void generateModule();
 void computePartsOfModule();
 

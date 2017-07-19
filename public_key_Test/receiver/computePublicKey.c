@@ -61,6 +61,7 @@ void cubeOfNewPolynomials(ulong *matrix, CubePolynomial newBufferMatrix[], ulong
 
 void newMultToSecondMatrix(ulong *matrix, CubePolynomial *newBufferMatrix, FullCubePolynomial *publicKey) {
     ulong cur;
+    ulong index, fac;
     for(uint i = 0; i < size; i++) {
         for (uint j = 0; j < MAX_VARS_IN_KEY; j++) {
             publicKey[i].vars[j] = 0;
@@ -68,24 +69,26 @@ void newMultToSecondMatrix(ulong *matrix, CubePolynomial *newBufferMatrix, FullC
     }
     for (uint i = 0; i < size; i++) {
         cur = 0;
-        for (uint j = 0; j < 2 * AMOUNT_OF_VAR_IN_LINE_SECOND;) {
+        for (uint j = 0; j < 2 * AMOUNT_OF_VAR_IN_LINE_SECOND; j += 2) {
+        	index = matrix[i * 2 * AMOUNT_OF_VAR_IN_LINE_SECOND + j];
+        	fac = matrix[i * 2 * AMOUNT_OF_VAR_IN_LINE_SECOND + j + 1];
             for (uint k = 0; k < MAX_TERMS_IN_CUBE; k++) {
-                if (newBufferMatrix[matrix[i * 2 * AMOUNT_OF_VAR_IN_LINE_SECOND + j]].factor[k] == 0) {
+                if (newBufferMatrix[index].factor[k] == 0) {
                     break;
                 }
                 uint p;
                 for (p = 0; p < cur; p++) {
-                    if (get3Vars_test(newBufferMatrix[matrix[i * 2 * AMOUNT_OF_VAR_IN_LINE_SECOND + j]].vars, k) == get3Vars_test(publicKey[i].vars, p)) {
-                        publicKey[i].factor[p] = modularAdd(publicKey[i].factor[p], modularMult(matrix[i * 2 * AMOUNT_OF_VAR_IN_LINE_SECOND + j + 1], newBufferMatrix[matrix[i * 2 * AMOUNT_OF_VAR_IN_LINE_SECOND + j]].factor[k]));
+                    if (get3Vars_test(newBufferMatrix[index].vars, k) == get3Vars_test(publicKey[i].vars, p)) {
+                        publicKey[i].factor[p] = modularAdd(publicKey[i].factor[p], modularMult(fac, newBufferMatrix[index].factor[k]));
                         break;
                     }
                 }
                 if (p >= cur) {
-                    publicKey[i].factor[cur] = modularMult(matrix[i * 2 * AMOUNT_OF_VAR_IN_LINE_SECOND + j + 1], newBufferMatrix[matrix[i * 2 * AMOUNT_OF_VAR_IN_LINE_SECOND + j]].factor[k]);
+                    publicKey[i].factor[cur] = modularMult(fac, newBufferMatrix[index].factor[k]);
                     if(publicKey[i].factor[cur] == 0) {
                         break;
                     }
-                    write3Vars_test(newBufferMatrix[j].vars, publicKey[i].vars, k, cur);
+                    write3Vars_test(newBufferMatrix[index].vars, publicKey[i].vars, k, cur);
                     //print_bin(get3Vars_test(bufferMatrix[j].vars, k), 9);
                     //printf("(%llu); ", bufferMatrix[j].factor[k]);
                     //print_bin(get3Vars_test(publicKey[i].vars, cur), 9);
@@ -93,7 +96,6 @@ void newMultToSecondMatrix(ulong *matrix, CubePolynomial *newBufferMatrix, FullC
                     cur++;
                 }
             }
-            j += 2;
         }
         for (cur; cur < MAX_TERMS_IN_KEY; cur++) {
             publicKey[i].factor[cur] = 0;
