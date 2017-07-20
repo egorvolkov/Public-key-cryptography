@@ -4,43 +4,10 @@ extern const uint size;
 extern struct Module moduleStruct;
 
 void generateSecretKey(struct NewMatrices *matrices) {
-	printf("1\n");
 	generateModule();
-	printf("2\n");
 	generateFirstMatrices_rare(matrices->firstMatrix, matrices->firstInverseMatrix);
-	printf("3\n");
 	generateSecondMatrices_rare(matrices->secondMatrix, matrices->secondInverseMatrix);
-	printf("4\n");
 	generateConstants(matrices->constants);
-	printf("5\n");
-	// for (ulong i = 0; i < AMOUNT_OF_VARIABLES; i++){
-	// 	newMatrices->constants[i] = matrices->constants[i];
-	// }
-	// ulong i, j, countFirst = 0, countInvFirst = 0, countSecond = 0, countInvSecond = 0;
-	// for (i = 0; i < AMOUNT_OF_VARIABLES; i++){
-	// 	for (j = 0; j < AMOUNT_OF_VARIABLES; j++){
-	// 		if (matrices->firstMatrix[AMOUNT_OF_VARIABLES * i + j] != 0){
-	// 			newMatrices->firstMatrix[countFirst] = j;
-	// 			newMatrices->firstMatrix[countFirst + 1] = matrices->firstMatrix[AMOUNT_OF_VARIABLES * i + j];
-	// 			countFirst += 2;
-	// 		}
-	// 		if (matrices->firstInverseMatrix[AMOUNT_OF_VARIABLES * i + j] != 0){
-	// 			newMatrices->firstInverseMatrix[countInvFirst] = j;
-	// 			newMatrices->firstInverseMatrix[countInvFirst + 1] = matrices->firstInverseMatrix[AMOUNT_OF_VARIABLES * i + j];
-	// 			countInvFirst += 2;
-	// 		}
-	// 		if (matrices->secondMatrix[AMOUNT_OF_VARIABLES * i + j] != 0){
-	// 			newMatrices->secondMatrix[countSecond] = j;
-	// 			newMatrices->secondMatrix[countSecond + 1] = matrices->secondMatrix[AMOUNT_OF_VARIABLES * i + j];
-	// 			countSecond += 2;
-	// 		}
-	// 		if (matrices->secondInverseMatrix[AMOUNT_OF_VARIABLES * i + j] != 0){
-	// 			newMatrices->secondInverseMatrix[countInvSecond] = j;
-	// 			newMatrices->secondInverseMatrix[countInvSecond + 1] = matrices->secondInverseMatrix[AMOUNT_OF_VARIABLES * i + j];
-	// 			countInvSecond += 2;
-	// 		}
-	// 	}
-	// }
 }
 
 void generateModule() {
@@ -156,55 +123,12 @@ void generateConstants(ulong *constants){
 	}
 }
 
-// int canCreate(int n, ulong min, ulong max) {
-// 	int downLine = MODULES/3;
-// 	int upLine = MODULES - MODULES/3;
-
-// 	int downMult = 1;
-// 	int upMult = 1;
-
-// 	for (int i = 0; i < n; i++) {
-// 		downMult = getModules(downLine - i);
-// 		upMult = getModules(upLine + i);
-// 	}
-
-// 	if (upMult >= min && downMult <= upLine) {
-// 		return 1;
-// 	}
-// 	return 0;
-// }
-
 void computePartsOfModule() {
     for (int i = 0; i < moduleStruct.masSize; i++) {
         moduleStruct.partsOfModule[i + moduleStruct.masSize * 1] = moduleStruct.module / moduleStruct.partsOfModule[i];
         moduleStruct.partsOfModule[i + moduleStruct.masSize * 2] = modularInverseMultUniver(moduleStruct.partsOfModule[i + moduleStruct.masSize * 1], moduleStruct.partsOfModule[i]);
     }
 }
-
-// void generateFirstMatrices(ulong *firstMatrix, ulong *firstInverseMatrix, ulong lines) {
-// 	ulong LUmatrices[lines * lines];
-
-// 	ulong h = 1;
-// 	//ulong det = 1;
-
-// 	while (h) {
-// 		h = 0; //det = 1;
-// 		getRandTriangleMatrix(LUmatrices, 0, lines);
-// 		getRandTriangleMatrix(LUmatrices, 1, lines);
-// 		modularTriangleMatrixMult(LUmatrices, firstMatrix, lines);
-// 		for (int i = 0; i < lines; i++) {
-// 			for (int j = 0; j < lines; j++) {
-// 				if (!cube(firstMatrix[i * lines + j])) {
-// 					h++;
-// 				}
-// 			}
-// 		}
-// 		if (h) {
-// 			continue;
-// 		}
-// 	}
-// 	computeInverseMatrix(LUmatrices, firstInverseMatrix,lines);
-// }
 
 void generateSecondMatrices(ulong *secondMatrix, ulong *secondInverseMatrix, ulong lines) {
 	ulong LUmatrices[lines * lines];
@@ -245,58 +169,6 @@ void computeInverseMatrix(ulong *LUmatrices, ulong *inverseMatrix, ulong lines) 
 			}
 		}
 	}
-}
-
-void getRandTriangleMatrix(ulong *matrix, uchar dir, ulong lines) {
-	// Locale variables declaration
-	ulong temp;
-	ulong mult = 1;
-	ulong preMult = 0;
-
-	// Fill TOP triangle (some trash)
-	if (dir)
-	{
-		for (int i = 0; i < lines; i++) {
-			for (int j = 0; j < i; j++) {
-				matrix[i * lines + j] = 0;
-			}
-			for (int j = i + 1; j < lines; j++) {
-				matrix[i * lines + j] = getRandom(moduleStruct.module);
-			}
-		}
-	}
-	// Fill DOWN triangle (some trash)
-	else {
-		for (int i = 0; i < lines; i++) {
-			for (int j = 0; j < i; j++) {
-				matrix[i * lines + j] = getRandom(moduleStruct.module);
-			}
-			for (int j = i + 1; j < lines; j++) {
-				matrix[i * lines + j] = 0;
-			}
-		}
-	}
-
-	// Fill diagonal right numbers
-    for (int i = 0; i < lines; i++) {
-        if (!dir) {
-            matrix[i * lines + i] = 1;
-        }
-        else {
-            temp = getRandom(moduleStruct.module - 1) + 1;    // exclude zero
-            preMult = modularMult(mult, temp);
-
-            // Choose right number
-            while (gcd(preMult, moduleStruct.module) != 1) {
-                temp = (temp + 1) % moduleStruct.module;
-                preMult = modularMult(mult, temp);
-            }
-
-            mult = preMult;
-            matrix[i * lines + i] = temp;
-        }
-    }
-	return;
 }
 
 /*
@@ -389,7 +261,6 @@ void generateFirstMatrices_rare(ulong *firstMatrix, ulong *firstInverseMatrix) {
 		generateSecondMatrices(B, inv_B, N);
 	}
 	while (tenzorMult(A, B, firstMatrix, N, 1));
-	//tenzorMult(A, B, firstMatrix, N, 1);
 	for (ulong i = 0; i < K; i++) {
 		A[i] = modularDiv(1, A[i]);
 	}
@@ -397,54 +268,60 @@ void generateFirstMatrices_rare(ulong *firstMatrix, ulong *firstInverseMatrix) {
 	shake(firstMatrix, firstInverseMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_FIRST);
 }
 
-void generateSecondMatrices_rare(ulong *secondMatrix, ulong *secondInverseMatrix) {
-	const ulong N = AMOUNT_OF_VAR_IN_LINE_SECOND, K = size / N;
-	ulong A[K], B[N * N], inv_B[N * N];
-	for (ulong i = 0; i < K; i++) {
-		A[i] = getRandom(moduleStruct.module - 1) + 1;
-		while (gcd(A[i], moduleStruct.module) != 1) {
-			A[i] = getRandom(moduleStruct.module - 1) + 1;
-		}
-	}
-	generateSecondMatrices(B,inv_B,N);
-	tenzorMult(A, B, secondMatrix, N, 0);
-	for (ulong i = 0; i < K; i++) {
-		A[i] = modularDiv(1, A[i]);
-	}
-	tenzorMult(A, inv_B, secondInverseMatrix, N, 0);
-	shake(secondMatrix, secondInverseMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_SECOND);
-}
-
 uchar tenzorMult(ulong *A, ulong *B, ulong *result, ulong N, uchar check) {
-	int cur = 0;
-	if (check){
-		for (ulong i = 0; i < size; i++) {
-			cur = 0;
-			for (ulong j = 0; j < size; j++) {
-				if (i / N == j / N) {
-					result[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + cur] = j;
-					result[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + cur + 1] = modularMult(A[i / N] , B[(i % N)*N + (j % N)]);
-					if ((i / N == j / N) && !cube(result[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + cur + 1])){
-						return 1;
-					}
-					cur += 2;
-				}
-			}
-		}
-		return 0;
-	}
-	else {
-		for (ulong i = 0; i < size; i++) {
-			cur = 0;
-			for (ulong j = 0; j < size; j++) {
-				if (i / N == j / N) {
-					result[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + cur] = j;
-					result[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + cur + 1] = modularMult(A[i / N] , B[(i % N)*N + (j % N)]);
-					cur += 2;
-				}
-			}
-		}
-	}
+    int cur = 0;
+    if (check){
+        for (ulong i = 0; i < size; i++) {
+            cur = 0;
+            for (ulong j = 0; j < size; j++) {
+                if (i / N == j / N) {
+                    result[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + cur] = j;
+                    result[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + cur + 1] = modularMult(A[i / N] , B[(i % N)*N + (j % N)]);
+                    if (!cube(result[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + cur + 1]) && (result[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + cur + 1] == 0)){
+                        return 1;
+                    }
+                    cur += 2;
+                }
+            }
+        }
+        return 0;
+    }
+    else {
+        for (ulong i = 0; i < size; i++) {
+            cur = 0;
+            for (ulong j = 0; j < size; j++) {
+                if (i / N == j / N) {
+                    result[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + cur] = j;
+                    result[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + cur + 1] = modularMult(A[i / N] , B[(i % N)*N + (j % N)]);
+                    if (result[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + cur + 1] == 0){
+                        return 1;
+                    }
+                    cur += 2;
+                }
+            }
+        }
+        return 0;
+    }
+}
+void generateSecondMatrices_rare(ulong *secondMatrix, ulong *secondInverseMatrix) {
+    const ulong N = AMOUNT_OF_VAR_IN_LINE_SECOND, K = size / N;
+    ulong A[K], B[N * N], inv_B[N * N];
+    do
+    {
+        for (ulong i = 0; i < K; i++) {
+            A[i] = getRandom(moduleStruct.module - 1) + 1;
+            while (gcd(A[i], moduleStruct.module) != 1) {
+                A[i] = getRandom(moduleStruct.module - 1) + 1;
+            }
+        }
+        generateSecondMatrices(B,inv_B,N);
+    }
+    while (tenzorMult(A, B, secondMatrix, N, 0));
+    for (ulong i = 0; i < K; i++) {
+        A[i] = modularDiv(1, A[i]);
+    }
+    tenzorMult(A, inv_B, secondInverseMatrix, N, 0);
+    shake(secondMatrix, secondInverseMatrix, size, 2 * AMOUNT_OF_VAR_IN_LINE_SECOND);
 }
 
 void swap(ulong *line1, ulong *line2, ulong length) {
@@ -481,11 +358,6 @@ void shake(ulong *matrix, ulong *invert_matrix, ulong lines, ulong columns) {
 				}
 			}
 		}
-		// for (ulong j = 0; j < size; j++) {
-		// 	ulong k = invert_matrix[j * size + i];
-		// 	invert_matrix[j * size + i] = invert_matrix[j * size + temp[i]];
-		// 	invert_matrix[j * size + temp[i]] = k;
-		// }
 	}
 	for (i = 0; i < columns; i++) {
 		temp[i] = i;
@@ -509,10 +381,5 @@ void shake(ulong *matrix, ulong *invert_matrix, ulong lines, ulong columns) {
 				}
 			}
 		}
-		// for (ulong j = 0; j < size; j++) {
-		// 	ulong k = matrix[j * size + i];
-		// 	matrix[j * size + i] = matrix[j * size + temp[i]];
-		// 	matrix[j * size + temp[i]] = k;
-		// }
 	}
 }
