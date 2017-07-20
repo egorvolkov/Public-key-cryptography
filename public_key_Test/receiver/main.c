@@ -31,8 +31,9 @@ int main(int argc, char* argv[]) {
 	}
 
 #ifdef TIME
-	double tStart, tEnd, timeOfSecretKey = 0, timeOfPublicKey = 0, timeOfDecoding = 0;
-	double tStartRDTSC, tEndRDTSC, timeOfSecretKeyRDTSC = 0, timeOfPublicKeyRDTSC = 0, timeOfDecodingRDTSC = 0;
+	clock_t tStart, tEnd, timeOfSecretKey = 0, timeOfPublicKey = 0, timeOfDecoding = 0;
+	ulong msec = 0;
+	//double tStartRDTSC, tEndRDTSC, timeOfSecretKeyRDTSC = 0, timeOfPublicKeyRDTSC = 0, timeOfDecodingRDTSC = 0;
 #endif
 
 	FILE *file = NULL;
@@ -40,7 +41,7 @@ int main(int argc, char* argv[]) {
 	FullCubePolynomial publicKey[AMOUNT_OF_POLYNOMS];
 	ulong encodedMessage[AMOUNT_OF_POLYNOMS];
 	ulong realMessage[AMOUNT_OF_VARIABLES] = {0};
-	ulong radixes[NUMBER_OF_RADIX * 3] = {11, 13, 17};
+	ulong radixes[NUMBER_OF_RADIX * 3] = {5, 7, 11, 13, 17};
 	ulong answers[AMOUNT_OF_VARIABLES * NUMBER_OF_RADIX];
 	ulong secretVector[LENGTH_OF_SECRET_VECTOR];
 	ulong transposition[AMOUNT_OF_VARIABLES];
@@ -56,17 +57,16 @@ int main(int argc, char* argv[]) {
 #endif
 		//moduleStruct.module = 1;
 #ifdef TIME
-		tStart = getTime();
-		tStartRDTSC = timeRDTSC();
+		tStart = clock();
+		//tStartRDTSC = timeRDTSC();
 #endif
 		generateSecretKey(&matrices, secretVector, answers, transposition, radix); //////////////////////////////////////////////////////
 #ifdef TIME
-
-		tEnd = getTime();
-		tEndRDTSC = timeRDTSC();
-		printf("Time of generation a secret key: %f ms\n", tEnd - tStart);
-		timeOfSecretKey += tEnd - tStart;
-		timeOfSecretKeyRDTSC += tEndRDTSC - tStartRDTSC;
+		msec = (clock() - tStart) * 1000 / CLOCKS_PER_SEC;
+		//tEndRDTSC = timeRDTSC();
+		printf("Time of generation a secret key: %llu seconds %llu milliseconds\n", msec/1000, msec%1000);
+		timeOfSecretKey += clock() - tStart;
+		//timeOfSecretKeyRDTSC += tEndRDTSC - tStartRDTSC;
 #endif
 #ifdef PRINT
 		fprintf(output, "SIZE: %d\nSIZE_OF_VARIABLE: %d\nSIZE_OF_MODULE: %d\n", size, SIZE_OF_VARIABLE, SIZE_OF_MODULE); printf("SIZE: %d\nSIZE_OF_VARIABLE: %d\nSIZE_OF_MODULE: %d\n", size, SIZE_OF_VARIABLE, SIZE_OF_MODULE);
@@ -95,16 +95,16 @@ int main(int argc, char* argv[]) {
 		fprintf(output, "\n"); printf("\n");
 #endif
 #ifdef TIME
-		tStart = getTime();
-		tStartRDTSC = timeRDTSC();
+		tStart = clock();
+		//tStartRDTSC = timeRDTSC();
 #endif
 		computePublicKey(matrices.firstMatrix, matrices.secondMatrix, publicKey, matrices.constants, matrices.firstMatrixDet, answers); ///////////////////////////////////////////
 #ifdef TIME
-		tEnd = getTime();
-		tEndRDTSC = timeRDTSC();
-		printf("Time of computing a public key: %f ms\n", tEnd - tStart);
-		timeOfPublicKey += tEnd - tStart;
-		timeOfPublicKeyRDTSC += tEndRDTSC - tStartRDTSC;
+		msec = (clock() - tStart) * 1000 / CLOCKS_PER_SEC;
+		//tEndRDTSC = timeRDTSC();
+		printf("Time of computing a public key:  %llu seconds %llu milliseconds\n", msec/1000, msec%1000);
+		timeOfPublicKey += clock() - tStart;
+		//timeOfPublicKeyRDTSC += tEndRDTSC - tStartRDTSC;
 #endif
 #ifdef PRINT
 		fprintf(output, "Public key\n"); printf("Public key\n");
@@ -127,16 +127,16 @@ int main(int argc, char* argv[]) {
 		fprintf(output, "\n"); printf("\n");
 #endif
 #ifdef TIME
-		tStart = getTime();
-		tStartRDTSC = timeRDTSC();
+		tStart = clock();
+		//tStartRDTSC = timeRDTSC();
 #endif
 		decoding(matrices.firstInverseMatrix, matrices.secondInverseMatrix, encodedMessage,realMessage, matrices.constants, secretVector, radixes, transposition, radix, matrices.firstMatrixDet);
 #ifdef TIME
-		tEnd = getTime();
-		tEndRDTSC = timeRDTSC();
-		printf("Time of decoding: %f ms\n", tEnd - tStart);
-		timeOfDecoding += tEnd - tStart;
-		timeOfDecodingRDTSC += tEndRDTSC - tStartRDTSC;
+		msec = (clock() - tStart) * 1000 / CLOCKS_PER_SEC;
+		//tEndRDTSC = timeRDTSC();
+		printf("Time of decoding: %llu seconds %llu milliseconds\n", msec/1000, msec%1000);
+		timeOfDecoding += clock() - tStart;
+		//timeOfDecodingRDTSC += tEndRDTSC - tStartRDTSC;
 #endif
 #ifdef PRINT
 		fprintf(output, "Message: "); printf("Message: ");
@@ -147,13 +147,13 @@ int main(int argc, char* argv[]) {
 #endif
 #ifdef TIME
 		printf("\nMiddle time (iteration %u)\n\
-			Time of generation a secret key: %f ms; %f Hz\n\
-			Time of computing a public key: %f ms; %f Hz\n\
-			Time of decoding: %f ms; %f Hz\n",\
+			Time of generation a secret key: %llu seconds %llu milliseconds\n\
+			Time of computing a public key: %llu seconds %llu milliseconds\n\
+			Time of decoding: %llu seconds %llu milliseconds\n",\
 		       loop + 1,\
-		       timeOfSecretKey / (loop + 1), timeOfSecretKeyRDTSC / (loop + 1),\
-		       timeOfPublicKey / (loop + 1), timeOfPublicKeyRDTSC / (loop + 1),\
-		       timeOfDecoding / (loop + 1), timeOfDecodingRDTSC / (loop + 1));
+		       timeOfSecretKey / (loop + 1) * 1000 / CLOCKS_PER_SEC / 1000, (timeOfSecretKey / (loop + 1) * 1000 / CLOCKS_PER_SEC) % 1000, \
+		       timeOfPublicKey / (loop + 1) * 1000 / CLOCKS_PER_SEC /1000, (timeOfPublicKey / (loop + 1) * 1000 / CLOCKS_PER_SEC) % 1000, \
+		       timeOfDecoding / (loop + 1) * 1000 / CLOCKS_PER_SEC / 1000, (timeOfDecoding / (loop + 1) * 1000 / CLOCKS_PER_SEC) % 1000);
 #endif
 		file = fopen(PATH_TO_MESSAGE, "r");
 		for (int i = 0; i < AMOUNT_OF_VARIABLES; i++) {

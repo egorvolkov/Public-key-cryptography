@@ -13,8 +13,9 @@ int main(int argc, char* argv[]) {
 	uchar encodedMessage[AMOUNT_OF_VARIABLES * LENGTH_OF_ENCODED_NUMBER];
 	ulong message[AMOUNT_OF_VARIABLES];
 #ifdef TIME
-	double tStart, tEnd, middleTimeOfCoding = 0;
-	double tStartRDTSC, tEndRDTSC, middleTimeOfCodingRDTSC = 0;
+	clock_t tStart, tEnd, middleTimeOfCoding = 0;
+	ulong msec = 0;
+	//double tStartRDTSC, tEndRDTSC, middleTimeOfCodingRDTSC = 0;
 #endif
 	uint count = 0;
 	while (1) {
@@ -33,16 +34,16 @@ int main(int argc, char* argv[]) {
 		printf("\n");
 #endif
 #ifdef TIME
-		tStart = getTime();
-		tStartRDTSC = timeRDTSC();
+		tStart = clock();
+		//tStartRDTSC = timeRDTSC();
 #endif
 		coding(message, publicKey, encodedMessage);
 #ifdef TIME
-		tEnd = getTime();
-		tEndRDTSC = timeRDTSC();
-		printf("Time of coding: %f ms\n", tEnd - tStart);
-		middleTimeOfCoding += tEnd - tStart;
-		middleTimeOfCodingRDTSC += tEndRDTSC - tStartRDTSC;
+		msec = (clock() - tStart) * 1000 / CLOCKS_PER_SEC;
+		//tEndRDTSC = timeRDTSC();
+		printf("Time of coding: %llu seconds %llu milliseconds\n", msec/1000, msec%1000);
+		middleTimeOfCoding += clock() - tStart;
+		//middleTimeOfCodingRDTSC += tEndRDTSC - tStartRDTSC;
 #endif
 #ifdef DEBUG
 		printf("bytes: %d\n", returnEncodedMessage(encodedMessage));
@@ -52,7 +53,7 @@ int main(int argc, char* argv[]) {
 #endif
 #ifdef TIME
 		printf("Middle time:\n\
-			Time of coding:  %f ms; %f Hz\n", middleTimeOfCoding / count, middleTimeOfCodingRDTSC / count);
+			Time of coding:  %llu seconds %llu milliseconds\n", middleTimeOfCoding / count * 1000 / CLOCKS_PER_SEC / 1000, (middleTimeOfCoding / count * 1000 / CLOCKS_PER_SEC) % 1000);//middleTimeOfCodingRDTSC / count);
 #endif
 	}
 	return 0;

@@ -2,7 +2,7 @@
  * TIME - if this constant is defined then time will be measured and printed
  * PRINT - if this constant is defined then all information will be printed to console and to a file "output.txt"
  */
-//#define TIME
+#define TIME
 #define PRINT
 
 /**
@@ -30,10 +30,10 @@
  *   	You can use any meanings you want but our algorithm of module generation isn't perfect.
  * 		Some meanings can cause looping.
  */
-#define NUMBER_OF_RADIX 3
+#define NUMBER_OF_RADIX 5
 #define LENGTH_OF_SECRET_VECTOR 1
 #define SIZE_OF_AVAR 4
-#define AMOUNT_OF_VARIABLES 13
+#define AMOUNT_OF_VARIABLES 10
 #define AMOUNT_OF_VAR_IN_LINE_FIRST 5
 #define AMOUNT_OF_VAR_IN_LINE_SECOND 5
 #define SIZE_OF_VARIABLE 100
