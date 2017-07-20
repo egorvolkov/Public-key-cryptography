@@ -11,9 +11,9 @@ void coding(ulong *message, FullCubePolynomial *publicKey, uchar *encodedMessage
 		longToZeroEncoded(encodedMessage + i * LENGTH_OF_ENCODED_NUMBER);
 		int a = MAX_TERMS_IN_KEY;
 		for (int j = 0; j < MAX_TERMS_IN_KEY; j++) {
-			//if (publicKey[i].factor[j] == 0) {
-			//	continue;
-			//}
+			if (publicKey[i].factor[j] == 0) {
+				continue;
+			}
 			longGetNumber(publicKey[i].factor[j], bufferPublicKey);
 			for (uint h = 0; h < 3; h++) {
 				var = getFromVar_test(publicKey[i].vars, (3 * j) + h);

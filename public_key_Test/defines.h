@@ -30,15 +30,15 @@
  *   	You can use any meanings you want but our algorithm of module generation isn't perfect.
  * 		Some meanings can cause looping.
  */
-#define NUMBER_OF_RADIX 2
+#define NUMBER_OF_RADIX 3
 #define LENGTH_OF_SECRET_VECTOR 1
-#define SIZE_OF_AVAR 5
-#define AMOUNT_OF_VARIABLES 3
+#define SIZE_OF_AVAR 4
+#define AMOUNT_OF_VARIABLES 13
 #define AMOUNT_OF_VAR_IN_LINE_FIRST 5
 #define AMOUNT_OF_VAR_IN_LINE_SECOND 5
-#define SIZE_OF_VARIABLE 21
+#define SIZE_OF_VARIABLE 100
 #define SIZE_OF_MODULE (SIZE_OF_VARIABLE + 1)
-#define MAS_SIZE 2
+#define MAS_SIZE 5
 #define AMOUNT_OF_POLYNOMS (NUMBER_OF_RADIX * LENGTH_OF_SECRET_VECTOR)
 
 /**

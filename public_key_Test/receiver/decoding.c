@@ -1,5 +1,4 @@
 #include "receiver.h"
-
 extern const uchar size;
 extern struct Module moduleStruct;
 
@@ -8,13 +7,25 @@ extern FILE *output;
 #endif
 
 void matricesDeTransposition(ulong *matrices, ulong *transposition){
-  for(int i = AMOUNT_OF_VARIABLES - 1; i >= 0; i--){
+  for(ulong i = 0 ; i < AMOUNT_OF_VARIABLES; i++){
+    printf("%llu ", transposition[i]);
+  }
+  printf("\n");
+  for(ulong i = 0 ; i < AMOUNT_OF_VARIABLES; i++){
+    	printf("%llu ", matrices[i]);
+  	}
+  	printf("\n");
+	for(int i = AMOUNT_OF_VARIABLES - 1; i >= 0; i--){
     ulong tmp = matrices[i];
     matrices[i] = matrices[transposition[i]];
     matrices[transposition[i]] = tmp;
+  for(ulong j = 0 ; j < AMOUNT_OF_VARIABLES; j++){
+    	printf("%llu ", matrices[j]);
+  	}
+  	printf("\n");
   }
 }
-void decoding(ulong *secondInverseMatrix, ulong *encodedMessage, ulong *realMessage, ulong *constants, ulong *secretVector, ulong *radixes, ulong *transposition, ulong radix) {
+void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *encodedMessage, ulong *realMessage, ulong *constants, ulong *secretVector, ulong *radixes, ulong *transposition, ulong radix, ulong det) {
 	ulong cube[AMOUNT_OF_POLYNOMS];
 	ulong inverseDegree = modularInverseMultUniver(3, euler(moduleStruct.module));	//	Считаем степень, которая будет соответствовать кубическому корню из числа
 #ifdef PRINT
@@ -49,15 +60,19 @@ void decoding(ulong *secondInverseMatrix, ulong *encodedMessage, ulong *realMess
 	/* СКАЛЯРНОЕ ПРОИЗВЕДЕНИЕ*/
 	ulong pre_result[NUMBER_OF_RADIX];
 	ulong result;
-	scalar(cube,secretVector,pre_result,LENGTH_OF_SECRET_VECTOR);//получаем числа из систем счисления, после чего пользуемся китайской теоремой об остатках.
+	ulong test = modularInverseMult(det); 
+	mult_A_na_vector_B_xd(firstInverseMatrix, cube);
+	for(uint i = 0; i < NUMBER_OF_RADIX; i++){
+		pre_result[i] = cube[i];
+	}
+	//scalar(cube,secretVector,pre_result,LENGTH_OF_SECRET_VECTOR);//получаем числа из систем счисления, после чего пользуемся китайской теоремой об остатках.
   printf("pre_result: ");
   for (int i = 0; i < NUMBER_OF_RADIX; i++) {
     printf("%llu ", pre_result[i]);
   }
   fprintf(output, "\n"); printf("\n");
-
 	translateFromDecimal(pre_result, radixes, realMessage, radixes, radix, transposition);
-  matricesDeTransposition(realMessage, transposition);
+  //matricesDeTransposition(realMessage, transposition);
 	//matricesDeTransposition(realMessage, transposition);
 	// for (int i = 0; i < size; i++) {
 	// 	encodedMessage[i] = 0;

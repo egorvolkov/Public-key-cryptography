@@ -8,9 +8,10 @@ extern struct Module moduleStruct;
 extern FILE *output;
 #endif
 
-void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, FullCubePolynomial *publicKey, ulong *constants) {
+void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, FullCubePolynomial *publicKey, ulong *constants, ulong det, ulong *answer) {
+	mult_A_on_all_vectors_B(firstMatrix, answer);
 	CubePolynomial bufferMatrix[AMOUNT_OF_POLYNOMS];
-	cubeOfPolynomials(firstMatrix, bufferMatrix, constants);
+	cubeOfPolynomials(answer, bufferMatrix, constants);
 #ifdef PRINT
 	printf("Constants:\n");
 	for(uint i = 0; i < AMOUNT_OF_POLYNOMS; i++){
@@ -22,8 +23,38 @@ void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, FullCubePolynomia
 	fprintf(output, "\n"); printf("\n");
 #endif
 	multToSecondMatrix(secondMatrix, bufferMatrix, publicKey);
+	
 }
 
+void mult_A_on_all_vectors_B(ulong *matrix_A, ulong *answer){
+	for(uint i = 0; i < AMOUNT_OF_VARIABLES; i++){
+		mult_A_na_vector_B(matrix_A, (&answer[i]));
+	}
+}
+
+void mult_A_na_vector_B(ulong *matrix_A, ulong *vector){
+	ulong result[AMOUNT_OF_POLYNOMS] = {0};
+	for(uint j = 0; j < AMOUNT_OF_POLYNOMS; j++){
+		for(uint h = 0; h < AMOUNT_OF_POLYNOMS; h++){
+			result[j] = modularAdd(result[j], modularMult(matrix_A[h + j * AMOUNT_OF_POLYNOMS], vector[h * AMOUNT_OF_VARIABLES]));
+		}
+	}
+	for(uint i = 0; i < AMOUNT_OF_POLYNOMS; i++){
+		vector[i * AMOUNT_OF_VARIABLES] = result[i];
+	}
+}
+
+void mult_A_na_vector_B_xd(ulong *matrix_A, ulong *vector){
+	ulong result[AMOUNT_OF_POLYNOMS] = {0};
+	for(uint j = 0; j < AMOUNT_OF_POLYNOMS; j++){
+		for(uint h = 0; h < AMOUNT_OF_POLYNOMS; h++){
+			result[j] = modularAdd(result[j], modularMult(matrix_A[h + j * AMOUNT_OF_POLYNOMS], vector[h]));
+		}
+	}
+	for(uint i = 0; i < AMOUNT_OF_POLYNOMS; i++){
+		vector[i] = result[i];
+	}
+}
 
 void cubeOfPolynomials(ulong *matrix, CubePolynomial bufferMatrix[], ulong *constants) {
 	CubePolynomial *buf;

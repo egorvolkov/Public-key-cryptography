@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "receiver.h": "c",
+        "transmitter.h": "c",
+        "defines.h": "c"
+    }
+}

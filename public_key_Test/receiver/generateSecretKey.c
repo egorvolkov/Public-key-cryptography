@@ -46,12 +46,25 @@ void matricesTransposition(ulong *matrices, ulong *transposition){
     random = getRandom(AMOUNT_OF_VARIABLES - i) + i;
     swap_ulong(&transposition[i], &transposition[random]);
   }
+  for(ulong i = 0 ; i < AMOUNT_OF_VARIABLES; i++){
+    printf("%llu ", transposition[i]);
+  }
+  printf("\n");
+  for(ulong i = 0 ; i < AMOUNT_OF_VARIABLES; i++){
+    	printf("%llu ", matrices[i]);
+  	}
+  	printf("\n");
   for(ulong i = 0; i < AMOUNT_OF_VARIABLES; i++){
+	
     for(ulong j = 0; j < AMOUNT_OF_POLYNOMS; j++){
       ulong tmp = matrices[i + j * AMOUNT_OF_VARIABLES];
       matrices[i + j * AMOUNT_OF_VARIABLES] = matrices[transposition[i] + j * AMOUNT_OF_VARIABLES];
       matrices[transposition[i] + j * AMOUNT_OF_VARIABLES] = tmp;
     }
+	for(ulong i = 0 ; i < AMOUNT_OF_VARIABLES; i++){
+    	printf("%llu ", matrices[i]);
+  	}
+  	printf("\n");
   }
 }
 
@@ -72,18 +85,40 @@ void generatePows(ulong *result, ulong *radixes, ulong lastPow) {
 }
 
 void generateSecretKey(struct Matrices *matrices, ulong *secretVector, ulong *answers, ulong *transposition, ulong radix) {
-  ulong minModule = answers[AMOUNT_OF_VARIABLES * NUMBER_OF_RADIX - 1] * (radix-1) - 1;
+    ulong minModule = answers[AMOUNT_OF_VARIABLES * NUMBER_OF_RADIX - 1] * (radix-1) - 1;
 	generateModule(minModule);
-  generateVector(secretVector);
-  printf("secretVector : ");
-  for (int i = 0; i < LENGTH_OF_SECRET_VECTOR; i++){
-    printf("%llu ", secretVector[i]);
-  }
-  printf("\n");
-	full_gcd(secretVector, answers, matrices->firstMatrix);
-  matricesTransposition(matrices->firstMatrix, transposition);
+  //generateVector(secretVector);
+  //printf("secretVector : ");
+  //for (int i = 0; i < LENGTH_OF_SECRET_VECTOR; i++){
+  //  printf("%llu ", secretVector[i]);
+  //}
+  //printf("\n");
+	generateFirstMatrices(matrices->firstMatrix, matrices->firstInverseMatrix, AMOUNT_OF_POLYNOMS, &matrices->firstMatrixDet);
+    /*matrices->firstMatrixDet = 70;
+	matrices->firstMatrix[0] = 88;
+	matrices->firstMatrix[1] = 16;
+	matrices->firstMatrix[2] = 22;
+	matrices->firstMatrix[3] = 166;
+	matrices->firstInverseMatrix[0] = 121;
+	matrices->firstInverseMatrix[1] = 153;
+	matrices->firstInverseMatrix[2] = 59;
+	matrices->firstInverseMatrix[3] = 110;
+	moduleStruct.module = 173;
+	moduleStruct.partsOfModule[0] = 173;
+	matrices->secondMatrix[0] = 1;
+	matrices->secondMatrix[1] = 0;
+	matrices->secondMatrix[2] = 0;
+	matrices->secondMatrix[3] = 1;
+	matrices->secondInverseMatrix[0] = 1;
+	matrices->secondInverseMatrix[1] = 0;
+	matrices->secondInverseMatrix[2] = 0;
+	matrices->secondInverseMatrix[3] = 1;*/
+
+	//matricesTransposition(matrices->firstMatrix, transposition);
 	generateSecondMatrices(matrices->secondMatrix, matrices->secondInverseMatrix, AMOUNT_OF_POLYNOMS);
 	generateConstants(matrices->constants);
+	//for(uint i = 0; i < AMOUNT_OF_POLYNOMS; i++)
+		//matrices->constants[i] = 0;
 }
 
 void generateModule(ulong minModule) {
@@ -228,12 +263,12 @@ void computePartsOfModule() {
 	}
 }
 
-void generateFirstMatrices(ulong *firstMatrix, ulong *firstInverseMatrix, ulong lines) {
+void generateFirstMatrices(ulong *firstMatrix, ulong *firstInverseMatrix, ulong lines, ulong *det) {
 	ulong matrixUp[lines * lines];
 	ulong matrixDown[lines * lines];
 
 	ulong h = 1;
-	//ulong det = 1;
+	*det = 1;
 
 	while (h) {
 		h = 0; //det = 1;
@@ -250,6 +285,10 @@ void generateFirstMatrices(ulong *firstMatrix, ulong *firstInverseMatrix, ulong 
 		if (h) {
 			continue;
 		}
+	}
+	for(uint i = 0; i < lines; i++){
+		*det = modularMult(*det, matrixUp[i + i * lines]);
+		printf("%llu ", *det);
 	}
 	computeInverseMatrix(matrixDown, matrixUp, firstInverseMatrix,lines);
 }

@@ -42,6 +42,7 @@ struct Module {
 struct Matrices {
 	ulong firstMatrix[AMOUNT_OF_POLYNOMS * AMOUNT_OF_VARIABLES];
 	ulong firstInverseMatrix[AMOUNT_OF_VARIABLES * AMOUNT_OF_VARIABLES];
+	ulong firstMatrixDet;
 	ulong secondMatrix[AMOUNT_OF_POLYNOMS* AMOUNT_OF_POLYNOMS];
 	ulong secondInverseMatrix[AMOUNT_OF_POLYNOMS * AMOUNT_OF_POLYNOMS];
 	ulong constants[AMOUNT_OF_POLYNOMS];
@@ -62,7 +63,7 @@ void generateSecretKey(struct Matrices *matrices, ulong *secretVector, ulong *an
 void generateModule();
 void computePartsOfModule();
 
-void generateFirstMatrices(ulong *firstMatrix, ulong *firstInverseMatrix, ulong lines);
+void generateFirstMatrices(ulong *firstMatrix, ulong *firstInverseMatrix, ulong lines, ulong *det);
 void generateSecondMatrices(ulong *secondMatrix, ulong *secondInverseMatrix, ulong lines);
 void computeInverseMatrix(ulong *matrixDown, ulong *matrixUp, ulong *inverseMatrix, ulong lines);
 void getRandTriangleMatrix(ulong *matrix, uchar dir, ulong lines);
@@ -78,7 +79,10 @@ void shake(ulong *matrix, ulong *invert_matrix, ulong lines, ulong columns);
 void generateConstants(ulong *constants);
 
 
-void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, FullCubePolynomial *publicKey, ulong *constans);
+void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, FullCubePolynomial *publicKey, ulong *constants, ulong det, ulong *answer);
+void mult_A_on_all_vectors_B(ulong *matrix_A, ulong *answer);
+void mult_A_na_vector_B(ulong *matrix_A, ulong *vector);
+void mult_A_na_vector_B_xd(ulong *matrix_A, ulong *vector);
 void cubeOfPolynomials(ulong *matrix, CubePolynomial bufferMatrix[], ulong *constants);
 void polynomialCube(ulong *polyn, CubePolynomial *bufferPolyn);
 void multToSecondMatrix(ulong *matrix, CubePolynomial *bufferMatrix, FullCubePolynomial *publicKey);
@@ -87,7 +91,7 @@ uint returnPublicKey(FullCubePolynomial *publicKey);
 void transmitterConnection();
 void getEncodedMessage(ulong *encodedOrRealMessage);
 
-void decoding(ulong *secondInverseMatrix, ulong *encodedMessage, ulong *realMessage, ulong *constants, ulong *secretVector, ulong *radixes, ulong *transposition, ulong radix);
+void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *encodedMessage, ulong *realMessage, ulong *constants, ulong *secretVector, ulong *radixes, ulong *transposition, ulong radix, ulong det);
 void chyna(ulong *pre_result, ulong *radixes, ulong radix, ulong *result);
 uchar inArray(ulong *arr, uint length, ulong element);
 uint getModules(uint index);

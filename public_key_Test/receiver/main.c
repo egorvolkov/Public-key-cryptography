@@ -40,17 +40,17 @@ int main(int argc, char* argv[]) {
 	FullCubePolynomial publicKey[AMOUNT_OF_POLYNOMS];
 	ulong encodedMessage[AMOUNT_OF_POLYNOMS];
 	ulong realMessage[AMOUNT_OF_VARIABLES] = {0};
-	ulong radixes[NUMBER_OF_RADIX * 3] = {41,43};
+	ulong radixes[NUMBER_OF_RADIX * 3] = {11, 13, 17};
 	ulong answers[AMOUNT_OF_VARIABLES * NUMBER_OF_RADIX];
 	ulong secretVector[LENGTH_OF_SECRET_VECTOR];
 	ulong transposition[AMOUNT_OF_VARIABLES];
-	ulong radix = 1;
+	for (int loop = 0; loop < amountOfLoopIterations; loop++) {
+		ulong radix = 1;
 	generatePows(answers, radixes, AMOUNT_OF_VARIABLES - 1);
 	for (int i = 0; i < NUMBER_OF_RADIX; i++){
 		radix *= radixes[i];
 	}
 	computeRadixes(radixes,radix);
-	for (int loop = 0; loop < amountOfLoopIterations; loop++) {
 #ifdef PRINT
 		output = fopen(PATH_TO_OUTPUT, "w");
 #endif
@@ -79,7 +79,7 @@ int main(int argc, char* argv[]) {
 		fprintf(output, "\n"); printf("\n");
 
 		fprintf(output, "Matrix A\n"); printf("Matrix A\n");
-		fPrintMatrix(matrices.firstMatrix, AMOUNT_OF_POLYNOMS, AMOUNT_OF_VARIABLES); printMatrix(matrices.firstMatrix, AMOUNT_OF_POLYNOMS, AMOUNT_OF_VARIABLES);
+		fPrintMatrix(matrices.firstMatrix, AMOUNT_OF_POLYNOMS, AMOUNT_OF_POLYNOMS); printMatrix(matrices.firstMatrix, AMOUNT_OF_POLYNOMS, AMOUNT_OF_POLYNOMS);
 		fprintf(output, "\n"); printf("\n");
 
 		// fprintf(output, "Matrix A^(-1)\n"); printf("Matrix A^(-1)\n");
@@ -98,7 +98,7 @@ int main(int argc, char* argv[]) {
 		tStart = getTime();
 		tStartRDTSC = timeRDTSC();
 #endif
-		computePublicKey(matrices.firstMatrix, matrices.secondMatrix, publicKey, matrices.constants); ///////////////////////////////////////////
+		computePublicKey(matrices.firstMatrix, matrices.secondMatrix, publicKey, matrices.constants, matrices.firstMatrixDet, answers); ///////////////////////////////////////////
 #ifdef TIME
 		tEnd = getTime();
 		tEndRDTSC = timeRDTSC();
@@ -130,7 +130,7 @@ int main(int argc, char* argv[]) {
 		tStart = getTime();
 		tStartRDTSC = timeRDTSC();
 #endif
-		decoding(matrices.secondInverseMatrix, encodedMessage,realMessage, matrices.constants, secretVector, radixes, transposition, radix);
+		decoding(matrices.firstInverseMatrix, matrices.secondInverseMatrix, encodedMessage,realMessage, matrices.constants, secretVector, radixes, transposition, radix, matrices.firstMatrixDet);
 #ifdef TIME
 		tEnd = getTime();
 		tEndRDTSC = timeRDTSC();
