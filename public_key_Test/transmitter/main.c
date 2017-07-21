@@ -78,7 +78,7 @@ void printFullCubePolynomials(FullCubePolynomial *cubePolynomials) {
 				printf(" + ");
 			}
 			printf("%llu", cubePolynomials[i].factor[j]);
-			for (int k = 0; k < 3; k++) {
+			for (int k = 0; k < 5; k++) {
 				printf("*x%u", getFromVar(cubePolynomials[i].vars[j], k));
 			}
 		}

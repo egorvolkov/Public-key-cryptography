@@ -31,9 +31,9 @@ uint getFromVar_test(uint* var, uint pos) {
     return result;
 }
 
-ulong get3Vars_test (uint* var, uint pos){
+ulong get5Vars(uint *var, uint pos){
     ulong result = 0;
-    for(uint i = 0; i < 3; i++){
+    for(uint i = 0; i < 5; i++){
         result <<= SIZE_OF_AVAR;
         result = getFromVar_test(var, pos + i);
     }

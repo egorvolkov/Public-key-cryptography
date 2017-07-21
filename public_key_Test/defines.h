@@ -11,16 +11,13 @@
  * 		Also you can set this parameter like an argument of execution the program. Parameter has more priority.
  */
 #define AMOUNT_OF_LOOP_ITERATIONS 100000
-#define PAUSE 10000
+#define PAUSE 1
 
 /**
  * AMOUNT_OF_VARIABLES - amount of variables; from 0 to infinity (in a theory)
  * 		But if you want to increase size of coding message we recommend to increase SIZE_OF_VARIABLE
  * 		because increasing AMOUNT_OF_VARIABLES can cause memory error. Also it will be much faster.
  * 		For instanse our computer don't execute the program with AMOUNT_OF_VARIABLES more then 28.
- * SIZE_OF_AVAR - amount of bits on AMOUNT_OF_VARIABLES
- * AMOUNT_OF_VAR_IN_LINE_FIRST - amount of non-zero elements in every row in the first matrix
- * AMOUNT_OF_VAR_IN_LINE_SECOND - amount of non-zero elements in every row in the second matrix
  * SIZE_OF_VARIABLE - amount of bits on a variable; from 3 to 62
  * SIZE_OF_MODULE - amount of bits on a module; from 4 to 63
  * 		SIZE_OF_MODULE must be more then SIZE_OF_VARIABLE
@@ -33,22 +30,21 @@
  *   	You can use any meanings you want but our algorithm of module generation isn't perfect.
  * 		Some meanings can cause looping.
  */
-#define AMOUNT_OF_VARIABLES 20
-#define SIZE_OF_AVAR 5
+#define SIZE_OF_AVAR 4
+#define AMOUNT_OF_VARIABLES 4
 #define AMOUNT_OF_VAR_IN_LINE_FIRST 2
 #define AMOUNT_OF_VAR_IN_LINE_SECOND 2
-#define SIZE_OF_VARIABLE 32
+#define SIZE_OF_VARIABLE 5
 #define SIZE_OF_MODULE (SIZE_OF_VARIABLE + 1)
-#define MAS_SIZE 3
+#define MAS_SIZE 1
 
 /**
  * BYTES_FOR_AMOUNT_OF_MEMBER - this constant is for encoding a long number.
- * 		AMOUNT_OF_VARIABLES < 11		then BYTES_FOR_AMOUNT_OF_MEMBER is 1;
+ * 		AMOUNT_OF_VARIABLES < 11		then BYTES_FOR_AMOUNT_OF_MEMBER is 1 or 2;
  * 		11 <= AMOUNT_OF_VARIABLES < 73	then BYTES_FOR_AMOUNT_OF_MEMBER is 2;
- * 		73 <= AMOUNT_OF_VARIABLES < 465	then BYTES_FOR_AMOUNT_OF_MEMBER is 3;
- * 		465 <= AMOUNT_OF_VARIABLES < 2500	then BYTES_FOR_AMOUNT_OF_MEMBER is 4;
+ * 		You don't need more meanings.
  */
-#define BYTES_FOR_AMOUNT_OF_MEMBER 4
+#define BYTES_FOR_AMOUNT_OF_MEMBER 2
 
 // 7 120 12 12 20 - 7.0mb 29m28s
 // 7 120 10 10 20 - 3.7mb 6m28s

@@ -34,18 +34,18 @@ uint getFromVar_test(uint* var, uint pos) {
     return result;
 }
 
-ulong get3Vars_test (uint* var, uint pos){
+ulong get5Vars(uint *var, uint pos){
     ulong result = 0;
-    for(uint i = 0; i < 3; i++){
+    for(uint i = 0; i < 5; i++){
         result =  result << SIZE_OF_AVAR;
-        result |= getFromVar_test(var, (3 * pos) + i);
+        result |= getFromVar_test(var, (5 * pos) + i);
     }
     return result;
 }
 
-void write3Vars_test(uint* varFrom, uint* varTo, uint posFrom, uint posTo){
-    for(uint i = 0; i < 3; i++){
-        writeVar_test(varTo, getFromVar_test(varFrom, 3 * posFrom + i), 3 * posTo + i);
+void write5Vars(uint *varFrom, uint *varTo, uint posFrom, uint posTo){
+    for(uint i = 0; i < 5; i++){
+        writeVar_test(varTo, getFromVar_test(varFrom, 5 * posFrom + i), 5 * posTo + i);
     }
 }
 
