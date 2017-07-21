@@ -13,18 +13,23 @@ void matricesDeTransposition(ulong *matrices, ulong *transposition){
   printf("\n");
   for(ulong i = 0 ; i < AMOUNT_OF_VARIABLES; i++){
     	printf("%llu ", matrices[i]);
-  	}
-  	printf("\n");
+  }
+  printf("\n");
 	for(int i = AMOUNT_OF_VARIABLES - 1; i >= 0; i--){
-    ulong tmp = matrices[i];
-    matrices[i] = matrices[transposition[i]];
-    matrices[transposition[i]] = tmp;
+		ulong pos = transposition[i];
+    ulong tmp = transposition[i];
+		transposition[i] = transposition[pos];
+		transposition[pos] = tmp;
+		tmp = matrices[i];
+    matrices[i] = matrices[pos];
+    matrices[pos] = tmp;
   for(ulong j = 0 ; j < AMOUNT_OF_VARIABLES; j++){
     	printf("%llu ", matrices[j]);
   	}
   	printf("\n");
   }
 }
+
 void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *encodedMessage, ulong *realMessage, ulong *constants, ulong *secretVector, ulong *radixes, ulong *transposition, ulong radix, ulong det) {
 	ulong cube[AMOUNT_OF_POLYNOMS];
 	ulong inverseDegree = modularInverseMultUniver(3, euler(moduleStruct.module));	//	Считаем степень, которая будет соответствовать кубическому корню из числа
@@ -72,13 +77,6 @@ void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *enco
   }
   fprintf(output, "\n"); printf("\n");
 	translateFromDecimal(pre_result, radixes, realMessage, radixes, radix, transposition);
-  //matricesDeTransposition(realMessage, transposition);
-	// for (int i = 0; i < size; i++) {
-	// 	encodedMessage[i] = 0;
-	// 	for (int j = 0; j < size; j++) {
-	// 		encodedMessage[i] = modularAdd(encodedMessage[i], modularMult(firstInverseMatrix[i * size + j], cube[j]));
-	// 	}
-	// }
 }
 void chyna(ulong *pre_result, ulong *radixes, ulong radix, ulong *result){
 	*result = 0;
@@ -96,14 +94,18 @@ void scalar(ulong *a, ulong *b, ulong *result, ulong N){
 }
 void translateFromDecimal(ulong* decimals, ulong *systems, ulong *result, ulong *radixes, ulong radix, ulong *transposition) {
 	ulong temp[NUMBER_OF_RADIX];
-    for(int k = 0; k < AMOUNT_OF_VARIABLES; k++){
+	ulong temp2[AMOUNT_OF_VARIABLES];
+	for(ulong i = 0; i < AMOUNT_OF_VARIABLES; i++){
+		temp2[transposition[i]] = i;
+	}
+  for(int k = 0; k < AMOUNT_OF_VARIABLES; k++){
 		for (int i = 0; i < NUMBER_OF_RADIX; i++){
-        	temp[i] = decimals[i] % systems[i];
+  	   	temp[i] = decimals[i] % systems[i];
 		}
-		chyna(temp, radixes, radix, &result[k]);
+		chyna(temp, radixes, radix, &result[temp2[k]]);
 		for (int i = 0; i < NUMBER_OF_RADIX; i++){
-					decimals[i] -= result[k];
-        	decimals[i] /= systems[i];
-    	}
+			decimals[i] -= result[temp2[k]];
+  	 	decimals[i] /= systems[i];
+  		}
 	}
 }

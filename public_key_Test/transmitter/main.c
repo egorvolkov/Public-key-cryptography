@@ -53,7 +53,7 @@ int main(int argc, char* argv[]) {
 #endif
 #ifdef TIME
 		printf("Middle time:\n\
-			Time of coding:  %llu seconds %llu milliseconds\n", middleTimeOfCoding / count * 1000 / CLOCKS_PER_SEC / 1000, (middleTimeOfCoding / count * 1000 / CLOCKS_PER_SEC) % 1000);//middleTimeOfCodingRDTSC / count);
+			Time of coding:  %lu seconds %lu milliseconds\n", middleTimeOfCoding / count * 1000 / CLOCKS_PER_SEC / 1000, (middleTimeOfCoding / count * 1000 / CLOCKS_PER_SEC) % 1000);//middleTimeOfCodingRDTSC / count);
 #endif
 	}
 	return 0;

@@ -147,9 +147,9 @@ int main(int argc, char* argv[]) {
 #endif
 #ifdef TIME
 		printf("\nMiddle time (iteration %u)\n\
-			Time of generation a secret key: %llu seconds %llu milliseconds\n\
-			Time of computing a public key: %llu seconds %llu milliseconds\n\
-			Time of decoding: %llu seconds %llu milliseconds\n",\
+			Time of generation a secret key: %lu seconds %lu milliseconds\n\
+			Time of computing a public key: %lu seconds %lu milliseconds\n\
+			Time of decoding: %lu seconds %lu milliseconds\n",\
 		       loop + 1,\
 		       timeOfSecretKey / (loop + 1) * 1000 / CLOCKS_PER_SEC / 1000, (timeOfSecretKey / (loop + 1) * 1000 / CLOCKS_PER_SEC) % 1000, \
 		       timeOfPublicKey / (loop + 1) * 1000 / CLOCKS_PER_SEC /1000, (timeOfPublicKey / (loop + 1) * 1000 / CLOCKS_PER_SEC) % 1000, \
