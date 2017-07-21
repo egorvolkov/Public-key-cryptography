@@ -26,12 +26,12 @@ int main(int argc, char* argv[]) {
 		// printf("\n");
 		//printFullCubePolynomials(publicKey);
 		// printf("\n");
+#endif
 		printf("Message: ");
 		for (int i = 0; i < size; i++) {
 			printf("%llu ", message[i]);
 		}
 		printf("\n");
-#endif
 #ifdef TIME
 		tStart = getTime();
 		tStartRDTSC = timeRDTSC();

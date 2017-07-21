@@ -58,10 +58,10 @@ void newDecoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *e
 	for (int i = 0; i < size; i++) {
 		cube[i] = 0;
 		//	Умножаем обратную вторую матрицу на результат каждого многочлена. Получаем куб результата первого многочлена без констант
-		printf("!!!!!!!!!!!!");
+		//printf("!!!!!!!!!!!!");
         for (int j = 0; j < 2 * AMOUNT_OF_VAR_IN_LINE_SECOND;) {
 			cube[i] = modularAdd(cube[i], modularMult(secondInverseMatrix[i * 2 * AMOUNT_OF_VAR_IN_LINE_SECOND + j + 1], encodedOrRealMessage[secondInverseMatrix[i * 2 * AMOUNT_OF_VAR_IN_LINE_SECOND + j]]));
-            printf("%llu += %llu x %llu\n", cube[i], secondInverseMatrix[i * 2 * AMOUNT_OF_VAR_IN_LINE_SECOND + j + 1], encodedOrRealMessage[secondInverseMatrix[i * 2 * AMOUNT_OF_VAR_IN_LINE_SECOND + j]]);
+            //printf("%llu += %llu x %llu\n", cube[i], secondInverseMatrix[i * 2 * AMOUNT_OF_VAR_IN_LINE_SECOND + j + 1], encodedOrRealMessage[secondInverseMatrix[i * 2 * AMOUNT_OF_VAR_IN_LINE_SECOND + j]]);
             j += 2;
         }
 		// Добавляем вектор констант в кубе к многочлену

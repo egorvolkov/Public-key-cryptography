@@ -4,15 +4,10 @@ extern const uint size;
 extern struct Module moduleStruct;
 
 void generateSecretKey(struct NewMatrices *matrices) {
-	printf("1\n");
 	generateModule();
-	printf("2\n");
 	generateFirstMatrices_rare(matrices->firstMatrix, matrices->firstInverseMatrix);
-	printf("3\n");
 	generateSecondMatrices_rare(matrices->secondMatrix, matrices->secondInverseMatrix);
-	printf("4\n");
 	generateConstants(matrices->constants);
-	printf("5\n");
 	// for (ulong i = 0; i < AMOUNT_OF_VARIABLES; i++){
 	// 	newMatrices->constants[i] = matrices->constants[i];
 	// }
@@ -400,14 +395,18 @@ void generateFirstMatrices_rare(ulong *firstMatrix, ulong *firstInverseMatrix) {
 void generateSecondMatrices_rare(ulong *secondMatrix, ulong *secondInverseMatrix) {
 	const ulong N = AMOUNT_OF_VAR_IN_LINE_SECOND, K = size / N;
 	ulong A[K], B[N * N], inv_B[N * N];
-	for (ulong i = 0; i < K; i++) {
-		A[i] = getRandom(moduleStruct.module - 1) + 1;
-		while (gcd(A[i], moduleStruct.module) != 1) {
+	do
+	{
+		for (ulong i = 0; i < K; i++) {
 			A[i] = getRandom(moduleStruct.module - 1) + 1;
+			while (gcd(A[i], moduleStruct.module) != 1) {
+				A[i] = getRandom(moduleStruct.module - 1) + 1;
+			}
 		}
+		generateSecondMatrices(B,inv_B,N);
 	}
-	generateSecondMatrices(B,inv_B,N);
-	tenzorMult(A, B, secondMatrix, N, 0);
+	while (tenzorMult(A, B, secondMatrix, N, 0));
+	//tenzorMult(A, B, secondMatrix, N, 0);
 	for (ulong i = 0; i < K; i++) {
 		A[i] = modularDiv(1, A[i]);
 	}
@@ -424,7 +423,7 @@ uchar tenzorMult(ulong *A, ulong *B, ulong *result, ulong N, uchar check) {
 				if (i / N == j / N) {
 					result[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + cur] = j;
 					result[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + cur + 1] = modularMult(A[i / N] , B[(i % N)*N + (j % N)]);
-					if ((i / N == j / N) && !cube(result[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + cur + 1])){
+					if (!cube(result[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + cur + 1]) && (result[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + cur + 1] == 0)){
 						return 1;
 					}
 					cur += 2;
@@ -440,10 +439,14 @@ uchar tenzorMult(ulong *A, ulong *B, ulong *result, ulong N, uchar check) {
 				if (i / N == j / N) {
 					result[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + cur] = j;
 					result[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + cur + 1] = modularMult(A[i / N] , B[(i % N)*N + (j % N)]);
+					if (result[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + cur + 1] == 0){
+						return 1;
+					}
 					cur += 2;
 				}
 			}
 		}
+		return 0;
 	}
 }
 

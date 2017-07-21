@@ -186,13 +186,13 @@ int main(int argc, char* argv[]) {
 			fprintf(output, "%llu ", encodedOrRealMessage[i]); printf("%llu ", encodedOrRealMessage[i]);
 		}
 		fprintf(output, "\n"); printf("\n");
-
-        fprintf(output, "New message: "); printf("New message: ");
-        for (int i = 0; i < size; i++) {
-            fprintf(output, "%llu ", newEncodedOrRealMessage[i]); printf("%llu ", newEncodedOrRealMessage[i]);
-        }
-        fprintf(output, "\n"); printf("\n");
 #endif
+
+        printf("New message: ");
+        for (int i = 0; i < size; i++) {
+            printf("%llu ", newEncodedOrRealMessage[i]);
+        }
+        printf("\n");
 #ifdef TIME
 		printf("\nMiddle time (iteration %u)\n\
 			Time of generation a secret key: %f ms; %f Hz\n\
@@ -216,8 +216,8 @@ int main(int argc, char* argv[]) {
 		fclose(file);
 #ifdef PRINT
 		fclose(output);
-		printf("\n____________________________________\n");
 #endif
+		printf("\n____________________________________\n");
 		if ((loop + 1) % pause == 0) {
 			printf("PAUSE (Press Enter to continue)\n");
 			getchar();
@@ -315,18 +315,18 @@ void fPrintFullCubePolynomials(FullCubePolynomial *cubePolynomials) {
 }
 
 void printNewMatrix(ulong* matrix, int size1, int size2, int amount) {
-	int cur;
-	for (int i = 0; i < size; i++) {
-		cur = 0;
+	int was_printed;
+	for (int i = 0; i < size1; i++) {
 		for (int j = 0; j < size2; j++) {
-			if (cur == amount) {
-				printf("0 ");
-				continue;
+			was_printed = 0;
+			for (int k = 0; k < amount; k++) {
+				if (matrix[i*2*amount+2*k] == j) {
+					printf("%u ", matrix[i*2*amount+2*k + 1]);
+					was_printed = 1;
+					break;
+				}
 			}
-			if (matrix[i*2*amount+2*cur] == j) {
-				printf("%u ", matrix[i*2*amount+2*cur + 1]);
-				cur++;
-			} else {
+			if (!was_printed) {
 				printf("0 ");
 			}
 		}
