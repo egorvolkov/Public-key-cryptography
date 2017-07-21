@@ -73,7 +73,6 @@ void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *enco
   fprintf(output, "\n"); printf("\n");
 	translateFromDecimal(pre_result, radixes, realMessage, radixes, radix, transposition);
   //matricesDeTransposition(realMessage, transposition);
-	//matricesDeTransposition(realMessage, transposition);
 	// for (int i = 0; i < size; i++) {
 	// 	encodedMessage[i] = 0;
 	// 	for (int j = 0; j < size; j++) {

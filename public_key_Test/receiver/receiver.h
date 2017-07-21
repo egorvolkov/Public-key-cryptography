@@ -10,12 +10,12 @@
 
 
 #define AMOUNT_OF_MEMBERS (AMOUNT_OF_VARIABLES * (AMOUNT_OF_VARIABLES + 1) * (AMOUNT_OF_VARIABLES + 2) / 6)
-#define SIZE_OF_LONG_NUMBER ((SIZE_OF_MODULE + 3*SIZE_OF_VARIABLE + 7) / 8)
+#define SIZE_OF_LONG_NUMBER ((SIZE_OF_MODULE + 3 * SIZE_OF_VARIABLE + 7) / 8)
 #define LENGTH_OF_ENCODED_NUMBER (SIZE_OF_LONG_NUMBER + BYTES_FOR_AMOUNT_OF_MEMBER)
 #define MAX_TERMS_IN_CUBE ((AMOUNT_OF_VARIABLES + 1) * (AMOUNT_OF_VARIABLES + 2) * (AMOUNT_OF_VARIABLES + 3) / 6)
-#define MAX_VARS_IN_CUBE (((MAX_TERMS_IN_CUBE / 8 * sizeof(uint)) + 1) * 3 * SIZE_OF_AVAR)
+#define MAX_VARS_IN_CUBE (((MAX_TERMS_IN_CUBE / (8 * (sizeof(uint)))) + 1) * 3 * SIZE_OF_AVAR)
 #define MAX_TERMS_IN_KEY (AMOUNT_OF_POLYNOMS * MAX_TERMS_IN_CUBE)
-#define MAX_VARS_IN_KEY (((MAX_TERMS_IN_KEY / 8 * sizeof(uint)) + 1) * 3 * SIZE_OF_AVAR)
+#define MAX_VARS_IN_KEY (((MAX_TERMS_IN_KEY / (8 * sizeof(uint))) + 1) * 3 * SIZE_OF_AVAR)
 
 #define PATH_TO_PUBLIC_KEY "channel/public_key"
 #define PATH_TO_THE_FIRST_FLAG "channel/flag1"
@@ -79,7 +79,7 @@ void shake(ulong *matrix, ulong *invert_matrix, ulong lines, ulong columns);
 void generateConstants(ulong *constants);
 
 
-void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, FullCubePolynomial *publicKey, ulong *constants, ulong det, ulong *answer);
+void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, FullCubePolynomial *publicKey, ulong *constants, ulong det, ulong *answer, ulong *transposition);
 void mult_A_on_all_vectors_B(ulong *matrix_A, ulong *answer);
 void mult_A_na_vector_B(ulong *matrix_A, ulong *vector);
 void mult_A_na_vector_B_xd(ulong *matrix_A, ulong *vector);

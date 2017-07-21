@@ -41,7 +41,7 @@ int main(int argc, char* argv[]) {
 	FullCubePolynomial publicKey[AMOUNT_OF_POLYNOMS];
 	ulong encodedMessage[AMOUNT_OF_POLYNOMS];
 	ulong realMessage[AMOUNT_OF_VARIABLES] = {0};
-	ulong radixes[NUMBER_OF_RADIX * 3] = {5, 7, 11, 13, 17};
+	ulong radixes[NUMBER_OF_RADIX * 3] = {3, 5};
 	ulong answers[AMOUNT_OF_VARIABLES * NUMBER_OF_RADIX];
 	ulong secretVector[LENGTH_OF_SECRET_VECTOR];
 	ulong transposition[AMOUNT_OF_VARIABLES];
@@ -98,7 +98,7 @@ int main(int argc, char* argv[]) {
 		tStart = clock();
 		//tStartRDTSC = timeRDTSC();
 #endif
-		computePublicKey(matrices.firstMatrix, matrices.secondMatrix, publicKey, matrices.constants, matrices.firstMatrixDet, answers); ///////////////////////////////////////////
+		computePublicKey(matrices.firstMatrix, matrices.secondMatrix, publicKey, matrices.constants, matrices.firstMatrixDet, answers, transposition); ///////////////////////////////////////////
 #ifdef TIME
 		msec = (clock() - tStart) * 1000 / CLOCKS_PER_SEC;
 		//tEndRDTSC = timeRDTSC();

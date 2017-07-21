@@ -94,26 +94,6 @@ void generateSecretKey(struct Matrices *matrices, ulong *secretVector, ulong *an
   //}
   //printf("\n");
 	generateFirstMatrices(matrices->firstMatrix, matrices->firstInverseMatrix, AMOUNT_OF_POLYNOMS, &matrices->firstMatrixDet);
-    /*matrices->firstMatrixDet = 70;
-	matrices->firstMatrix[0] = 88;
-	matrices->firstMatrix[1] = 16;
-	matrices->firstMatrix[2] = 22;
-	matrices->firstMatrix[3] = 166;
-	matrices->firstInverseMatrix[0] = 121;
-	matrices->firstInverseMatrix[1] = 153;
-	matrices->firstInverseMatrix[2] = 59;
-	matrices->firstInverseMatrix[3] = 110;
-	moduleStruct.module = 173;
-	moduleStruct.partsOfModule[0] = 173;
-	matrices->secondMatrix[0] = 1;
-	matrices->secondMatrix[1] = 0;
-	matrices->secondMatrix[2] = 0;
-	matrices->secondMatrix[3] = 1;
-	matrices->secondInverseMatrix[0] = 1;
-	matrices->secondInverseMatrix[1] = 0;
-	matrices->secondInverseMatrix[2] = 0;
-	matrices->secondInverseMatrix[3] = 1;*/
-
 	//matricesTransposition(matrices->firstMatrix, transposition);
 	generateSecondMatrices(matrices->secondMatrix, matrices->secondInverseMatrix, AMOUNT_OF_POLYNOMS);
 	generateConstants(matrices->constants);

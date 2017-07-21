@@ -8,7 +8,8 @@ extern struct Module moduleStruct;
 extern FILE *output;
 #endif
 
-void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, FullCubePolynomial *publicKey, ulong *constants, ulong det, ulong *answer) {
+void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, FullCubePolynomial *publicKey, ulong *constants, ulong det, ulong *answer, ulong *transposition) {
+	//matricesTransposition(answer, transposition);
 	mult_A_on_all_vectors_B(firstMatrix, answer);
 	CubePolynomial bufferMatrix[AMOUNT_OF_POLYNOMS];
 	cubeOfPolynomials(answer, bufferMatrix, constants);
