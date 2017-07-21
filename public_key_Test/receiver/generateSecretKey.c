@@ -85,7 +85,9 @@ void generatePows(ulong *result, ulong *radixes, ulong lastPow) {
 }
 
 void generateSecretKey(struct Matrices *matrices, ulong *secretVector, ulong *answers, ulong *transposition, ulong radix) {
-    ulong minModule = answers[AMOUNT_OF_VARIABLES * NUMBER_OF_RADIX - 1] * (radix-1) - 1;
+    ulong minModule = 0;
+	for(uint i = AMOUNT_OF_VARIABLES * (NUMBER_OF_RADIX - 1); i < AMOUNT_OF_VARIABLES * NUMBER_OF_RADIX; i++)
+		minModule += answers[i] * (radix-1);
 	generateModule(minModule);
   //generateVector(secretVector);
   //printf("secretVector : ");
@@ -101,6 +103,14 @@ void generateSecretKey(struct Matrices *matrices, ulong *secretVector, ulong *an
 		//matrices->constants[i] = 0;
 }
 
+uchar getMasSize(uchar size){
+	if (size < 21) return 1;
+	else if(size >= 21 && size < 29) return 2;
+	else if(size >= 29 && size < 47) return 3;
+	else if(size >= 47 && size < 56) return 4;
+	else return 5;
+}
+
 void generateModule(ulong minModule) {
 	int bit = 0;
 	 while (minModule >>= 1){
@@ -108,6 +118,9 @@ void generateModule(ulong minModule) {
 	 }
 	ulong min = (ulong)1 << (bit + 1);
 	ulong max = (ulong)1 << (bit + 2);
+	
+	moduleStruct.moduleSize = bit + 1;
+	moduleStruct.masSize = getMasSize(moduleStruct.moduleSize);
 
 	ulong k[moduleStruct.masSize];
 	ulong i, a = 0, p1, p2;

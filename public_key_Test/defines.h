@@ -37,8 +37,8 @@
 #define AMOUNT_OF_VAR_IN_LINE_FIRST 5
 #define AMOUNT_OF_VAR_IN_LINE_SECOND 5
 #define SIZE_OF_VARIABLE 9
-#define SIZE_OF_MODULE (SIZE_OF_VARIABLE + 1)
-#define MAS_SIZE 1
+#define SIZE_OF_MODULE (((SIZE_OF_VARIABLE + 1) > 63) ? (SIZE_OF_VARIABLE + 1) : 63)	// module_size and mas_size
+#define MAS_SIZE 5																		//for ststic arrays
 #define AMOUNT_OF_POLYNOMS (NUMBER_OF_RADIX * LENGTH_OF_SECRET_VECTOR)
 
 /**

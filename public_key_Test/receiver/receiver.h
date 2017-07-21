@@ -35,7 +35,8 @@ typedef unsigned char uchar;
 
 struct Module {
 	ulong module;
-	const uchar masSize;
+	uchar masSize;
+	uint moduleSize;
 	ulong partsOfModule[MAS_SIZE * 3];
 };
 
