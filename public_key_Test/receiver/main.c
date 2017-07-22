@@ -221,6 +221,22 @@ void fPrintCubePolynomials(CubePolynomial *cubePolynomials) {
 	}
 }
 
+void printCubePolynomial(CubePolynomial cubePolynomials){
+    for (int j = 0; j < MAX_TERMS_IN_POLY; j++) {
+        if (cubePolynomials.factor[j] == 0) {
+            continue;
+        }
+        if (j != 0) {
+            printf( " + ");
+        }
+        printf("%llu", cubePolynomials.factor[j]);
+        for (int k = 0; k < 5; k++) {
+            printf("*x%lu", getFromVar_test(cubePolynomials.vars, (5 * j) + k));
+        }
+    }
+    printf("\n");
+}
+
 void printFullCubePolynomials(FullCubePolynomial *cubePolynomials) {
 	for (int i = 0; i < size; i++) {
 		for (int j = 0; j < MAX_TERMS_IN_KEY; j++) {

@@ -37,8 +37,11 @@ void computeNewPublicKey(ulong *firstMatrix, ulong *secondMatrix, ulong *funcMat
 	fprintf(output, "New cube polynomials\n"); printf("New cube polynomials\n");
 	fPrintCubePolynomials(newBufferMatrix); printCubePolynomials(newBufferMatrix);
 	fprintf(output, "\n"); printf("\n");
+	fprintf(output, "Function matrix\n"); printf("Function matrix\n");
+	fPrintMatrix(funcMatrix, size, size);printMatrix(funcMatrix, size, size);
+	fprintf(output, "\n"); printf("\n");
 #endif
-   // addFunctions(firstMatrix, constants, newBufferMatrix, funcMatrix);
+    //addFunctions(firstMatrix, constants, newBufferMatrix, funcMatrix);
 	newMultToSecondMatrix(secondMatrix, newBufferMatrix, newPublicKey, constants3);
 }
 
@@ -296,9 +299,9 @@ void polynomialDeg(ulong *polyn, CubePolynomial *bufferMatrix, ulong deg) {
 		}
 
 		//3+1+1 power
-		for (x[0] = 0; x[0] < size; x[0]++) {
-			for (x[1] = 0; x[1] < size; x[1]++) {
-				for (x[2] = x[1] + 1; x[2] < size; x[2]++) {
+		for (x[0] = 0; x[0] < size + 1; x[0]++) {
+			for (x[1] = 0; x[1] < size + 1; x[1]++) {
+				for (x[2] = x[1] + 1; x[2] < size + 1; x[2]++) {
 					if ((x[0]==x[1]) || (x[0]==x[2])) {
 						continue;
 					}
@@ -318,9 +321,9 @@ void polynomialDeg(ulong *polyn, CubePolynomial *bufferMatrix, ulong deg) {
 		}
 
 		//2+2+1 power
-		for (x[0] = 0; x[0] < size; x[0]++) {
-			for (x[1] = x[1] + 1; x[1] < size; x[1]++) {
-				for (x[2] = 0; x[2] < size; x[2]++) {
+		for (x[0] = 0; x[0] < size + 1; x[0]++) {
+			for (x[1] = x[0] + 1; x[1] < size + 1; x[1]++) {
+				for (x[2] = 0; x[2] < size + 1; x[2]++) {
 					if ((x[0] == x[2]) || (x[1]==x[2])) {
 						continue;
 					}
@@ -342,10 +345,10 @@ void polynomialDeg(ulong *polyn, CubePolynomial *bufferMatrix, ulong deg) {
 		}
 
 		//2+1+1+1 power
-		for (x[0] = 0; x[0] < size; x[0]++) {
-			for (x[1] = 0; x[1] < size; x[1]++) {
-				for (x[2] = x[1] + 1; x[2] < size; x[2]++) {
-					for (x[3] = x[2] + 1; x[3] < size; x[3]++) {
+		for (x[0] = 0; x[0] < size + 1; x[0]++) {
+			for (x[1] = 0; x[1] < size + 1; x[1]++) {
+				for (x[2] = x[1] + 1; x[2] < size + 1; x[2]++) {
+					for (x[3] = x[2] + 1; x[3] < size + 1; x[3]++) {
 						if ((x[0] == x[1]) || (x[0] == x[2]) || (x[0] == x[3])) {
 							continue;
 						}
@@ -367,11 +370,11 @@ void polynomialDeg(ulong *polyn, CubePolynomial *bufferMatrix, ulong deg) {
 		}
 
 		//1+1+1+1+1 power
-		for (x[0] = 0; x[0] < size; x[0]++) {
-			for (x[1] = x[0] + 1; x[1] < size; x[1]++) {
-				for (x[2] = x[1] + 1; x[2] < size; x[2]++) {
-					for (x[3] = x[2] + 1; x[3] < size; x[3]++) {
-						for (x[4] = x[3]+1; x[4] < size; x[4]++) {
+		for (x[0] = 0; x[0] < size + 1; x[0]++) {
+			for (x[1] = x[0] + 1; x[1] < size + 1; x[1]++) {
+				for (x[2] = x[1] + 1; x[2] < size + 1; x[2]++) {
+					for (x[3] = x[2] + 1; x[3] < size + 1; x[3]++) {
+						for (x[4] = x[3]+1; x[4] < size + 1; x[4]++) {
 							bufferFactor = modularMult(120,modularMult(modularMult(polyn[x[0]],polyn[x[1]]),modularMult(modularMult(polyn[x[2]],polyn[x[3]]),polyn[x[4]])));
 							if (bufferFactor == 0) {
 								continue;
@@ -431,7 +434,7 @@ void polynomialDeg(ulong *polyn, CubePolynomial *bufferMatrix, ulong deg) {
 
 		//2+2 power
 		for (x[0] = 0; x[0] < size + 1; x[0]++) {
-			for (x[1] = 0; x[1] < size + 1; x[1]++) {
+			for (x[1] = x[1] + 1; x[1] < size + 1; x[1]++) {
 				if (x[0]==x[1]) {
 					continue;
 				}
@@ -461,9 +464,9 @@ void polynomialDeg(ulong *polyn, CubePolynomial *bufferMatrix, ulong deg) {
 		}
 
 		//2+1+1 power
-		for (x[0] = 0; x[0] < size; x[0]++) {
-			for (x[1] = 0; x[1] < size; x[1]++) {
-				for (x[2] = x[1] + 1; x[2] < size; x[2]++) {
+		for (x[0] = 0; x[0] < size + 1; x[0]++) {
+			for (x[1] = 0; x[1] < size + 1; x[1]++) {
+				for (x[2] = x[1] + 1; x[2] < size + 1; x[2]++) {
 					if ((x[0]==x[1]) || (x[0]==x[2])) {
 						continue;
 					}
@@ -495,10 +498,10 @@ void polynomialDeg(ulong *polyn, CubePolynomial *bufferMatrix, ulong deg) {
 		}
 
 		//1+1+1+1 power
-		for (x[0] = 0; x[0] < size; x[0]++) {
-			for (x[1] = 0; x[1] < size; x[1]++) {
-				for (x[2] = x[1] + 1; x[2] < size; x[2]++) {
-					for (x[3] = x[2] + 1; x[3] < size; x[3]++) {
+		for (x[0] = 0; x[0] < size + 1; x[0]++) {
+			for (x[1] = x[0] + 1; x[1] < size + 1; x[1]++) {
+				for (x[2] = x[1] + 1; x[2] < size + 1; x[2]++) {
+					for (x[3] = x[2] + 1; x[3] < size + 1; x[3]++) {
 						if ((x[0] == x[1]) || (x[0] == x[2]) || (x[0] == x[3])) {
 							continue;
 						}
@@ -596,9 +599,9 @@ void polynomialDeg(ulong *polyn, CubePolynomial *bufferMatrix, ulong deg) {
 		}
 
 		//1+1+1 power
-		for (x[0] = 0; x[0] < size; x[0]++) {
-			for (x[1] = 0; x[1] < size; x[1]++) {
-				for (x[2] = x[1] + 1; x[2] < size; x[2]++) {
+		for (x[0] = 0; x[0] < size + 1; x[0]++) {
+			for (x[1] = x[0] + 1; x[1] < size + 1; x[1]++) {
+				for (x[2] = x[1] + 1; x[2] < size + 1; x[2]++) {
 					if ((x[0]==x[1]) || (x[0]==x[2])) {
 						continue;
 					}
@@ -718,6 +721,9 @@ void addFunctions(ulong *matrix, ulong *constants, CubePolynomial *bufferMatrix,
 			}
 			polynom[size] = constants[j];
 			polynomialDeg(polynom, &buffer, funcMatrix[j + i * size]%6);
+#ifdef PRINT
+            printCubePolynomial(buffer);
+#endif
 			uint cur = 0;
 			while (buffer.factor[cur]!=0) {
 				uint k;
@@ -733,6 +739,9 @@ void addFunctions(ulong *matrix, ulong *constants, CubePolynomial *bufferMatrix,
 				bufferMatrix[i].factor[k] = modularAdd(bufferMatrix[i].factor[k],buffer.factor[cur]);
 				cur++;
 			}
+#ifdef PRINT
+			printCubePolynomial(bufferMatrix[i]);
+#endif
 
 		}
 	}
