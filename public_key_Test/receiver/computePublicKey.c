@@ -41,7 +41,7 @@ void computeNewPublicKey(ulong *firstMatrix, ulong *secondMatrix, ulong *funcMat
 	fPrintMatrix(funcMatrix, size, size);printMatrix(funcMatrix, size, size);
 	fprintf(output, "\n"); printf("\n");
 #endif
-    addFunctions(firstMatrix, constants, newBufferMatrix, funcMatrix);
+    //addFunctions(firstMatrix, constants, newBufferMatrix, funcMatrix);
 	newMultToSecondMatrix(secondMatrix, newBufferMatrix, newPublicKey, constants3);
 }
 
@@ -796,6 +796,7 @@ void addFunctions(ulong *matrix, ulong *constants, CubePolynomial *bufferMatrix,
 				k += 2;
 			}
 			polynom[size] = constants[j];
+
 			polynomialDeg(polynom, &buffer, funcMatrix[j + i * size]%6);
 #ifdef PRINT
             printCubePolynomial(buffer);
