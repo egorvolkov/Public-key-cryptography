@@ -76,7 +76,7 @@ void newDecoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *f
 		fprintf(output, "%llu ", cube[i]);
 		printf("%llu ", cube[i]);
 #endif
-	/*}
+	/**/}
 
 	// Вычисляем и убираем дополнительные функции
 	for (int i = size - 2; i>=0; i--) {

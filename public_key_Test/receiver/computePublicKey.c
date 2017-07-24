@@ -41,7 +41,7 @@ void computeNewPublicKey(ulong *firstMatrix, ulong *secondMatrix, ulong *funcMat
 	fPrintMatrix(funcMatrix, size, size);printMatrix(funcMatrix, size, size);
 	fprintf(output, "\n"); printf("\n");
 #endif
-    //addFunctions(firstMatrix, constants, newBufferMatrix, funcMatrix);
+    addFunctions(firstMatrix, constants, newBufferMatrix, funcMatrix);
 	newMultToSecondMatrix(secondMatrix, newBufferMatrix, newPublicKey, constants3);
 }
 
@@ -60,7 +60,8 @@ void cubeOfNewPolynomials(ulong *matrix, CubePolynomial newBufferMatrix[], ulong
 		}
         polinom[size] = constants[i];
 		buf = &(newBufferMatrix[i]);
-		polynomialDeg(polinom,buf,3);
+        //polynomialCube(polinom,buf);
+        polynomialDeg(polinom,buf,3);
 	}
 }
 
@@ -443,22 +444,36 @@ void polynomialDeg(ulong *polyn, CubePolynomial *bufferMatrix, ulong deg) {
 					continue;
 				}
 				bufferMatrix->factor[cur] = bufferFactor;
-				for (uint j = 0; j < 2; j++) {
-					writeVar_test(bufferMatrix->vars, (x[0] + 1)%(size + 1), (5 * cur) + j);
-				}
-				if (x[0]==size){
-					writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 2);
-					for (uint j = 3; j < 5; j++) {
-						writeVar_test(bufferMatrix->vars, (x[1] + 1)%(size + 1), (5 * cur) + j);
-					}
-				}
-				else
-				{
-					for (uint j = 2; j < 4; j++) {
-						writeVar_test(bufferMatrix->vars, (x[1] + 1)%(size + 1), (5 * cur) + j);
-					}
-					writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 4);
-				}
+				if (x[0]==size) {
+                    for (uint j = 0; j < 2; j++) {
+                        writeVar_test(bufferMatrix->vars, (x[0] + 1)%(size + 1), (5 * cur) + j);
+                    }
+                    writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 2);
+                    for (uint j = 3; j < 5; j++) {
+                        writeVar_test(bufferMatrix->vars, (x[1] + 1)%(size + 1), (5 * cur) + j);
+                    }
+                }
+                else
+                {
+                    if (x[1]==size) {
+                        for (uint j = 0; j < 2; j++) {
+                            writeVar_test(bufferMatrix->vars, (x[1] + 1)%(size + 1), (5 * cur) + j);
+                        }
+                        writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 2);
+                        for (uint j = 3; j < 5; j++) {
+                            writeVar_test(bufferMatrix->vars, (x[0] + 1)%(size + 1), (5 * cur) + j);
+                        }
+                    }
+                    else {
+                        for (uint j = 0; j < 2; j++) {
+                            writeVar_test(bufferMatrix->vars, (x[0] + 1)%(size + 1), (5 * cur) + j);
+                        }
+                        for (uint j = 2; j < 4; j++) {
+                            writeVar_test(bufferMatrix->vars, (x[1] + 1)%(size + 1), (5 * cur) + j);
+                        }
+                        writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 4);
+                    }
+                }
 				cur++;
 			}
 		}
@@ -475,22 +490,34 @@ void polynomialDeg(ulong *polyn, CubePolynomial *bufferMatrix, ulong deg) {
 						continue;
 					}
 					bufferMatrix->factor[cur] = bufferFactor;
-					if ((x[0] == size) || (x[1] == size)) {
-						for (uint j = 0; j < 2; j++) {
-							writeVar_test(bufferMatrix->vars, (x[0] + 1)%(size + 1), (5 * cur) + j);
-						}
-						writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 2);
-						writeVar_test(bufferMatrix->vars, (x[1] + 1)%(size + 1), (5 * cur) + 3);
-						writeVar_test(bufferMatrix->vars, (x[2] + 1)%(size + 1), (5 * cur) + 4);
-					}else
-					{
-						for (uint j = 0; j < 2; j++) {
-							writeVar_test(bufferMatrix->vars, (x[0] + 1)%(size + 1), (5 * cur) + j);
-						}
-						writeVar_test(bufferMatrix->vars, (x[1] + 1)%(size + 1), (5 * cur) + 2);
-						writeVar_test(bufferMatrix->vars, (x[2] + 1)%(size + 1), (5 * cur) + 3);
-						writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 4);
-					}
+					if ((x[0]==size) || (x[1]==size)){
+                        for (uint j = 0; j < 2; j++) {
+                            writeVar_test(bufferMatrix->vars, (x[0] + 1)%(size + 1), (5 * cur) + j);
+                        }
+                        writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 2);
+                        writeVar_test(bufferMatrix->vars, (x[1] + 1)%(size + 1), (5 * cur) + 3);
+                        writeVar_test(bufferMatrix->vars, (x[2] + 1)%(size + 1), (5 * cur) + 4);
+                    }
+                    else
+                    {
+                        if (x[2]==size){
+                            for (uint j = 0; j < 2; j++) {
+                                writeVar_test(bufferMatrix->vars, (x[0] + 1)%(size + 1), (5 * cur) + j);
+                            }
+                            writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 2);
+                            writeVar_test(bufferMatrix->vars, (x[2] + 1)%(size + 1), (5 * cur) + 3);
+                            writeVar_test(bufferMatrix->vars, (x[1] + 1)%(size + 1), (5 * cur) + 4);
+                        }
+                        else
+                        {
+                            for (uint j = 0; j < 2; j++) {
+                                writeVar_test(bufferMatrix->vars, (x[0] + 1)%(size + 1), (5 * cur) + j);
+                            }
+                            writeVar_test(bufferMatrix->vars, (x[1] + 1)%(size + 1), (5 * cur) + 2);
+                            writeVar_test(bufferMatrix->vars, (x[2] + 1)%(size + 1), (5 * cur) + 3);
+                            writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 4);
+                        }
+                    }
 
 					cur++;
 				}
@@ -510,31 +537,50 @@ void polynomialDeg(ulong *polyn, CubePolynomial *bufferMatrix, ulong deg) {
 							continue;
 						}
 						bufferMatrix->factor[cur] = bufferFactor;
-						if ((x[0]==size) || (x[1] == size)){
-							writeVar_test(bufferMatrix->vars, (x[0] + 1)%(size + 1), (5 * cur) + 0);
-							writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 1);
-							writeVar_test(bufferMatrix->vars, (x[1] + 1)%(size + 1), (5 * cur) + 2);
-							writeVar_test(bufferMatrix->vars, (x[2] + 1)%(size + 1), (5 * cur) + 3);
-							writeVar_test(bufferMatrix->vars, (x[3] + 1)%(size + 1), (5 * cur) + 4);
-						}
-						else
-						{
-							if ((x[2]==size) || (x[3]==size)) {
-								writeVar_test(bufferMatrix->vars, (x[0] + 1)%(size + 1), (5 * cur) + 0);
-								writeVar_test(bufferMatrix->vars, (x[1] + 1)%(size + 1), (5 * cur) + 1);
-								writeVar_test(bufferMatrix->vars, (x[2] + 1)%(size + 1), (5 * cur) + 2);
-								writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 3);
-								writeVar_test(bufferMatrix->vars, (x[3] + 1)%(size + 1), (5 * cur) + 4);
-							}
-							else
-							{
-								writeVar_test(bufferMatrix->vars, (x[0] + 1)%(size + 1), (5 * cur) + 0);
-								writeVar_test(bufferMatrix->vars, (x[1] + 1)%(size + 1), (5 * cur) + 1);
-								writeVar_test(bufferMatrix->vars, (x[2] + 1)%(size + 1), (5 * cur) + 2);
-								writeVar_test(bufferMatrix->vars, (x[3] + 1)%(size + 1), (5 * cur) + 3);
-								writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 5);
-							}
-						}
+						if (x[0]==size) {
+                            writeVar_test(bufferMatrix->vars, (x[0] + 1)%(size + 1), (5 * cur) + 0);
+                            writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 1);
+                            writeVar_test(bufferMatrix->vars, (x[1] + 1)%(size + 1), (5 * cur) + 2);
+                            writeVar_test(bufferMatrix->vars, (x[2] + 1)%(size + 1), (5 * cur) + 3);
+                            writeVar_test(bufferMatrix->vars, (x[3] + 1)%(size + 1), (5 * cur) + 4);
+                        }
+                        else
+                        {
+                            if (x[1]==size) {
+                                writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 0);
+                                writeVar_test(bufferMatrix->vars, (x[1] + 1)%(size + 1), (5 * cur) + 1);
+                                writeVar_test(bufferMatrix->vars, (x[0] + 1)%(size + 1), (5 * cur) + 2);
+                                writeVar_test(bufferMatrix->vars, (x[2] + 1)%(size + 1), (5 * cur) + 3);
+                                writeVar_test(bufferMatrix->vars, (x[3] + 1)%(size + 1), (5 * cur) + 4);
+                            }
+                            else
+                            {
+                                if (x[2]==size){
+                                    writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 0);
+                                    writeVar_test(bufferMatrix->vars, (x[2] + 1)%(size + 1), (5 * cur) + 1);
+                                    writeVar_test(bufferMatrix->vars, (x[0] + 1)%(size + 1), (5 * cur) + 2);
+                                    writeVar_test(bufferMatrix->vars, (x[1] + 1)%(size + 1), (5 * cur) + 3);
+                                    writeVar_test(bufferMatrix->vars, (x[3] + 1)%(size + 1), (5 * cur) + 4);
+                                }
+                                else {
+                                    if (x[3]==size){
+                                        writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 0);
+                                        writeVar_test(bufferMatrix->vars, (x[3] + 1)%(size + 1), (5 * cur) + 1);
+                                        writeVar_test(bufferMatrix->vars, (x[0] + 1)%(size + 1), (5 * cur) + 2);
+                                        writeVar_test(bufferMatrix->vars, (x[1] + 1)%(size + 1), (5 * cur) + 3);
+                                        writeVar_test(bufferMatrix->vars, (x[2] + 1)%(size + 1), (5 * cur) + 4);
+                                    }
+                                    else
+                                    {
+                                        writeVar_test(bufferMatrix->vars, (x[0] + 1)%(size + 1), (5 * cur) + 0);
+                                        writeVar_test(bufferMatrix->vars, (x[1] + 1)%(size + 1), (5 * cur) + 1);
+                                        writeVar_test(bufferMatrix->vars, (x[2] + 1)%(size + 1), (5 * cur) + 2);
+                                        writeVar_test(bufferMatrix->vars, (x[3] + 1)%(size + 1), (5 * cur) + 3);
+                                        writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 4);
+                                    }
+                                }
+                            }
+                        }
 						cur++;
 					}
 				}
@@ -549,7 +595,7 @@ void polynomialDeg(ulong *polyn, CubePolynomial *bufferMatrix, ulong deg) {
 			if (bufferFactor == 0) {
 				continue;
 			}
-			bufferMatrix->factor[cur] = bufferFactor;;
+			bufferMatrix->factor[cur] = bufferFactor;
 			for (uint j = 0; j < 3; j++) {
 				writeVar_test(bufferMatrix->vars, (x[0] + 1)%(size + 1), (5 * cur) + j);
 			}
@@ -610,22 +656,42 @@ void polynomialDeg(ulong *polyn, CubePolynomial *bufferMatrix, ulong deg) {
 						continue;
 					}
 					bufferMatrix->factor[cur] = bufferFactor;
-					if ((x[0] == size) || (x[1] == size)) {
-						writeVar_test(bufferMatrix->vars, (x[0] + 1)%(size + 1), (5 * cur) + 0);
-						writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 1);
-						writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 2);
-						writeVar_test(bufferMatrix->vars, (x[1] + 1)%(size + 1), (5 * cur) + 3);
-						writeVar_test(bufferMatrix->vars, (x[2] + 1)%(size + 1), (5 * cur) + 4);
-					}else
-					{
-						writeVar_test(bufferMatrix->vars, (x[0] + 1)%(size + 1), (5 * cur) + 0);
-						writeVar_test(bufferMatrix->vars, (x[1] + 1)%(size + 1), (5 * cur) + 1);
-						writeVar_test(bufferMatrix->vars, (x[2] + 1)%(size + 1), (5 * cur) + 2);
-						writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 3);
-						writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 4);
-					}
-
-					cur++;
+					if (x[0] == size) {
+                        writeVar_test(bufferMatrix->vars, (x[0] + 1)%(size + 1), (5 * cur) + 0);
+                        writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 1);
+                        writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 2);
+                        writeVar_test(bufferMatrix->vars, (x[1] + 1)%(size + 1), (5 * cur) + 3);
+                        writeVar_test(bufferMatrix->vars, (x[2] + 1)%(size + 1), (5 * cur) + 4);
+                    }
+                    else
+                    {
+                        if (x[1]==size) {
+                            writeVar_test(bufferMatrix->vars, (x[1] + 1)%(size + 1), (5 * cur) + 0);
+                            writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 1);
+                            writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 2);
+                            writeVar_test(bufferMatrix->vars, (x[0] + 1)%(size + 1), (5 * cur) + 3);
+                            writeVar_test(bufferMatrix->vars, (x[2] + 1)%(size + 1), (5 * cur) + 4);
+                        }
+                        else
+                        {
+                            if (x[2]==size){
+                                writeVar_test(bufferMatrix->vars, (x[2] + 1)%(size + 1), (5 * cur) + 0);
+                                writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 1);
+                                writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 2);
+                                writeVar_test(bufferMatrix->vars, (x[0] + 1)%(size + 1), (5 * cur) + 3);
+                                writeVar_test(bufferMatrix->vars, (x[1] + 1)%(size + 1), (5 * cur) + 4);
+                            }
+                            else
+                            {
+                                writeVar_test(bufferMatrix->vars, (x[0] + 1)%(size + 1), (5 * cur) + 0);
+                                writeVar_test(bufferMatrix->vars, (x[1] + 1)%(size + 1), (5 * cur) + 1);
+                                writeVar_test(bufferMatrix->vars, (x[2] + 1)%(size + 1), (5 * cur) + 2);
+                                writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 3);
+                                writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 4);
+                        }
+                        }
+                    }
+                    cur++;
 				}
 			}
 		}
@@ -639,18 +705,18 @@ void polynomialDeg(ulong *polyn, CubePolynomial *bufferMatrix, ulong deg) {
 				continue;
 			}
 			bufferMatrix->factor[cur] = bufferFactor;;
-			for (uint j = 0; j < 2; j++) {
+			for (uint j = 3; j < 5; j++) {
 				writeVar_test(bufferMatrix->vars, (x[0] + 1)%(size + 1), (5 * cur) + j);
 			}
+			writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 0);
+			writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 1);
 			writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 2);
-			writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 3);
-			writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 4);
 			cur++;
 		}
 
 		//1+1 power
 		for (x[0] = 0; x[0] < size + 1; x[0]++) {
-			for (x[1] = 0; x[1] < size + 1; x[1]++) {
+			for (x[1] = x[0] + 1; x[1] < size + 1; x[1]++) {
 				if (x[0]==x[1]) {
 					continue;
 				}
@@ -659,18 +725,29 @@ void polynomialDeg(ulong *polyn, CubePolynomial *bufferMatrix, ulong deg) {
 					continue;
 				}
 				bufferMatrix->factor[cur] = bufferFactor;
-				writeVar_test(bufferMatrix->vars, (x[0] + 1)%(size + 1), (5 * cur) + 0);
 				if (x[0]==size){
+                    writeVar_test(bufferMatrix->vars, (x[0] + 1)%(size + 1), (5 * cur) + 0);
 					writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 1);
 					writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 2);
 					writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 3);
 					writeVar_test(bufferMatrix->vars, (x[1] + 1)%(size + 1), (5 * cur) + 4);
 				} else
 				{
-					writeVar_test(bufferMatrix->vars, (x[1] + 1)%(size + 1), (5 * cur) + 1);
-					writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 2);
-					writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 3);
-					writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 4);
+                    if (x[1]==size) {
+                        writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 0);
+                        writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 1);
+                        writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 2);
+                        writeVar_test(bufferMatrix->vars, (x[1] + 1)%(size + 1), (5 * cur) + 3);
+                        writeVar_test(bufferMatrix->vars, (x[0] + 1)%(size + 1), (5 * cur) + 4);
+                    }
+                    else
+                    {
+                        writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 0);
+                        writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 1);
+                        writeVar_test(bufferMatrix->vars, 0, (5 * cur) + 2);
+                        writeVar_test(bufferMatrix->vars, (x[0] + 1) % (size + 1), (5 * cur) + 3);
+                        writeVar_test(bufferMatrix->vars, (x[1] + 1) % (size + 1), (5 * cur) + 4);
+                    }
 				}
 				cur++;
 			}
@@ -683,8 +760,8 @@ void polynomialDeg(ulong *polyn, CubePolynomial *bufferMatrix, ulong deg) {
 				continue;
 			}
 			bufferMatrix->factor[cur] = polyn[x[0]];
-			writeVar_test(bufferMatrix->vars, (x[0] + 1)%(size + 1), (5 * cur) + 0);
-			for (uint j = 1; j < 5; j++) {
+			writeVar_test(bufferMatrix->vars, (x[0] + 1)%(size + 1), (5 * cur) + 4);
+			for (uint j = 0; j < 4; j++) {
 				writeVar_test(bufferMatrix->vars, 0, (5 * cur) + j);
 			}
 			cur++;
@@ -701,7 +778,6 @@ void polynomialDeg(ulong *polyn, CubePolynomial *bufferMatrix, ulong deg) {
 
 	for (cur; cur < MAX_TERMS_IN_POLY; cur++) {
 		bufferMatrix->factor[cur] = 0;
-		bufferMatrix->vars[cur] = 0;
 	}
 }
 
@@ -725,7 +801,7 @@ void addFunctions(ulong *matrix, ulong *constants, CubePolynomial *bufferMatrix,
             printCubePolynomial(buffer);
 #endif
 			uint cur = 0;
-			while (buffer.factor[cur]!=0) {
+			while ((buffer.factor[cur]!=0)&&(cur < MAX_TERMS_IN_POLY)) {
 				uint k;
 				for (k = 0; k < MAX_TERMS_IN_POLY; k++){
 					if (bufferMatrix[i].factor[k]==0) {
@@ -740,7 +816,8 @@ void addFunctions(ulong *matrix, ulong *constants, CubePolynomial *bufferMatrix,
 				cur++;
 			}
 #ifdef PRINT
-			printCubePolynomial(bufferMatrix[i]);
+            printCubePolynomial(bufferMatrix[i]);
+            printf("\n");
 #endif
 
 		}
