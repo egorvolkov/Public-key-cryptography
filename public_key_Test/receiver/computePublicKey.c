@@ -41,7 +41,7 @@ void computeNewPublicKey(ulong *firstMatrix, ulong *secondMatrix, ulong *funcMat
 	fPrintMatrix(funcMatrix, size, size);printMatrix(funcMatrix, size, size);
 	fprintf(output, "\n"); printf("\n");
 #endif
-    //addFunctions(firstMatrix, constants, newBufferMatrix, funcMatrix);
+    addFunctions(firstMatrix, constants, newBufferMatrix, funcMatrix);
 	newMultToSecondMatrix(secondMatrix, newBufferMatrix, newPublicKey, constants3);
 }
 
@@ -399,7 +399,7 @@ void polynomialDeg(ulong *polyn, CubePolynomial *bufferMatrix, ulong deg) {
 			if (bufferFactor == 0) {
 				continue;
 			}
-			bufferMatrix->factor[cur] = bufferFactor;;
+			bufferMatrix->factor[cur] = bufferFactor;
 			for (uint j = 0; j < 4; j++) {
 				writeVar_test(bufferMatrix->vars, (x[0] + 1)%(size + 1), (5 * cur) + j);
 			}
@@ -435,7 +435,7 @@ void polynomialDeg(ulong *polyn, CubePolynomial *bufferMatrix, ulong deg) {
 
 		//2+2 power
 		for (x[0] = 0; x[0] < size + 1; x[0]++) {
-			for (x[1] = x[1] + 1; x[1] < size + 1; x[1]++) {
+			for (x[1] = x[0] + 1; x[1] < size + 1; x[1]++) {
 				if (x[0]==x[1]) {
 					continue;
 				}
@@ -700,7 +700,7 @@ void polynomialDeg(ulong *polyn, CubePolynomial *bufferMatrix, ulong deg) {
 	if (deg == 2) {
 		//2 power
 		for (x[0] = 0; x[0] < size + 1; x[0]++) {
-			bufferFactor = modularDeg(polyn[x[0]], 3);
+			bufferFactor = modularDeg(polyn[x[0]], 2);
 			if (bufferFactor == 0) {
 				continue;
 			}
@@ -720,7 +720,7 @@ void polynomialDeg(ulong *polyn, CubePolynomial *bufferMatrix, ulong deg) {
 				if (x[0]==x[1]) {
 					continue;
 				}
-				bufferFactor = modularMult(5,modularMult(polyn[x[0]],polyn[x[1]]));
+				bufferFactor = modularMult(2,modularMult(polyn[x[0]],polyn[x[1]]));
 				if (bufferFactor == 0) {
 					continue;
 				}
@@ -805,9 +805,18 @@ void addFunctions(ulong *matrix, ulong *constants, CubePolynomial *bufferMatrix,
 			while ((buffer.factor[cur]!=0)&&(cur < MAX_TERMS_IN_POLY)) {
 				uint k;
 				for (k = 0; k < MAX_TERMS_IN_POLY; k++){
-					if (bufferMatrix[i].factor[k]==0) {
-						write5Vars(buffer.vars, bufferMatrix[i].vars, cur, k);
-						break;
+					if ((bufferMatrix[i].factor[k]==0)&&(get5Vars(bufferMatrix[i].vars,k)==0)) {
+						if (k == MAX_TERMS_IN_POLY - 1) {
+							write5Vars(buffer.vars, bufferMatrix[i].vars, cur, k);
+							break;
+						}
+						else {
+							if (get5Vars(bufferMatrix[i].vars,k+1)==0) {
+								write5Vars(buffer.vars, bufferMatrix[i].vars, cur, k);
+								break;
+							}
+							continue;
+						}
 					}
 					if (get5Vars(bufferMatrix[i].vars,k)==get5Vars(buffer.vars,cur)) {
 						break;
@@ -817,6 +826,7 @@ void addFunctions(ulong *matrix, ulong *constants, CubePolynomial *bufferMatrix,
 				cur++;
 			}
 #ifdef PRINT
+            printf("bufferMatrix\n");
             printCubePolynomial(bufferMatrix[i]);
             printf("\n");
 #endif
