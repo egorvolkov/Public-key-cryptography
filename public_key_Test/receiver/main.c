@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
 #endif
 
 	FILE *file = NULL;
-	struct NewMatrices newMatrices;
+	struct Matrices matrices;
 	FullCubePolynomial publicKey[size];
 	ulong encodedOrRealMessage[size];
 
@@ -48,7 +48,7 @@ int main(int argc, char* argv[]) {
 		tStart = getTime();
 		tStartRDTSC = timeRDTSC();
 #endif
-		generateSecretKey(&newMatrices); //////////////////////////////////////////////////////
+		generateSecretKey(&matrices); //////////////////////////////////////////////////////
 #ifdef TIME
 
 		tEnd = getTime();
@@ -68,19 +68,19 @@ int main(int argc, char* argv[]) {
 		fprintf(output, "\n"); printf("\n");
 
         printf("New Matrix A\n");
-        printNewMatrix(newMatrices.firstMatrix, size, size, AMOUNT_OF_VAR_IN_LINE_FIRST);
+        printNewMatrix(matrices.firstMatrix, size, size, AMOUNT_OF_VAR_IN_LINE_FIRST);
         printf("\n");
 
         printf("New Matrix A^(-1)\n");
-        printNewMatrix(newMatrices.firstInverseMatrix, size, size, AMOUNT_OF_VAR_IN_LINE_FIRST);
+        printNewMatrix(matrices.firstInverseMatrix, size, size, AMOUNT_OF_VAR_IN_LINE_FIRST);
         printf("\n");
 
         printf("New Matrix B\n");
-        printNewMatrix(newMatrices.secondMatrix, size, size, AMOUNT_OF_VAR_IN_LINE_FIRST);
+        printNewMatrix(matrices.secondMatrix, size, size, AMOUNT_OF_VAR_IN_LINE_FIRST);
         printf("\n");
 
         printf("New Matrix B^(-1)\n");
-        printNewMatrix(newMatrices.secondInverseMatrix, size, size, AMOUNT_OF_VAR_IN_LINE_FIRST);
+        printNewMatrix(matrices.secondInverseMatrix, size, size, AMOUNT_OF_VAR_IN_LINE_FIRST);
         printf("\n");
 
 #endif
@@ -88,7 +88,7 @@ int main(int argc, char* argv[]) {
 		tStart = getTime();
 		tStartRDTSC = timeRDTSC();
 #endif
-        computeNewPublicKey(newMatrices.firstMatrix, newMatrices.secondMatrix, newMatrices.functionMatrix, publicKey, newMatrices.constants, newMatrices.constants3);
+        computePublicKey(matrices.firstMatrix, matrices.secondMatrix, matrices.functionMatrix, publicKey, matrices.constants, matrices.constants3);
 #ifdef TIME
 		tEnd = getTime();
 		tEndRDTSC = timeRDTSC();
@@ -120,7 +120,7 @@ int main(int argc, char* argv[]) {
 		tStart = getTime();
 		tStartRDTSC = timeRDTSC();
 #endif
-        newDecoding(newMatrices.firstInverseMatrix, newMatrices.secondInverseMatrix, newMatrices.functionMatrix, encodedOrRealMessage, newMatrices.constants, newMatrices.constants3);
+        decoding(matrices.firstInverseMatrix, matrices.secondInverseMatrix, matrices.functionMatrix, encodedOrRealMessage, matrices.constants, matrices.constants3);
 #ifdef TIME
 		tEnd = getTime();
 		tEndRDTSC = timeRDTSC();

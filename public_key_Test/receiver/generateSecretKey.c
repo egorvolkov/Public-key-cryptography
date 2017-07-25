@@ -3,7 +3,7 @@
 extern const uint size;
 extern struct Module moduleStruct;
 
-void generateSecretKey(struct NewMatrices *matrices) {
+void generateSecretKey(struct Matrices *matrices) {
 	generateModule();
 	generateFirstMatrices_rare(matrices->firstMatrix, matrices->firstInverseMatrix);
 	generateSecondMatrices_rare(matrices->secondMatrix, matrices->secondInverseMatrix);
@@ -12,7 +12,7 @@ void generateSecretKey(struct NewMatrices *matrices) {
 }
 
 void generateFunctionMatrix(ulong *matrix) {
-	getNewRandTriangleMatrix(matrix, 1, size);
+	getRandTriangleMatrix(matrix, 1, size);
 	for (int i = 0; i < size; i++) {
 		matrix[i + size * i] = 0;
 	}
@@ -138,14 +138,14 @@ void computePartsOfModule() {
     }
 }
 
-void generateSecondMatrices(ulong *secondMatrix, ulong *secondInverseMatrix, ulong lines) {
+void generateSimpleMatrix(ulong *matrix, ulong *inverseMatrix, ulong lines) {
 	ulong LUmatrices[lines * lines];
 
-	getNewRandTriangleMatrix(LUmatrices, 2, lines);
+	getRandTriangleMatrix(LUmatrices, 2, lines);
 
-	modularTriangleMatrixMult(LUmatrices, secondMatrix, lines);
+	modularTriangleMatrixMult(LUmatrices, matrix, lines);
 
-	computeInverseMatrix(LUmatrices, secondInverseMatrix, lines);
+	computeInverseMatrix(LUmatrices, inverseMatrix, lines);
 }
 
 void computeInverseMatrix(ulong *LUmatrices, ulong *inverseMatrix, ulong lines) {
@@ -188,7 +188,7 @@ void computeInverseMatrix(ulong *LUmatrices, ulong *inverseMatrix, ulong lines) 
  *      = 1 - генерация верхнетреугольной матрицы
  *      иные значения - генерация обеих треугольных матриц с записью в одну квадратную
  */
-void getNewRandTriangleMatrix(ulong *matrix, uchar dir, ulong lines) {
+void getRandTriangleMatrix(ulong *matrix, uchar dir, ulong lines) {
     // Locale variables declaration
     ulong temp;
     ulong mult = 1;
@@ -266,7 +266,7 @@ void generateFirstMatrices_rare(ulong *firstMatrix, ulong *firstInverseMatrix) {
 				A[i] = getRandom(moduleStruct.module - 1) + 1;
 			}
 		}
-		generateSecondMatrices(B, inv_B, N);
+		generateSimpleMatrix(B, inv_B, N);
 	}
 	while (tenzorMult(A, B, firstMatrix, N, 1, 1, 1));
 	for (ulong i = 0; i < K; i++) {
@@ -275,43 +275,6 @@ void generateFirstMatrices_rare(ulong *firstMatrix, ulong *firstInverseMatrix) {
 	tenzorMult(A, inv_B, firstInverseMatrix, N, 1, 0, 0);
 	shake(firstMatrix, firstInverseMatrix, size, size, AMOUNT_OF_VAR_IN_LINE_FIRST);
 }
-
-// uchar tenzorMult(ulong *A, ulong *B, ulong *result, ulong N, uchar check) {
-//     int cur = 0;
-//     if (check){
-//         for (ulong i = 0; i < size; i++) {
-//             cur = 0;
-//             for (ulong j = 0; j < size; j++) {
-//                 if (i / N == j / N) {
-//                     result[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + cur] = j;
-//                     result[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + cur + 1] = modularMult(A[i / N] , B[(i % N)*N + (j % N)]);
-//                     if (!cube(result[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + cur + 1]) || (result[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + cur + 1] == 0)){
-//                         return 1;
-//                     }
-//                     cur += 2;
-//                 }
-//             }
-//         }
-//         return 0;
-//     }
-//     else {
-//         for (ulong i = 0; i < size; i++) {
-//             cur = 0;
-//             for (ulong j = 0; j < size; j++) {
-//                 if (i / N == j / N) {
-//                     result[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + cur] = j;
-//                     result[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + cur + 1] = modularMult(A[i / N] , B[(i % N)*N + (j % N)]);
-//                     // if (result[i * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST + cur + 1] == 0){
-//                     //     return 1;
-//                     // }
-//                     cur += 2;
-//                 }
-//             }
-//         }
-//         //return 0;
-//     }
-// }
-
 
 uchar tenzorMult(ulong *A, ulong *B, ulong *result, ulong N, uchar numberOfMatrix, uchar checkCube, uchar checkZero) {
     int cur = 0;
@@ -348,7 +311,7 @@ void generateSecondMatrices_rare(ulong *secondMatrix, ulong *secondInverseMatrix
                 A[i] = getRandom(moduleStruct.module - 1) + 1;
             }
         }
-        generateSecondMatrices(B,inv_B,N);
+		generateSimpleMatrix(B,inv_B,N);
     }
     while (tenzorMult(A, B, secondMatrix, N, 2, 0, 1));
     for (ulong i = 0; i < K; i++) {

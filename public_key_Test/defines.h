@@ -3,7 +3,7 @@
  * PRINT - if this constant is defined then all information will be printed to console and to a file "output.txt"
  */
 //#define TIME
-//#define PRINT
+#define PRINT
 
 /**
  * AMOUNT_OF_LOOP_ITERATIONS - the program will starts a loop with this parameter. Must be more then 0
@@ -11,7 +11,7 @@
  * 		Also you can set this parameter like an argument of execution the program. Parameter has more priority.
  */
 #define AMOUNT_OF_LOOP_ITERATIONS 100000
-#define PAUSE 1000
+#define PAUSE 1
 
 /**
  * AMOUNT_OF_VARIABLES - amount of variables; from 0 to infinity (in a theory)
@@ -31,12 +31,12 @@
  * 		Some meanings can cause looping.
  */
 #define SIZE_OF_AVAR 5
-#define AMOUNT_OF_VARIABLES 12
-#define AMOUNT_OF_VAR_IN_LINE_FIRST 2
-#define AMOUNT_OF_VAR_IN_LINE_SECOND 2
-#define SIZE_OF_VARIABLE 5
+#define AMOUNT_OF_VARIABLES 21
+#define AMOUNT_OF_VAR_IN_LINE_FIRST 3
+#define AMOUNT_OF_VAR_IN_LINE_SECOND 3
+#define SIZE_OF_VARIABLE 62
 #define SIZE_OF_MODULE (SIZE_OF_VARIABLE + 1)
-#define MAS_SIZE 1
+#define MAS_SIZE 5
 
 /**
  * BYTES_FOR_AMOUNT_OF_MEMBER - this constant is for encoding a long number.
