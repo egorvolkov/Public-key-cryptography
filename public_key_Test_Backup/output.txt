@@ -1,0 +1,29 @@
+SIZE: 2
+SIZE_OF_VARIABLE: 7
+SIZE_OF_MODULE: 8
+Module: 167
+Parts of module: 167 
+Matrix A
+155 57 
+160 132 
+
+Matrix A^(-1)
+117 14 
+10 126 
+
+Matrix B
+157 147 
+156 132 
+
+Matrix B^(-1)
+19 13 
+99 77 
+
+Cube polynomials
+109*x1*x1*x1 + 157*x2*x2*x2 + 75*x1*x1*x2 + 103*x2*x2*x1 + 41*x1*x1*x0 + 28*x1*x2*x0 + 17*x2*x2*x0 + 70*x1*x0*x0 + 85*x2*x0*x0
+158*x1*x1*x1 + 44*x2*x2*x2 + 32*x1*x1*x2 + 160*x2*x2*x1 + 159*x1*x1*x0 + 87*x1*x2*x0 + 134*x2*x2*x0 + 10*x1*x0*x0 + 50*x2*x0*x0
+
+Public key
+92*x1*x1*x1 + 55*x2*x2*x2 + 113*x1*x1*x2 + 112*x2*x2*x1 + 84*x1*x1*x0 + 151*x1*x2*x0 + 156*x2*x2*x0 + 102*x1*x0*x0 + 154*x2*x0*x0
+118*x1*x1*x1 + 73*x2*x2*x2 + 59*x1*x1*x2 + 114*x2*x2*x1 + 163*x1*x1*x0 + 154*x1*x2*x0 + 133*x2*x2*x0 + 49*x1*x0*x0 + 154*x2*x0*x0
+
