@@ -8,14 +8,6 @@ void generateSecretKey(struct Matrices *matrices) {
 	generateFirstMatrices_rare(matrices->firstMatrix, matrices->firstInverseMatrix);
 	generateSecondMatrices_rare(matrices->secondMatrix, matrices->secondInverseMatrix);
 	generateConstants(matrices->constants);
-	generateFunctionMatrix(matrices->functionMatrix);
-}
-
-void generateFunctionMatrix(ulong *matrix) {
-	getRandTriangleMatrix(matrix, 1, size);
-	for (int i = 0; i < size; i++) {
-		matrix[i + size * i] = 0;
-	}
 }
 
 void generateModule() {

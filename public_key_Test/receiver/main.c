@@ -88,7 +88,7 @@ int main(int argc, char* argv[]) {
 		tStart = getTime();
 		tStartRDTSC = timeRDTSC();
 #endif
-        computePublicKey(matrices.firstMatrix, matrices.secondMatrix, matrices.functionMatrix, publicKey, matrices.constants, matrices.constants3);
+        computePublicKey(matrices.firstMatrix, matrices.secondMatrix, matrices.secondInverseMatrix, publicKey, matrices.constants, matrices.constants3);
 #ifdef TIME
 		tEnd = getTime();
 		tEndRDTSC = timeRDTSC();
@@ -120,7 +120,7 @@ int main(int argc, char* argv[]) {
 		tStart = getTime();
 		tStartRDTSC = timeRDTSC();
 #endif
-        decoding(matrices.firstInverseMatrix, matrices.secondInverseMatrix, matrices.functionMatrix, encodedOrRealMessage, matrices.constants, matrices.constants3);
+        decoding(matrices.firstInverseMatrix, matrices.secondInverseMatrix, encodedOrRealMessage, matrices.constants, matrices.constants3);
 #ifdef TIME
 		tEnd = getTime();
 		tEndRDTSC = timeRDTSC();

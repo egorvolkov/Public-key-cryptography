@@ -12,8 +12,8 @@
 #define AMOUNT_OF_MEMBERS (AMOUNT_OF_VARIABLES * (AMOUNT_OF_VARIABLES + 1) * (AMOUNT_OF_VARIABLES + 2) / 6)
 #define SIZE_OF_LONG_NUMBER ((SIZE_OF_MODULE + 5*SIZE_OF_VARIABLE + 7) / 8)
 #define LENGTH_OF_ENCODED_NUMBER (SIZE_OF_LONG_NUMBER + BYTES_FOR_AMOUNT_OF_MEMBER)
-//#define MAX_TERMS_IN_POLY ((AMOUNT_OF_VAR_IN_LINE_FIRST + 1) * (AMOUNT_OF_VAR_IN_LINE_FIRST + 2) * (AMOUNT_OF_VAR_IN_LINE_FIRST + 3) * (AMOUNT_OF_VAR_IN_LINE_FIRST + 4) * (AMOUNT_OF_VAR_IN_LINE_FIRST + 5) / 120)
-#define MAX_TERMS_IN_POLY ((AMOUNT_OF_VARIABLES + 1) * (AMOUNT_OF_VARIABLES + 2) * (AMOUNT_OF_VARIABLES + 3) * (AMOUNT_OF_VARIABLES + 4) * (AMOUNT_OF_VARIABLES + 5) / 120)
+#define MAX_TERMS_IN_POLY (AMOUNT_OF_VARIABLES * (AMOUNT_OF_VAR_IN_LINE_FIRST + 1) * (AMOUNT_OF_VAR_IN_LINE_FIRST + 2) * (AMOUNT_OF_VAR_IN_LINE_FIRST + 3) * (AMOUNT_OF_VAR_IN_LINE_FIRST + 4) * (AMOUNT_OF_VAR_IN_LINE_FIRST + 5) / 120)
+//#define MAX_TERMS_IN_POLY ((AMOUNT_OF_VARIABLES + 1) * (AMOUNT_OF_VARIABLES + 2) * (AMOUNT_OF_VARIABLES + 3) * (AMOUNT_OF_VARIABLES + 4) * (AMOUNT_OF_VARIABLES + 5) / 120)
 #define MAX_VARS_IN_POLY (((MAX_TERMS_IN_POLY / (sizeof(uint) * 8)) + 1) * 5 * SIZE_OF_AVAR)
 #define MAX_TERMS_IN_KEY (MAX_TERMS_IN_POLY)
 #define MAX_VARS_IN_KEY (((MAX_TERMS_IN_KEY / (sizeof(uint) * 8)) + 1) * 5 * SIZE_OF_AVAR)
@@ -47,7 +47,6 @@ struct Matrices {
 	ulong secondInverseMatrix[AMOUNT_OF_VARIABLES * 2 * AMOUNT_OF_VAR_IN_LINE_SECOND];
 	ulong constants[AMOUNT_OF_VARIABLES];
 	ulong constants3[AMOUNT_OF_VARIABLES];
-	ulong functionMatrix[AMOUNT_OF_VARIABLES * AMOUNT_OF_VARIABLES];
 };
 
 typedef struct CubePolynomial {
@@ -65,7 +64,6 @@ void generateModule();
 void computePartsOfModule();
 
 void generateSimpleMatrix(ulong *matrix, ulong *inverseMatrix, ulong lines);
-void generateFunctionMatrix(ulong *matrix);
 void computeInverseMatrix(ulong *matrices, ulong *inverseMatrix, ulong lines);
 void getRandTriangleMatrix(ulong *matrix, uchar dir, ulong lines);
 
@@ -78,7 +76,7 @@ void shake(ulong *matrix, ulong *invert_matrix, ulong lines, ulong columns, ulon
 void generateConstants(ulong *constants);
 
 
-void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, ulong *funcMatrix, FullCubePolynomial *newPublicKey, ulong *constants, ulong *constants3);
+void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, ulong *inverseSecondMatrix, FullCubePolynomial *newPublicKey, ulong *constants, ulong *constants3);
 void cubeOfPolynomials(ulong *matrix, CubePolynomial newBufferMatrix[], ulong *constants);
 void polynomialDeg(ulong *polyn, CubePolynomial *bufferMatrix, ulong deg);
 void multToSecondMatrix(ulong *matrix, CubePolynomial *bufferMatrix, FullCubePolynomial *publicKey, ulong *constants3);
@@ -88,7 +86,7 @@ uint returnPublicKey(FullCubePolynomial *publicKey);
 void transmitterConnection();
 void getEncodedMessage(ulong *encodedOrRealMessage);
 
-void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *funcMatrix, ulong *encodedOrRealMessage, ulong *constants, ulong *constants3);
+void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *encodedOrRealMessage, ulong *constants, ulong *constants3);
 
 uchar inArray(ulong *arr, uint length, ulong element);
 uint getModules(uint index);

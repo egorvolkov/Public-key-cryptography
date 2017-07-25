@@ -7,7 +7,7 @@ extern struct Module moduleStruct;
 extern FILE *output;
 #endif
 
-void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *funcMatrix, ulong *encodedOrRealMessage, ulong *constants, ulong *constants3) {
+void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *encodedOrRealMessage, ulong *constants, ulong *constants3) {
 	ulong cube[size];
 	ulong inverseDegree = modularInverseMultUniver(3, euler(moduleStruct.module));	//	Считаем степень, которая будет соответствовать кубическому корню из числа
 #ifdef PRINT
@@ -38,12 +38,16 @@ void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *func
 		fprintf(output, "%llu ", cube[i]);
 		printf("%llu ", cube[i]);
 #endif
-	/**/}
-
+	/*secondInverseMatrix[pow * 2 + 1] % 6)*/}
+    uint pow = ((uint)(AMOUNT_OF_VARIABLES - 1) * (AMOUNT_OF_VARIABLES) / 2 - 1) % (size * AMOUNT_OF_VAR_IN_LINE_SECOND);
 	// Вычисляем и убираем дополнительные функции
 	for (int i = size - 1; i>=0; i--) {
-		for (int j = i + 1; j < size; j++) {
-			cube[i] = modularSub(cube[i],modularDeg(cube[j], 2));
+		for (int j = size - 1; j > i; j--) {
+			cube[i] = modularSub(cube[i],modularDeg(cube[j], secondInverseMatrix[pow * 2 + 1] % 6));
+			if (pow == 0) {
+				pow = size * AMOUNT_OF_VAR_IN_LINE_SECOND;
+			}
+            pow--;
 		}
 		//	Вычисляем кубический корень. Нашли результат начального многочлена
 		cube[i] = modularDeg(cube[i], inverseDegree);

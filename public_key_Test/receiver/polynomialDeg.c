@@ -527,10 +527,10 @@ void polynomialDeg(ulong *polyn, CubePolynomial *bufferMatrix, ulong deg) {
                 continue;
             }
             bufferMatrix->factor[cur] = polyn[x[0]];
-            writeVar_test(bufferMatrix->vars, (x[0] + 1)%(size + 1), (5 * cur) + 4);
             for (uint j = 0; j < 4; j++) {
                 writeVar_test(bufferMatrix->vars, 0, (5 * cur) + j);
             }
+            writeVar_test(bufferMatrix->vars, (x[0] + 1)%(size + 1), (5 * cur) + 4);
             cur++;
         }
     }

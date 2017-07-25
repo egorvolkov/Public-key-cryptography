@@ -7,7 +7,7 @@ extern struct Module moduleStruct;
 extern FILE *output;
 #endif
 
-void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, ulong *funcMatrix, FullCubePolynomial *newPublicKey, ulong *constants, ulong *constants3){
+void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, ulong *inverseSecondMatrix, FullCubePolynomial *newPublicKey, ulong *constants, ulong *constants3){
 	CubePolynomial newBufferMatrix[size];
 	cubeOfPolynomials(firstMatrix, newBufferMatrix, constants);
 #ifdef PRINT
@@ -19,11 +19,8 @@ void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, ulong *funcMatrix
 	fprintf(output, "New cube polynomials\n"); printf("New cube polynomials\n");
 	fPrintCubePolynomials(newBufferMatrix); printCubePolynomials(newBufferMatrix);
 	fprintf(output, "\n"); printf("\n");
-	fprintf(output, "Function matrix\n"); printf("Function matrix\n");
-	fPrintMatrix(funcMatrix, size, size);printMatrix(funcMatrix, size, size);
-	fprintf(output, "\n"); printf("\n");
 #endif
-    addFunctions(firstMatrix, constants, newBufferMatrix, funcMatrix);
+    addFunctions(firstMatrix, constants, newBufferMatrix, inverseSecondMatrix);
 	multToSecondMatrix(secondMatrix, newBufferMatrix, newPublicKey, constants3);
 }
 
@@ -95,8 +92,9 @@ void multToSecondMatrix(ulong *matrix, CubePolynomial *newBufferMatrix, FullCube
     }
 }
 
-void addFunctions(ulong *matrix, ulong *constants, CubePolynomial *bufferMatrix, ulong *funcMatrix) {
-	for (uint i = 0; i < size - 1; i++){
+void addFunctions(ulong *matrix, ulong *constants, CubePolynomial *bufferMatrix, ulong *inverseSecondMatrix) {
+	uint pow = 0;
+    for (uint i = 0; i < size - 1; i++){
 		for (uint j = i + 1; j < size; j++){
 			CubePolynomial buffer;
 			ulong polynom[size+1];
@@ -109,9 +107,12 @@ void addFunctions(ulong *matrix, ulong *constants, CubePolynomial *bufferMatrix,
 				polynom[index] = number;
 				k += 2;
 			}
-			polynom[size] = constants[j];
-
-			polynomialDeg(polynom, &buffer, 2);
+			polynom[size] = constants[j];//inverseSecondMatrix[pow * 2 + 1] % 6
+			polynomialDeg(polynom, &buffer, inverseSecondMatrix[pow * 2 + 1] % 6);
+            pow++;
+            if (pow == size * AMOUNT_OF_VAR_IN_LINE_SECOND) {
+                pow = 0;
+            }
 #ifdef PRINT
             printCubePolynomial(buffer);
 #endif
