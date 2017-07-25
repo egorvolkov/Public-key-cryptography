@@ -3,7 +3,7 @@
  * PRINT - if this constant is defined then all information will be printed to console and to a file "output.txt"
  */
 //#define TIME
-//#define PRINT
+#define PRINT
 
 /**
  * AMOUNT_OF_LOOP_ITERATIONS - the program will starts a loop with this parameter. Must be more then 0
