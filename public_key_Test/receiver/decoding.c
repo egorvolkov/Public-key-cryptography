@@ -82,18 +82,18 @@ void newDecoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *f
 		fprintf(output, "%llu ", cube[i]);
 		printf("%llu ", cube[i]);
 #endif
-	/*}
+	/**/}
 
 	// Вычисляем и убираем дополнительные функции
 	for (int i = size - 1; i>=0; i--) {
 		for (int j = i + 1; j < size; j++) {
-			cube[i] = modularSub(cube[i],modularDeg(cube[j], funcMatrix[j + i * size]%6));
+			cube[i] = modularSub(cube[i],modularDeg(cube[j], 2));
 		}
 		//	Вычисляем кубический корень. Нашли результат начального многочлена
+		cube[i] = modularDeg(cube[i], inverseDegree);
 	}
 
 	for (int i = 0; i < size; i++) {/**/
-		cube[i] = modularDeg(cube[i], inverseDegree);
 		//  Вычитаем столбец констант
 		cube[i] = modularAdd(cube[i], modularInverseAdd(constants[i]));
 	}
