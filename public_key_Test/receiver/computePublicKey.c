@@ -80,7 +80,7 @@ void newMultToSecondMatrix(ulong *matrix, CubePolynomial *newBufferMatrix, FullC
         	fac = matrix[i * 2 * AMOUNT_OF_VAR_IN_LINE_SECOND + j + 1];
             for (uint k = 0; k < MAX_TERMS_IN_POLY; k++) {
                 if (newBufferMatrix[index].factor[k] == 0) {
-                    break;
+                    continue;
                 }
                 uint p;
                 for (p = 0; p < cur; p++) {
@@ -815,6 +815,9 @@ void addFunctions(ulong *matrix, ulong *constants, CubePolynomial *bufferMatrix,
 								write5Vars(buffer.vars, bufferMatrix[i].vars, cur, k);
 								break;
 							}
+                            if (get5Vars(bufferMatrix[i].vars,k)==get5Vars(buffer.vars,cur)) {
+                                break;
+                            }
 							continue;
 						}
 					}
@@ -848,7 +851,7 @@ void multToSecondMatrix(ulong *matrix, CubePolynomial *bufferMatrix, FullCubePol
 		for (uint j = 0; j < size; j++) {
 			for (uint k = 0; k < MAX_TERMS_IN_POLY; k++) {
 				if (bufferMatrix[j].factor[k] == 0) {
-					break;
+					continue;
 				}
 				uint p;
 				for (p = 0; p < cur; p++) {
