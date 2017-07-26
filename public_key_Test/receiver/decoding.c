@@ -20,10 +20,14 @@ void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *enco
 	}
 
 #ifdef PRINT
-	// for (int i = 0; i < size; i++) {
-	// 	printf("%llu ", encodedOrRealMessage[i]);
-	// }
-	// printf("\n\n");
+	printf("Add free members: ");
+	fprintf(output, "Add free members: "); 
+	for (int i = 0; i < size; i++) {
+		printf("%llu ", encodedOrRealMessage[i]);
+		fprintf(output, "%llu ", encodedOrRealMessage[i]);
+	}
+	printf("\n\n");
+	fprintf(output, "\n\n");
 	printf("After mult on B^(-1): ");
 	fprintf(output, "After mult on B^(-1): "); 
 #endif
@@ -40,7 +44,12 @@ void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *enco
 		printf("%llu ", cube[i]);
 		fprintf(output, "%llu ", cube[i]);
 #endif
-	/*secondInverseMatrix[pow * 2 + 1] % 6)*/}
+	/*secondInverseMatrix[pow * 2 + 1] % 6)*/
+	}
+#ifdef PRINT
+	printf("\n\nAfter deleting adding functions: ");
+	fprintf(output, "\n\nAfter deleting adding functions: "); 
+#endif
     uint pow = ((uint)(AMOUNT_OF_VARIABLES - 1) * (AMOUNT_OF_VARIABLES) / 2 - 1) % (size * AMOUNT_OF_VAR_IN_LINE_SECOND);
 	// Вычисляем и убираем дополнительные функции
 	for (int i = size - 1; i>=0; i--) {
@@ -52,16 +61,27 @@ void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *enco
             pow--;
 		}
 		//	Вычисляем кубический корень. Нашли результат начального многочлена
+#ifdef PRINT
+		printf("%llu ", cube[i]);
+		fprintf(output, "%llu ", cube[i]);
+#endif
 		cube[i] = modularDeg(cube[i], inverseDegree);
 	}
-
+#ifdef PRINT
+	printf("\n\nAfter inverse_degree: ");
+	fprintf(output, "\n\nAfter inverse_degree: "); 
+#endif
 	for (int i = 0; i < size; i++) {/**/
+#ifdef PRINT
+		printf("%llu ", cube[i]);
+		fprintf(output, "%llu ", cube[i]);
+#endif
 		//  Вычитаем столбец констант
 		cube[i] = modularAdd(cube[i], modularInverseAdd(constants[i]));
 	}
 #ifdef PRINT
-	printf("\n\nCube-root: ");
-	fprintf(output, "\n\nCube-root: "); 
+	printf("\n\nAfter deleting constants: ");
+	fprintf(output, "\n\nAfter deleting constants: "); 
 	for (int i = 0; i < size; i++) {
 		printf("%llu ", cube[i]);
 		fprintf(output, "%llu ", cube[i]);

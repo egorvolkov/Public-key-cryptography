@@ -86,7 +86,7 @@ void multToSecondMatrix(ulong *matrix, CubePolynomial *cubePolynomials, CubePoly
 
 void addFunctions(ulong *matrix, ulong *constants, CubePolynomial *bufferMatrix, ulong *inverseSecondMatrix) {
 	uint pow = 0;
-    for (uint i = 0; i < size - 1; i++){
+    for (uint i = 0; i < size - 1; i++) {
 		for (uint j = i + 1; j < size; j++){
 			CubePolynomial buffer;
 			ulong polynom[size+1];
@@ -106,7 +106,7 @@ void addFunctions(ulong *matrix, ulong *constants, CubePolynomial *bufferMatrix,
                 pow = 0;
             }
 
-            //printPolynomial(buffer);
+            printAddFunction(buffer, i, j, inverseSecondMatrix[(pow - 1) * 2 + 1] % 6);
 
 			uint cur = 0;
 			while ((buffer.factor[cur]!=0)&&(cur < MAX_TERMS_IN_POLY)) {

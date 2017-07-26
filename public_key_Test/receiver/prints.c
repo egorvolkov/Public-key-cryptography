@@ -82,13 +82,22 @@ void printCubePolynomials(CubePolynomial *cubePolynomials) {
     fprintf(output, "\n"); 
 }
 
+void printAddFunction(CubePolynomial addFunction, int line, int number, int degree) {
+	#ifndef PRINT
+		return;
+	#endif
+
+	printf("Adding function %d, polynomial %d, degree %d\n", line, number, degree);
+	printPolynomial(addFunction);
+}
+
 void printPolynomialsAfterAddFunctions(CubePolynomial *polynomials) {
 	#ifndef PRINT
 		return;
 	#endif
 		
-	printf("Polynomials after adding functions\n");
-	fprintf(output, "Polynomials after adding functions\n"); 
+	printf("\nPolynomials after adding functions\n");
+	fprintf(output, "\nPolynomials after adding functions\n"); 
 
 	printPolynomials(polynomials);
     fprintPolynomials(polynomials); 
@@ -186,6 +195,9 @@ void printPolynomial(CubePolynomial cubePolynomials){
         }
         printf("%llu", cubePolynomials.factor[j]);
         for (int k = 0; k < 5; k++) {
+        	if (getFromVar_test(cubePolynomials.vars, (5 * j) + k) == 0) {
+        		continue;
+        	}
             printf("*x%lu", getFromVar_test(cubePolynomials.vars, (5 * j) + k));
         }
     }
@@ -202,6 +214,9 @@ void fprintPolynomial(CubePolynomial cubePolynomials){
         }
         fprintf(output, "%llu", cubePolynomials.factor[j]);
         for (int k = 0; k < 5; k++) {
+        	if (getFromVar_test(cubePolynomials.vars, (5 * j) + k) == 0) {
+        		continue;
+        	}
             fprintf(output, "*x%lu", getFromVar_test(cubePolynomials.vars, (5 * j) + k));
         }
     }
