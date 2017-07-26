@@ -131,6 +131,7 @@ uint getFromVar(uint var, uint pos);
 
 void printSecretKey(Matrices matrices);
 void printCubePolynomials(CubePolynomial *cubePolynomials);
+void printAddFunction(CubePolynomial addFunction, int line, int number, int degree);
 void printPolynomialsAfterAddFunctions(CubePolynomial *polynomials);
 void printPublicKey(CubePolynomial *publicKey, uint bytes);
 void printEncodedMessage(ulong *encodedMessage);
