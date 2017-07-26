@@ -77,7 +77,7 @@ void generateConstants(ulong *constants);
 
 
 void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, ulong *inverseSecondMatrix, CubePolynomial *newPublicKey, ulong *constants, ulong *constants3);
-void cubeOfPolynomials(ulong *matrix, CubePolynomial newBufferMatrix[], ulong *constants);
+void cubeOfPolynomials(ulong *matrix, CubePolynomial newBufferMatrix[], ulong *constants, ulong *inverseSecondMatrix);
 void polynomialDeg(ulong *polyn, CubePolynomial *bufferMatrix, ulong deg);
 void multToSecondMatrix(ulong *matrix, CubePolynomial *bufferMatrix, CubePolynomial *publicKey, ulong *constants3);
 void addFunctions(ulong *matrix, ulong *constants, CubePolynomial *bufferMatrix, ulong *funcMatrix);
@@ -131,7 +131,6 @@ uint getFromVar(uint var, uint pos);
 
 void printSecretKey(Matrices matrices);
 void printCubePolynomials(CubePolynomial *cubePolynomials);
-void printAddFunction(CubePolynomial addFunction, int line, int number, int degree);
 void printPolynomialsAfterAddFunctions(CubePolynomial *polynomials);
 void printPublicKey(CubePolynomial *publicKey, uint bytes);
 void printEncodedMessage(ulong *encodedMessage);

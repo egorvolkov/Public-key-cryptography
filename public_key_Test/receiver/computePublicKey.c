@@ -9,16 +9,17 @@ extern FILE *output;
 
 void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, ulong *inverseSecondMatrix, CubePolynomial *newPublicKey, ulong *constants, ulong *constants3){
 	CubePolynomial cubePolynomials[size];
-	cubeOfPolynomials(firstMatrix, cubePolynomials, constants);
+    cubeOfPolynomials(firstMatrix, cubePolynomials, constants, inverseSecondMatrix);
 	printCubePolynomials(cubePolynomials);
     addFunctions(firstMatrix, constants, cubePolynomials, inverseSecondMatrix);
     printPolynomialsAfterAddFunctions(cubePolynomials);
 	multToSecondMatrix(secondMatrix, cubePolynomials, newPublicKey, constants3);
 }
 
-void cubeOfPolynomials(ulong *matrix, CubePolynomial cubePolynomials[], ulong *constants) {
+void cubeOfPolynomials(ulong *matrix, CubePolynomial cubePolynomials[], ulong *constants, ulong *inverseSecondMatrix) {
 	CubePolynomial *buf;
 	ulong polinom[size + 1];
+    uint pow = 0;
 	for (uint i = 0; i < size; i++) {
         for (uint j = 0; j < size + 1; j++){
             polinom[j] = 0;
@@ -31,7 +32,11 @@ void cubeOfPolynomials(ulong *matrix, CubePolynomial cubePolynomials[], ulong *c
 		}
         polinom[size] = constants[i];
 		buf = &(cubePolynomials[i]);
-        polynomialDeg(polinom,buf,3);
+        polynomialDeg(polinom, buf, ((inverseSecondMatrix[pow * 2 + 1] % 2 == 1) ? 5 : 3));
+        pow++;
+        if (pow == size * AMOUNT_OF_VAR_IN_LINE_SECOND) {
+            pow = 0;
+        }
 	}
 }
 
@@ -86,7 +91,7 @@ void multToSecondMatrix(ulong *matrix, CubePolynomial *cubePolynomials, CubePoly
 
 void addFunctions(ulong *matrix, ulong *constants, CubePolynomial *bufferMatrix, ulong *inverseSecondMatrix) {
 	uint pow = 0;
-    for (uint i = 0; i < size - 1; i++) {
+    for (uint i = 0; i < size - 1; i++){
 		for (uint j = i + 1; j < size; j++){
 			CubePolynomial buffer;
 			ulong polynom[size+1];
@@ -106,7 +111,7 @@ void addFunctions(ulong *matrix, ulong *constants, CubePolynomial *bufferMatrix,
                 pow = 0;
             }
 
-            printAddFunction(buffer, i, j, inverseSecondMatrix[(pow - 1) * 2 + 1] % 6);
+            //printPolynomial(buffer);
 
 			uint cur = 0;
 			while ((buffer.factor[cur]!=0)&&(cur < MAX_TERMS_IN_POLY)) {

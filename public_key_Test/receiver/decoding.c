@@ -9,10 +9,12 @@ extern FILE *output;
 
 void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *encodedOrRealMessage, ulong *constants, ulong *constants3) {
 	ulong cube[size];
-	ulong inverseDegree = modularInverseMultUniver(3, euler(moduleStruct.module));	//	Считаем степень, которая будет соответствовать кубическому корню из числа
+	ulong inverseDegree[2];
+    inverseDegree[0] = modularInverseMultUniver(3, euler(moduleStruct.module));	//	Считаем степень, которая будет соответствовать кубическому корню из числа
+    inverseDegree[1] = modularInverseMultUniver(5, euler(moduleStruct.module)); //  Считаем степень, которая будет соответствовать корнюы 5 степени из числа
 #ifdef PRINT
-	printf("inverseDegree: %llu\n\n", inverseDegree);
-	fprintf(output, "InversedDegree: %llu\n\n", inverseDegree); 
+	printf("inverseDegree: %llu %llu\n\n", inverseDegree[0], inverseDegree[1]);
+	fprintf(output, "InversedDegree: %llu %llu\n\n", inverseDegree[0], inverseDegree[1]);
 #endif
 	for (int i = 0; i < size; i++) {
 		// Добавляем вектор кубических констант к многочлену
@@ -20,14 +22,10 @@ void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *enco
 	}
 
 #ifdef PRINT
-	printf("Add free members: ");
-	fprintf(output, "Add free members: "); 
-	for (int i = 0; i < size; i++) {
-		printf("%llu ", encodedOrRealMessage[i]);
-		fprintf(output, "%llu ", encodedOrRealMessage[i]);
-	}
-	printf("\n\n");
-	fprintf(output, "\n\n");
+	// for (int i = 0; i < size; i++) {
+	// 	printf("%llu ", encodedOrRealMessage[i]);
+	// }
+	// printf("\n\n");
 	printf("After mult on B^(-1): ");
 	fprintf(output, "After mult on B^(-1): "); 
 #endif
@@ -44,13 +42,9 @@ void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *enco
 		printf("%llu ", cube[i]);
 		fprintf(output, "%llu ", cube[i]);
 #endif
-	/*secondInverseMatrix[pow * 2 + 1] % 6)*/
-	}
-#ifdef PRINT
-	printf("\n\nAfter deleting adding functions: ");
-	fprintf(output, "\n\nAfter deleting adding functions: "); 
-#endif
+	/*secondInverseMatrix[pow * 2 + 1] % 6)*/}
     uint pow = ((uint)(AMOUNT_OF_VARIABLES - 1) * (AMOUNT_OF_VARIABLES) / 2 - 1) % (size * AMOUNT_OF_VAR_IN_LINE_SECOND);
+    uint invpow = ((uint) AMOUNT_OF_VARIABLES - 1) % (size * AMOUNT_OF_VAR_IN_LINE_SECOND);
 	// Вычисляем и убираем дополнительные функции
 	for (int i = size - 1; i>=0; i--) {
 		for (int j = size - 1; j > i; j--) {
@@ -61,27 +55,20 @@ void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *enco
             pow--;
 		}
 		//	Вычисляем кубический корень. Нашли результат начального многочлена
-#ifdef PRINT
-		printf("%llu ", cube[i]);
-		fprintf(output, "%llu ", cube[i]);
-#endif
-		cube[i] = modularDeg(cube[i], inverseDegree);
+		cube[i] = modularDeg(cube[i], inverseDegree[secondInverseMatrix[invpow * 2 + 1] % 2]);
+        if (invpow == 0) {
+            invpow = size * AMOUNT_OF_VAR_IN_LINE_SECOND;
+        }
+        invpow--;
 	}
-#ifdef PRINT
-	printf("\n\nAfter inverse_degree: ");
-	fprintf(output, "\n\nAfter inverse_degree: "); 
-#endif
+
 	for (int i = 0; i < size; i++) {/**/
-#ifdef PRINT
-		printf("%llu ", cube[i]);
-		fprintf(output, "%llu ", cube[i]);
-#endif
 		//  Вычитаем столбец констант
 		cube[i] = modularAdd(cube[i], modularInverseAdd(constants[i]));
 	}
 #ifdef PRINT
-	printf("\n\nAfter deleting constants: ");
-	fprintf(output, "\n\nAfter deleting constants: "); 
+	printf("\n\nCube-root: ");
+	fprintf(output, "\n\nCube-root: "); 
 	for (int i = 0; i < size; i++) {
 		printf("%llu ", cube[i]);
 		fprintf(output, "%llu ", cube[i]);
