@@ -6,13 +6,10 @@
 const uint size = AMOUNT_OF_VARIABLES;
 struct Module moduleStruct = {1, MAS_SIZE};
 
-#ifdef PRINT
-FILE *output;
-#endif
-
 int main(int argc, char* argv[]) {
 	int amountOfLoopIterations = AMOUNT_OF_LOOP_ITERATIONS;
 	int pause = PAUSE;
+	uint bytes;
 	if (argc > 1) {
 		amountOfLoopIterations = 0;
 		int i = 0;
@@ -37,53 +34,23 @@ int main(int argc, char* argv[]) {
 
 	FILE *file = NULL;
 	struct Matrices matrices;
-	FullCubePolynomial publicKey[size];
+	CubePolynomial publicKey[size];
 	ulong encodedOrRealMessage[size];
 
 	for (int loop = 0; loop < amountOfLoopIterations; loop++) {
-#ifdef PRINT
-		output = fopen(PATH_TO_OUTPUT, "w");
-#endif
 #ifdef TIME
 		tStart = getTime();
 		tStartRDTSC = timeRDTSC();
 #endif
 		generateSecretKey(&matrices); //////////////////////////////////////////////////////
 #ifdef TIME
-
 		tEnd = getTime();
 		tEndRDTSC = timeRDTSC();
 		printf("Time of generation a secret key: %f ms\n", tEnd - tStart);
 		timeOfSecretKey += tEnd - tStart;
 		timeOfSecretKeyRDTSC += tEndRDTSC - tStartRDTSC;
 #endif
-#ifdef PRINT
-		fprintf(output, "SIZE: %d\nSIZE_OF_VARIABLE: %d\nSIZE_OF_MODULE: %d\n", size, SIZE_OF_VARIABLE, SIZE_OF_MODULE); printf("SIZE: %d\nSIZE_OF_VARIABLE: %d\nSIZE_OF_MODULE: %d\n", size, SIZE_OF_VARIABLE, SIZE_OF_MODULE);
-
-		fprintf(output, "Module: %llu\nParts of module: ", moduleStruct.module); printf("Module: %llu\nParts of module: ", moduleStruct.module);
-
-		for (int i = 0; i < moduleStruct.masSize; i++) {
-			fprintf(output, "%llu ", moduleStruct.partsOfModule[i]); printf("%llu ", moduleStruct.partsOfModule[i]);
-		}
-		fprintf(output, "\n"); printf("\n");
-
-        printf("New Matrix A\n");
-        printNewMatrix(matrices.firstMatrix, size, size, AMOUNT_OF_VAR_IN_LINE_FIRST);
-        printf("\n");
-
-        printf("New Matrix A^(-1)\n");
-        printNewMatrix(matrices.firstInverseMatrix, size, size, AMOUNT_OF_VAR_IN_LINE_FIRST);
-        printf("\n");
-
-        printf("New Matrix B\n");
-        printNewMatrix(matrices.secondMatrix, size, size, AMOUNT_OF_VAR_IN_LINE_FIRST);
-        printf("\n");
-
-        printf("New Matrix B^(-1)\n");
-        printNewMatrix(matrices.secondInverseMatrix, size, size, AMOUNT_OF_VAR_IN_LINE_FIRST);
-        printf("\n");
-
-#endif
+		printSecretKey(matrices);
 #ifdef TIME
 		tStart = getTime();
 		tStartRDTSC = timeRDTSC();
@@ -96,26 +63,16 @@ int main(int argc, char* argv[]) {
 		timeOfPublicKey += tEnd - tStart;
 		timeOfPublicKeyRDTSC += tEndRDTSC - tStartRDTSC;
 #endif
-#ifdef PRINT
-		fprintf(output, "Public key\n"); printf("Public key\n");
-        fPrintFullCubePolynomials(publicKey); printFullCubePolynomials(publicKey);
-        fprintf(output, "\n"); printf("\n");
 
-        printf("Bytes written: %d\n", returnPublicKey(publicKey));
-#endif
-#ifndef PRINT
-		returnPublicKey(publicKey); ///////////////////////////////////////
-#endif
+		bytes = returnPublicKey(publicKey);
+
+		printPublicKey(publicKey, bytes);
+		
 		transmitterConnection();
 
 		getEncodedMessage(encodedOrRealMessage);
-#ifdef PRINT
-		fprintf(output, "Encoded message by module: "); printf("Encoded message by module: ");
-		for (int i = 0; i < size; i++) {
-			fprintf(output, "%llu ", encodedOrRealMessage[i]); printf("%llu ", encodedOrRealMessage[i]);
-		}
-		fprintf(output, "\n"); printf("\n");
-#endif
+
+		printEncodedMessage(encodedOrRealMessage);
 #ifdef TIME
 		tStart = getTime();
 		tStartRDTSC = timeRDTSC();
@@ -127,14 +84,8 @@ int main(int argc, char* argv[]) {
 		printf("Time of decoding: %f ms\n", tEnd - tStart);
 		timeOfDecoding += tEnd - tStart;
 		timeOfDecodingRDTSC += tEndRDTSC - tStartRDTSC;
-#endif
-//#ifdef PRINT
-		printf("Message: ");
-		for (int i = 0; i < size; i++) {
-			printf("%llu ", encodedOrRealMessage[i]);
-		}
-		printf("\n");
-//#endif
+#endif		
+		printDecodedMessage(encodedOrRealMessage);
 #ifdef TIME
 		printf("\nMiddle time (iteration %u)\n\
 			Time of generation a secret key: %f ms; %f Hz\n\
@@ -156,10 +107,9 @@ int main(int argc, char* argv[]) {
 			}
 		}
 		fclose(file);
-#ifdef PRINT
-		fclose(output);
+
 		printf("\n____________________________________\n");
-#endif
+
 		if ((loop + 1) % pause == 0) {
 			printf("PAUSE (Press Enter to continue)\n");
 			getchar();
@@ -167,129 +117,3 @@ int main(int argc, char* argv[]) {
 	}
 	return 0;
 }
-
-#ifdef PRINT
-void printMatrix(ulong *matrix, uint size1, uint size2) {
-	for (int i = 0; i < size1; i++) {
-		for (int j = 0; j < size2; j++) {
-			printf("%llu ", matrix[i * size2 + j]);
-		}
-		printf("\n");
-	}
-}
-void fPrintMatrix(ulong *matrix, uint size1, uint size2) {
-	for (int i = 0; i < size1; i++) {
-		for (int j = 0; j < size2; j++) {
-			fprintf(output, "%llu ", matrix[i * size2 + j]);
-		}
-		fprintf(output, "\n");
-	}
-}
-
-void printCubePolynomials(CubePolynomial *cubePolynomials) {
-	for (int i = 0; i < size; i++) {
-		for (int j = 0; j < MAX_TERMS_IN_POLY; j++) {
-			if (cubePolynomials[i].factor[j] == 0) {
-				continue;
-			}
-			if (j != 0) {
-				printf(" + ");
-			}
-			printf("%llu", cubePolynomials[i].factor[j]);
-			for (int k = 0; k < 5; k++) {
-				printf("*x%u", getFromVar_test(cubePolynomials[i].vars, (5 * j) + k));
-			}
-		}
-		printf("\n");
-	}
-}
-void fPrintCubePolynomials(CubePolynomial *cubePolynomials) {
-	for (int i = 0; i < size; i++) {
-		for (int j = 0; j < MAX_TERMS_IN_POLY; j++) {
-			if (cubePolynomials[i].factor[j] == 0) {
-				continue;
-			}
-			if (j != 0) {
-				fprintf(output, " + ");
-			}
-			fprintf(output, "%llu", cubePolynomials[i].factor[j]);
-			for (int k = 0; k < 5; k++) {
-				fprintf(output, "*x%lu", getFromVar_test(cubePolynomials[i].vars, (5 * j) + k));
-			}
-		}
-		fprintf(output, "\n");
-	}
-}
-
-void printCubePolynomial(CubePolynomial cubePolynomials){
-    for (int j = 0; j < MAX_TERMS_IN_POLY; j++) {
-        if (cubePolynomials.factor[j] == 0) {
-            continue;
-        }
-        if (j != 0) {
-            printf( " + ");
-        }
-        printf("%llu", cubePolynomials.factor[j]);
-        for (int k = 0; k < 5; k++) {
-            printf("*x%lu", getFromVar_test(cubePolynomials.vars, (5 * j) + k));
-        }
-    }
-    printf("\n");
-}
-
-void printFullCubePolynomials(FullCubePolynomial *cubePolynomials) {
-	for (int i = 0; i < size; i++) {
-		for (int j = 0; j < MAX_TERMS_IN_KEY; j++) {
-			if (cubePolynomials[i].factor[j] == 0) {
-				continue;
-			}
-			if (j != 0) {
-				printf(" + ");
-			}
-			printf("%llu", cubePolynomials[i].factor[j]);
-			for (int k = 0; k < 5; k++) {
-				printf("*x%lu", getFromVar_test(cubePolynomials[i].vars, (5 * j) + k));
-			}
-		}
-		printf("\n");
-	}
-}
-void fPrintFullCubePolynomials(FullCubePolynomial *cubePolynomials) {
-	for (int i = 0; i < size; i++) {
-		for (int j = 0; j < MAX_TERMS_IN_KEY; j++) {
-			if (cubePolynomials[i].factor[j] == 0) {
-				continue;
-			}
-			if (j != 0) {
-				fprintf(output, " + ");
-			}
-			fprintf(output, "%llu", cubePolynomials[i].factor[j]);
-			for (int k = 0; k < 5; k++) {
-				fprintf(output, "*x%u", getFromVar_test(cubePolynomials[i].vars, (5 * j) + k));
-			}
-		}
-		fprintf(output, "\n");
-	}
-}
-
-void printNewMatrix(ulong* matrix, int size1, int size2, int amount) {
-	int was_printed;
-	for (int i = 0; i < size1; i++) {
-		for (int j = 0; j < size2; j++) {
-			was_printed = 0;
-			for (int k = 0; k < amount; k++) {
-				if (matrix[i*2*amount+2*k] == j) {
-					printf("%u ", matrix[i*2*amount+2*k + 1]);
-					was_printed = 1;
-					break;
-				}
-			}
-			if (!was_printed) {
-				printf("0 ");
-			}
-		}
-		printf("\n");
-	}
-}
-
-#endif

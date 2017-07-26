@@ -34,30 +34,30 @@ typedef unsigned long long ulong;
 typedef unsigned long uint;
 typedef unsigned char uchar;
 
-struct Module {
+typedef struct Module {
 	ulong module;
 	const uchar masSize;
 	ulong partsOfModule[MAS_SIZE * 3];
-};
+} Module;
 
-struct Matrices {
+typedef struct Matrices {
 	ulong firstMatrix[AMOUNT_OF_VARIABLES * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST];
 	ulong firstInverseMatrix[AMOUNT_OF_VARIABLES * 2 * AMOUNT_OF_VAR_IN_LINE_FIRST];
 	ulong secondMatrix[AMOUNT_OF_VARIABLES * 2 * AMOUNT_OF_VAR_IN_LINE_SECOND];
 	ulong secondInverseMatrix[AMOUNT_OF_VARIABLES * 2 * AMOUNT_OF_VAR_IN_LINE_SECOND];
 	ulong constants[AMOUNT_OF_VARIABLES];
 	ulong constants3[AMOUNT_OF_VARIABLES];
-};
+} Matrices;
 
 typedef struct CubePolynomial {
 	ulong factor[MAX_TERMS_IN_POLY];
 	uint vars[MAX_VARS_IN_POLY];
 } CubePolynomial;
 
-typedef struct FullCubePolynomial {
-	ulong factor[MAX_TERMS_IN_KEY];
-	uint vars[MAX_VARS_IN_KEY];
-} FullCubePolynomial;
+// typedef struct FullCubePolynomial {
+// 	ulong factor[MAX_TERMS_IN_KEY];
+// 	uint vars[MAX_VARS_IN_KEY];
+// } FullCubePolynomial;
 
 void generateSecretKey(struct Matrices *matrices);
 void generateModule();
@@ -76,13 +76,13 @@ void shake(ulong *matrix, ulong *invert_matrix, ulong lines, ulong columns, ulon
 void generateConstants(ulong *constants);
 
 
-void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, ulong *inverseSecondMatrix, FullCubePolynomial *newPublicKey, ulong *constants, ulong *constants3);
+void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, ulong *inverseSecondMatrix, CubePolynomial *newPublicKey, ulong *constants, ulong *constants3);
 void cubeOfPolynomials(ulong *matrix, CubePolynomial newBufferMatrix[], ulong *constants);
 void polynomialDeg(ulong *polyn, CubePolynomial *bufferMatrix, ulong deg);
-void multToSecondMatrix(ulong *matrix, CubePolynomial *bufferMatrix, FullCubePolynomial *publicKey, ulong *constants3);
+void multToSecondMatrix(ulong *matrix, CubePolynomial *bufferMatrix, CubePolynomial *publicKey, ulong *constants3);
 void addFunctions(ulong *matrix, ulong *constants, CubePolynomial *bufferMatrix, ulong *funcMatrix);
 
-uint returnPublicKey(FullCubePolynomial *publicKey);
+uint returnPublicKey(CubePolynomial *publicKey);
 void transmitterConnection();
 void getEncodedMessage(ulong *encodedOrRealMessage);
 
@@ -127,19 +127,22 @@ ulong modularInverseMultUniver(ulong a, ulong module);
 ulong euler(ulong n);
 ulong gcd(ulong a, ulong b);
 
-#ifdef PRINT
-void printMatrix(ulong *matrix, uint size1, uint size2);
-void fPrintMatrix(ulong *matrix, uint size1, uint size2);
-#endif
-
 uint getFromVar(uint var, uint pos);
 
+void printSecretKey(Matrices matrices);
 void printCubePolynomials(CubePolynomial *cubePolynomials);
-void fPrintCubePolynomials(CubePolynomial *cubePolynomials);
-void printCubePolynomial(CubePolynomial cubePolynomials);
-void printFullCubePolynomials(FullCubePolynomial *cubePolynomials);
-void fPrintFullCubePolynomials(FullCubePolynomial *cubePolynomials);
-void printNewMatrix(ulong* matrix, int size1, int size2, int amount);
+void printPolynomialsAfterAddFunctions(CubePolynomial *polynomials);
+void printPublicKey(CubePolynomial *publicKey, uint bytes);
+void printEncodedMessage(ulong *encodedMessage);
+void printDecodedMessage(ulong *decodedMessage);
+void printMatrix(ulong *matrix, uint size1, uint size2);
+void fprintMatrix(ulong *matrix, uint size1, uint size2);
+void printPolynomials(CubePolynomial *cubePolynomials);
+void fprintPolynomials(CubePolynomial *cubePolynomials);
+void printPolynomial(CubePolynomial cubePolynomials);
+void fprintPolynomial(CubePolynomial cubePolynomials);
+void printRareMatrix(ulong* matrix, int size1, int size2, int amount);
+void fprintRareMatrix(ulong* matrix, int size1, int size2, int amount);
 
 void writeVar_test(uint*, uint, uint);
 void print_bin(uint, uint);

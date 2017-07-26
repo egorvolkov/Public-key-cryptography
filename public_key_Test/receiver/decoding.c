@@ -11,7 +11,8 @@ void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *enco
 	ulong cube[size];
 	ulong inverseDegree = modularInverseMultUniver(3, euler(moduleStruct.module));	//	Считаем степень, которая будет соответствовать кубическому корню из числа
 #ifdef PRINT
-	fprintf(output, "InversedDegree: %llu\n", inverseDegree); printf("inverseDegree: %llu\n", inverseDegree);
+	printf("inverseDegree: %llu\n\n", inverseDegree);
+	fprintf(output, "InversedDegree: %llu\n\n", inverseDegree); 
 #endif
 	for (int i = 0; i < size; i++) {
 		// Добавляем вектор кубических констант к многочлену
@@ -19,11 +20,12 @@ void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *enco
 	}
 
 #ifdef PRINT
-	for (int i = 0; i < size; i++) {
-		printf("%llu ",encodedOrRealMessage[i]);
-	}
-	printf("\n");
-	fprintf(output, "Cube: "); printf("Cube: ");
+	// for (int i = 0; i < size; i++) {
+	// 	printf("%llu ", encodedOrRealMessage[i]);
+	// }
+	// printf("\n\n");
+	printf("After mult on B^(-1): ");
+	fprintf(output, "After mult on B^(-1): "); 
 #endif
 	for (int i = 0; i < size; i++) {
 		cube[i] = 0;
@@ -35,8 +37,8 @@ void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *enco
 			j += 2;
 		}
 #ifdef PRINT
-		fprintf(output, "%llu ", cube[i]);
 		printf("%llu ", cube[i]);
+		fprintf(output, "%llu ", cube[i]);
 #endif
 	/*secondInverseMatrix[pow * 2 + 1] % 6)*/}
     uint pow = ((uint)(AMOUNT_OF_VARIABLES - 1) * (AMOUNT_OF_VARIABLES) / 2 - 1) % (size * AMOUNT_OF_VAR_IN_LINE_SECOND);
@@ -58,12 +60,14 @@ void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *enco
 		cube[i] = modularAdd(cube[i], modularInverseAdd(constants[i]));
 	}
 #ifdef PRINT
-	fprintf(output, "\nCube-root: "); printf("\nCube-root: ");
+	printf("\n\nCube-root: ");
+	fprintf(output, "\n\nCube-root: "); 
 	for (int i = 0; i < size; i++) {
-		fprintf(output, "%llu ", cube[i]);
 		printf("%llu ", cube[i]);
+		fprintf(output, "%llu ", cube[i]);
 	}
-	fprintf(output, "\n"); printf("\n");
+	printf("\n\n");
+	fprintf(output, "\n\n"); 
 #endif
 	//	Умножаем обратную первую матрицу на начальный. Получаем те значения, который пользователь подставлял в многочлен
 	for (int i = 0; i < size; i++) {
