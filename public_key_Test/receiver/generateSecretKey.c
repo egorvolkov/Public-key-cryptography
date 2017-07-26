@@ -41,7 +41,9 @@ void generateModule() {
 		} while (max > a);
 		p2 = i - 2;
 
-		moduleStruct.module = getModules(getRandom(p2 - p1 + 1) + p1);
+		do {
+			moduleStruct.module = getModules(getRandom(p2 - p1 + 1) + p1);
+		} while ((moduleStruct.module - 1) % 5 == 0);
 		moduleStruct.partsOfModule[0] = moduleStruct.module;
 		computePartsOfModule();
 		fclose(fin);
@@ -65,7 +67,7 @@ void generateModule() {
 
 	do {
 		k[0] = getModules(getRandom(p1));
-	} while (pow(getModules(MODULES - MODULES / 10), moduleStruct.masSize - 1) < (double)((ulong)1 << SIZE_OF_VARIABLE) / k[0] || k[0] >= ((ulong)1 << SIZE_OF_VARIABLE));
+	} while (((k[0] - 1) % 5 == 0) || pow(getModules(MODULES - MODULES / 10), moduleStruct.masSize - 1) < (double)((ulong)1 << SIZE_OF_VARIABLE) / k[0] || k[0] >= ((ulong)1 << SIZE_OF_VARIABLE));
 	moduleStruct.module *= k[0];
 	moduleStruct.partsOfModule[0] = k[0];
 
@@ -108,7 +110,7 @@ void generateModule() {
 		for (int j = 1; j < moduleStruct.masSize; j++) {
 			do {
 				k[j] = getModules(getRandom(p2 - p1 + 1) + p1);
-			} while (inArray(k, j, k[j]));
+			} while (((k[j] - 1) % 5 == 0) || inArray(k, j, k[j]));
 			moduleStruct.module *= k[j];
 			moduleStruct.partsOfModule[j] = k[j];
 		}

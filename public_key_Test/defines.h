@@ -11,7 +11,7 @@
  * 		Also you can set this parameter like an argument of execution the program. Parameter has more priority.
  */
 #define AMOUNT_OF_LOOP_ITERATIONS 10000000
-#define PAUSE 1
+#define PAUSE 100
 
 /**
  * AMOUNT_OF_VARIABLES - amount of variables; from 0 to infinity (in a theory)
@@ -34,9 +34,9 @@
 #define AMOUNT_OF_VARIABLES 4
 #define AMOUNT_OF_VAR_IN_LINE_FIRST 2
 #define AMOUNT_OF_VAR_IN_LINE_SECOND 2
-#define SIZE_OF_VARIABLE 5
+#define SIZE_OF_VARIABLE 62
 #define SIZE_OF_MODULE (SIZE_OF_VARIABLE + 1)
-#define MAS_SIZE 1
+#define MAS_SIZE 5
 
 /**
  * BYTES_FOR_AMOUNT_OF_MEMBER - this constant is for encoding a long number.
