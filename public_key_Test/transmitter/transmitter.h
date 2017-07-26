@@ -25,6 +25,12 @@ typedef unsigned long long ulong;
 typedef unsigned int uint;
 typedef unsigned char uchar;
 
+struct Module {
+	ulong module;
+	uchar masSize;
+	ulong partsOfModule[MAS_SIZE * 3];
+};
+
 typedef struct FullCubePolynomial {
 	ulong factor[MAX_TERMS_IN_KEY];
 	uint vars[MAX_VARS_IN_KEY];
@@ -33,7 +39,8 @@ typedef struct FullCubePolynomial {
 void getPublicKey(FullCubePolynomial *publicKey);
 void createMessage(ulong *message);
 void coding(ulong *message, FullCubePolynomial *publicKey, uchar *encodedMessage);
-uint returnEncodedMessage(uchar *encodedMessage);
+void moduleCoding(ulong *message, FullCubePolynomial *publicKey, ulong *encodedMessage);
+uint returnEncodedMessage(ulong *encodedMessage);
 
 ulong getRandom(ulong module);
 void factor(ulong *publicKey);
@@ -58,3 +65,27 @@ void writeVar_test(uint*, uint, uint);
 void print_bin(uint, uint);
 uint getFromVar_test(uint*, uint);
 ulong get3Vars_test (uint*, uint);
+
+ulong modularAdd(ulong a, ulong b);
+ulong modularSub(ulong a, ulong b);
+ulong modularDiv(ulong a, ulong b);
+ulong modularMult(ulong a, ulong b);
+ulong modularDeg(ulong a, ulong b);
+ulong modularInverseAdd(ulong a);
+ulong modularInverseMult(ulong a);
+void modularMatrixMult(ulong *mat1, ulong *mat2, ulong *result, ulong lines);
+
+/**
+ *	This block for operations with an any module
+ */
+
+ulong modularAddUniver(ulong a, ulong b, ulong module);
+ulong modularSubUniver(ulong a, ulong b, ulong module);
+ulong littleModularMultUniver(ulong a, ulong b, ulong module);
+ulong modularMultUniver(ulong a, ulong b, ulong module);
+ulong modularDegUniver(ulong a, ulong b, ulong module);
+ulong modularInverseAddUniver(ulong a, ulong module);
+ulong modularInverseMultUniver(ulong a, ulong module);
+
+ulong euler(ulong n);
+

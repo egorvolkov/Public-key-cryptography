@@ -2,7 +2,7 @@
 
 extern const uint size;
 
-uint returnEncodedMessage(uchar *encodedMessage) {
+uint returnEncodedMessage(ulong *encodedMessage) {
 	FILE* fout;
 	uint bytes = 0;
 
@@ -12,8 +12,8 @@ uint returnEncodedMessage(uchar *encodedMessage) {
 		return 1;
 	}
 
-	fwrite(encodedMessage, 1, AMOUNT_OF_VARIABLES*LENGTH_OF_ENCODED_NUMBER, fout);
-	bytes += AMOUNT_OF_VARIABLES*LENGTH_OF_ENCODED_NUMBER;
+	fwrite(encodedMessage, 8, AMOUNT_OF_POLYNOMS, fout);
+	bytes += 8 * AMOUNT_OF_POLYNOMS;
 
 	fclose(fout);
 

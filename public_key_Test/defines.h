@@ -30,7 +30,7 @@
  *   	You can use any meanings you want but our algorithm of module generation isn't perfect.
  * 		Some meanings can cause looping.
  */
-#define NUMBER_OF_RADIX 2
+#define NUMBER_OF_RADIX 8
 #define LENGTH_OF_SECRET_VECTOR 1
 #define SIZE_OF_AVAR 4
 #define AMOUNT_OF_VARIABLES 10

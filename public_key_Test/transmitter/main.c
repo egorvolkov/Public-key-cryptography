@@ -7,10 +7,11 @@ void printMatrix(ulong *matrix, uchar size1, uchar size2);
  *	Main block
  */
 const uint size = AMOUNT_OF_VARIABLES;
+struct Module moduleStruct;
 
 int main(int argc, char* argv[]) {
 	FullCubePolynomial publicKey[AMOUNT_OF_VARIABLES];	//	Correct Factor! It's ineffective memory using
-	uchar encodedMessage[AMOUNT_OF_VARIABLES * LENGTH_OF_ENCODED_NUMBER];
+	ulong encodedMessage[AMOUNT_OF_POLYNOMS];
 	ulong message[AMOUNT_OF_VARIABLES];
 #ifdef TIME
 	clock_t tStart, tEnd, middleTimeOfCoding = 0;
@@ -24,9 +25,9 @@ int main(int argc, char* argv[]) {
 
 		createMessage(message);
 #ifdef PRINT
-		printf("\n");
-		printFullCubePolynomials(publicKey);
-		printf("\n");
+		// printf("\n");
+		// printFullCubePolynomials(publicKey);
+		// printf("\n");
 		printf("Message: ");
 		for (int i = 0; i < AMOUNT_OF_VARIABLES; i++) {
 			printf("%llu ", message[i]);
@@ -37,7 +38,7 @@ int main(int argc, char* argv[]) {
 		tStart = clock();
 		//tStartRDTSC = timeRDTSC();
 #endif
-		coding(message, publicKey, encodedMessage);
+		moduleCoding(message, publicKey, encodedMessage);
 #ifdef TIME
 		msec = (clock() - tStart) * 1000 / CLOCKS_PER_SEC;
 		//tEndRDTSC = timeRDTSC();
@@ -49,7 +50,7 @@ int main(int argc, char* argv[]) {
 		printf("bytes: %d\n", returnEncodedMessage(encodedMessage));
 #endif
 #ifndef DEBUG
-		returnEncodedMessage(encodedMessage);
+		printf("bytes: %d\n", returnEncodedMessage(encodedMessage));
 #endif
 #ifdef TIME
 		printf("Middle time:\n\

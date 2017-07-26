@@ -1,6 +1,14 @@
 #include "transmitter.h"
 
 extern const uint size;
+extern struct Module moduleStruct;
+
+void computePartsOfModule() {
+	for (int i = 0; i < moduleStruct.masSize; i++) {
+		moduleStruct.partsOfModule[i + moduleStruct.masSize * 1] = moduleStruct.module / moduleStruct.partsOfModule[i];
+		moduleStruct.partsOfModule[i + moduleStruct.masSize * 2] = modularInverseMultUniver(moduleStruct.partsOfModule[i + moduleStruct.masSize * 1], moduleStruct.partsOfModule[i]);
+	}
+}
 
 void getPublicKey(FullCubePolynomial *publicKey) {
 	FILE* fin = NULL;
@@ -18,7 +26,17 @@ void getPublicKey(FullCubePolynomial *publicKey) {
 		printf("Can't open the file for reading\n");
 		return;
 	}
-		int a = AMOUNT_OF_POLYNOMS, b = MAX_TERMS_IN_KEY, c = MAX_VARS_IN_KEY;
+	
+	moduleStruct.module = 1;
+	fread(&(moduleStruct.masSize), 1, 1, fin);
+	fread(moduleStruct.partsOfModule, 8, moduleStruct.masSize, fin);
+	for (int i = 0; i < moduleStruct.masSize; ++i)
+	{
+		moduleStruct.module *= moduleStruct.partsOfModule[i];
+	}
+	computePartsOfModule();
+
+	int a = AMOUNT_OF_POLYNOMS, b = MAX_TERMS_IN_KEY, c = MAX_VARS_IN_KEY;
 	for (int i = 0; i < AMOUNT_OF_POLYNOMS; i++) {
 		fread(publicKey[i].factor, 8, MAX_TERMS_IN_KEY, fin);
 		fread(publicKey[i].vars, 4, MAX_VARS_IN_KEY, fin);

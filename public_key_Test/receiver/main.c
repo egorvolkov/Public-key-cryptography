@@ -41,7 +41,7 @@ int main(int argc, char* argv[]) {
 	FullCubePolynomial publicKey[AMOUNT_OF_POLYNOMS];
 	ulong encodedMessage[AMOUNT_OF_POLYNOMS];
 	ulong realMessage[AMOUNT_OF_VARIABLES] = {0};
-	ulong radixes[NUMBER_OF_RADIX * 3] = {3, 5};
+	ulong radixes[NUMBER_OF_RADIX * 3] = {2, 3, 5, 7, 11, 13, 17, 19};
 	ulong answers[AMOUNT_OF_VARIABLES * NUMBER_OF_RADIX];
 	ulong secretVector[LENGTH_OF_SECRET_VECTOR];
 	ulong transposition[AMOUNT_OF_VARIABLES];
@@ -119,7 +119,15 @@ int main(int argc, char* argv[]) {
 #endif
 		transmitterConnection();
 
-		getEncodedMessage(encodedMessage);
+		FILE* fin;
+		fin = fopen(PATH_TO_PUBLIC_KEY, "rb");
+		if (!fin) {
+			printf("Can't open the file for reading\n");
+			return 0;
+		}
+		fread(encodedMessage, 8, AMOUNT_OF_POLYNOMS, fin);
+		fclose(fin);
+		//getEncodedMessage(encodedMessage);
 #ifdef PRINT
 		fprintf(output, "Encoded message by module: "); printf("Encoded message by module: ");
 		for (int i = 0; i < AMOUNT_OF_POLYNOMS; i++) {

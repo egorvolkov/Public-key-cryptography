@@ -14,6 +14,9 @@ uint returnPublicKey(FullCubePolynomial *publicKey) {
 		return 1;
 	}
 
+	fwrite(&(moduleStruct.masSize), 1, 1, fout);
+	fwrite(moduleStruct.partsOfModule, 8, moduleStruct.masSize, fout);	//transmitting parts of module
+
 	int a = AMOUNT_OF_POLYNOMS, b = MAX_TERMS_IN_KEY, c = MAX_VARS_IN_KEY;
 	for (int i = 0; i < AMOUNT_OF_POLYNOMS; i++) {
 		fwrite(publicKey[i].factor, 8, MAX_TERMS_IN_KEY, fout);
