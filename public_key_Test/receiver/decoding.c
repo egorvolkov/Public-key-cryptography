@@ -71,11 +71,13 @@ void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *enco
 		pre_result[i] = cube[i];
 	}
 	//scalar(cube,secretVector,pre_result,LENGTH_OF_SECRET_VECTOR);//получаем числа из систем счисления, после чего пользуемся китайской теоремой об остатках.
+#ifdef PRINT 
   printf("pre_result: ");
   for (int i = 0; i < NUMBER_OF_RADIX; i++) {
     printf("%llu ", pre_result[i]);
   }
   fprintf(output, "\n"); printf("\n");
+#endif
 	translateFromDecimal(pre_result, radixes, realMessage, radixes, radix, transposition);
 }
 void chyna(ulong *pre_result, ulong *radixes, ulong radix, ulong *result){

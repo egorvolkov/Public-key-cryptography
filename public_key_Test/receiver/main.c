@@ -61,6 +61,7 @@ int main(int argc, char* argv[]) {
 		//tStartRDTSC = timeRDTSC();
 #endif
 		generateSecretKey(&matrices, secretVector, answers, transposition, radix); //////////////////////////////////////////////////////
+		printf("Module: %llu\n", moduleStruct.module);
 #ifdef TIME
 		msec = (clock() - tStart) * 1000 / CLOCKS_PER_SEC;
 		//tEndRDTSC = timeRDTSC();

@@ -44,32 +44,11 @@ void matricesTransposition(ulong *matrices, ulong *transposition){
 	ulong random = 0;
 	for(ulong i = 0; i < AMOUNT_OF_VARIABLES; i++){
 		random = getRandom(AMOUNT_OF_VARIABLES - i) + i;
-		//random = AMOUNT_OF_VARIABLES - i - 1;
 		swap_ulong(&transposition[i], &transposition[random]);
 		for(ulong j = 0; j < AMOUNT_OF_POLYNOMS; j++){
 			swap_ulong(&matrices[i + j * AMOUNT_OF_VARIABLES], &matrices[random + j * AMOUNT_OF_VARIABLES]);
 		}
 	}
-	/* for(ulong i = 0 ; i < AMOUNT_OF_VARIABLES; i++){
-		printf("%llu ", transposition[i]);
-	}
-	printf("\n");
-	for(ulong i = 0 ; i < AMOUNT_OF_VARIABLES; i++){
-		printf("%llu ", matrices[i]);
-		}
-		printf("\n");
-	for(ulong i = 0; i < AMOUNT_OF_VARIABLES; i++){
-	
-		for(ulong j = 0; j < AMOUNT_OF_POLYNOMS; j++){
-		ulong tmp = matrices[i + j * AMOUNT_OF_VARIABLES];
-		matrices[i + j * AMOUNT_OF_VARIABLES] = matrices[transposition[i] + j * AMOUNT_OF_VARIABLES];
-		matrices[transposition[i] + j * AMOUNT_OF_VARIABLES] = tmp;
-		}
-	for(ulong i = 0 ; i < AMOUNT_OF_VARIABLES; i++){
-		printf("%llu ", matrices[i]);
-		}
-		printf("\n");
-	}*/
 }
 
 
@@ -92,134 +71,62 @@ void generateSecretKey(struct Matrices *matrices, ulong *secretVector, ulong *an
     ulong minModule = 0;
 	for(uint i = AMOUNT_OF_VARIABLES * (NUMBER_OF_RADIX - 1); i < AMOUNT_OF_VARIABLES * NUMBER_OF_RADIX; i++)
 		minModule += answers[i] * (radix-1);
-	generateModule(minModule);
-  //generateVector(secretVector);
-  //printf("secretVector : ");
-  //for (int i = 0; i < LENGTH_OF_SECRET_VECTOR; i++){
-  //  printf("%llu ", secretVector[i]);
-  //}
-  //printf("\n");
+	printf("%llu ", minModule);
+	while(1) { 
+		generateModule(minModule);
+		if (moduleStruct.module > minModule && moduleStruct.module < (minModule + (minModule >> 2))) break; 
+	}
 	generateFirstMatrices(matrices->firstMatrix, matrices->firstInverseMatrix, AMOUNT_OF_POLYNOMS, &matrices->firstMatrixDet);
  	matricesTransposition(answers, transposition);
 	generateSecondMatrices(matrices->secondMatrix, matrices->secondInverseMatrix, AMOUNT_OF_POLYNOMS);
 	generateConstants(matrices->constants);
-	//for(uint i = 0; i < AMOUNT_OF_POLYNOMS; i++)
-		//matrices->constants[i] = 0;
 }
 
 uchar getMasSize(uchar size){
-	if (size < 21) return 1;
-	else if(size >= 21 && size < 29) return 2;
-	else if(size >= 29 && size < 47) return 3;
-	else if(size >= 47 && size < 56) return 4;
+	if (size < 15) return 1;
+	else if(size >= 15 && size < 26) return 2;
+	else if(size >= 26 && size < 40) return 3;
+	else if(size >= 40 && size < 54) return 4;
 	else return 5;
 }
 
 void generateModule(ulong minModule) {
-	int bit = 0;
+	uint bit = 0;
 	 while (minModule >>= 1){
 		bit++;
-	 }
-	ulong min = (ulong)1 << (bit + 1);
-	ulong max = (ulong)1 << (bit + 2);
-	
+	}
+	moduleStruct.module = 1;
 	moduleStruct.moduleSize = bit + 1;
 	moduleStruct.masSize = getMasSize(moduleStruct.moduleSize);
 
 	ulong k[moduleStruct.masSize];
-	ulong i, a = 0, p1, p2;
+	uint masOfBits[moduleStruct.masSize];
+	uint averageBits = moduleStruct.moduleSize / moduleStruct.masSize;
+	uint flag = 0; 
 
-	if (moduleStruct.masSize == 1) {
+	for (uint j = 0; j < moduleStruct.masSize; j++) {
 		FILE *fin = fopen(PATH_TO_MODULES, "rb");
-		i = 0;
+		uint p1, p2, a, i = 0;
 		do {
 			fread(&a, 4, 1, fin);
 			i++;
-		} while (min > a);
-		p1 = i - 1;
-
+		} while ((ulong)1 << (averageBits) > a);
+		p1 = i - 2;
 		do {
 			fread(&a, 4, 1, fin);
 			i++;
 			if (i == MODULES) {
 				break;
 			}
-		} while (max > a);
+		} while (((ulong)1 << (averageBits + 1)) > a);
 		p2 = i - 2;
-
-		moduleStruct.module = getModules(getRandom(p2 - p1 + 1) + p1);
-		moduleStruct.partsOfModule[0] = moduleStruct.module;
-		computePartsOfModule();
+		do {
+			k[j] = getModules(getRandom(p2));
+		} while (inArray(k, j, k[j]));
+		moduleStruct.module *= k[j];
+		moduleStruct.partsOfModule[j] = k[j];
 		fclose(fin);
-		return;
 	}
-
-	moduleStruct.module = 1;
-
-	i = 0;
-
-	FILE *fin = fopen(PATH_TO_MODULES, "rb");
-
-	do {
-		fread(&a, 4, 1, fin);
-		i++;
-		if (i == MODULES) {
-			break;
-		}
-	} while (((ulong)1 << (bit+2)) > a);
-	p1 = i - 2;
-
-	do {
-		k[0] = getModules(getRandom(p1));
-	} while (pow(getModules(MODULES - MODULES / 10), moduleStruct.masSize - 1) < (double)((ulong)1 << (bit+1)) / k[0] || k[0] >= ((ulong)1 << (bit+1)));
-	moduleStruct.module *= k[0];
-	moduleStruct.partsOfModule[0] = k[0];
-
-	min = (ulong)ceil(pow((double)((ulong)1 << (bit+1)) / k[0], (double)1 / (moduleStruct.masSize - 1)));
-	max = (ulong)floor(pow((double)((ulong)1 << (bit+2)) / k[0], (double)1 / (moduleStruct.masSize - 1)));
-
-	i = 0;
-	fseek(fin, 0, SEEK_SET);
-	do {
-		fread(&a, 4, 1, fin);
-		i++;
-	} while (min > a);
-	p1 = i - 1;
-
-	do {
-		fread(&a, 4, 1, fin);
-		i++;
-		if (i == MODULES) {
-			break;
-		}
-	} while (max > a);
-	p2 = i - 2;
-
-	fclose(fin);
-
-	if (p2 - p1 < moduleStruct.masSize - 1) {
-		if (p1 < 10) {
-			p1 = 0;
-		} else {
-			p1 -= 10;
-		}
-		p2 += 10;
-		if (p2 >= MODULES) {
-			p2 = MODULES - 1;
-		}
-	}
-
-	do {
-		moduleStruct.module = k[0];
-		for (int j = 1; j < moduleStruct.masSize; j++) {
-			do {
-				k[j] = getModules(getRandom(p2 - p1 + 1) + p1);
-			} while (inArray(k, j, k[j]));
-			moduleStruct.module *= k[j];
-			moduleStruct.partsOfModule[j] = k[j];
-		}
-	} while (moduleStruct.module < ((ulong)1 << (bit+1)) || moduleStruct.module >= ((ulong)1 << (bit+2)));
-
 	computePartsOfModule();
 }
 
@@ -229,24 +136,6 @@ void generateConstants(ulong *constants){
 	}
 }
 
-// int canCreate(int n, ulong min, ulong max) {
-// 	int downLine = MODULES/3;
-// 	int upLine = MODULES - MODULES/3;
-
-// 	int downMult = 1;
-
-// 	int upMult = 1;
-
-// 	for (int i = 0; i < n; i++) {
-// 		downMult = getModules(downLine - i);
-// 		upMult = getModules(upLine + i);
-// 	}
-
-// 	if (upMult >= min && downMult <= upLine) {
-// 		return 1;
-// 	}
-// 	return 0;
-// }
 void computeRadixes(ulong *radixes, ulong radix) {
 	for (int i = 0; i < NUMBER_OF_RADIX; i++) {
 		radixes[i + NUMBER_OF_RADIX * 1] = radix / radixes[i];

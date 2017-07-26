@@ -32,11 +32,11 @@
  */
 #define NUMBER_OF_RADIX 2
 #define LENGTH_OF_SECRET_VECTOR 1
-#define SIZE_OF_AVAR 3
-#define AMOUNT_OF_VARIABLES 4
+#define SIZE_OF_AVAR 4
+#define AMOUNT_OF_VARIABLES 10
 #define AMOUNT_OF_VAR_IN_LINE_FIRST 5
 #define AMOUNT_OF_VAR_IN_LINE_SECOND 5
-#define SIZE_OF_VARIABLE 9
+#define SIZE_OF_VARIABLE 100
 #define SIZE_OF_MODULE (((SIZE_OF_VARIABLE + 1) > 63) ? (SIZE_OF_VARIABLE + 1) : 63)	// module_size and mas_size
 #define MAS_SIZE 5																		//for ststic arrays
 #define AMOUNT_OF_POLYNOMS (NUMBER_OF_RADIX * LENGTH_OF_SECRET_VECTOR)
@@ -47,7 +47,7 @@
  * 		11 <= AMOUNT_OF_VARIABLES < 73	then BYTES_FOR_AMOUNT_OF_MEMBER is 2;
  * 		You don't need more meanings.
  */
-#define BYTES_FOR_AMOUNT_OF_MEMBER 2
+#define BYTES_FOR_AMOUNT_OF_MEMBER 1
 
 // 7 120 12 12 20 - 7.0mb 29m28s
 // 7 120 10 10 20 - 3.7mb 6m28s
