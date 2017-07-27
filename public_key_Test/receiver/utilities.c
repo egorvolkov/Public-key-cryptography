@@ -36,31 +36,51 @@ void prepare(ulong *preSeed)
 	//clock_gettime (CLOCK_MONOTONIC, &t);
 	//seed = t.tv_nsec;
 	srand(time(NULL));
-	seed = rand();
+	seed = 0;
+	for (int i = 0; i < 8; i++) {
+		seed <<= 8;
+		seed |= rand() & 255;
+	}
 }
 
 ulong randMain()
 {
 	ulong next = seed;
-	ulong result;
+	ulong result1, result2;
 
 	next *= 1103515245;
 	next += 12345;
-	result = (next >> 16) % 2048; // next / 65536
+	result1 = (next >> 16) % 2048; // next / 65536
 
 	next *= 1103515245;
 	next += 12345;
-	result <<= 10;
-	result ^= (next >> 16) % 1024;
+	result1 <<= 10;
+	result1 ^= (next >> 16) % 1024;
 
 	next *= 1103515245;
 	next += 12345;
-	result <<= 10;
-	result ^= (next >> 16) % 1024;
+	result1 <<= 10;
+	result1 ^= (next >> 16) % 1024;
+
+	next *= 1103515245;
+	next += 12345;
+	result2 = (next >> 16) % 2048; // next / 65536
+
+	next *= 1103515245;
+	next += 12345;
+	result2 <<= 10;
+	result2 ^= (next >> 16) % 1024;
+
+	next *= 1103515245;
+	next += 12345;
+	result2 <<= 10;
+	result2 ^= (next >> 16) % 1024;
+
+	result1 = (result1 << 32) | result2;
 
 	seed = next;
 
-	return result;
+	return result1;
 }
 
 /*
