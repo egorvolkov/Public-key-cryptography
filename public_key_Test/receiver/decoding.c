@@ -65,13 +65,13 @@ void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *enco
 	/* СКАЛЯРНОЕ ПРОИЗВЕДЕНИЕ*/
 	ulong pre_result[NUMBER_OF_RADIX];
 	ulong result;
-	ulong test = modularInverseMult(det); 
+	ulong test = modularInverseMult(det);
 	mult_A_na_vector_B_xd(firstInverseMatrix, cube);
 	for(uint i = 0; i < NUMBER_OF_RADIX; i++){
 		pre_result[i] = cube[i];
 	}
 	//scalar(cube,secretVector,pre_result,LENGTH_OF_SECRET_VECTOR);//получаем числа из систем счисления, после чего пользуемся китайской теоремой об остатках.
-#ifdef PRINT 
+#ifdef PRINT
   printf("pre_result: ");
   for (int i = 0; i < NUMBER_OF_RADIX; i++) {
     printf("%llu ", pre_result[i]);
@@ -80,10 +80,10 @@ void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *enco
 #endif
 	translateFromDecimal(pre_result, radixes, realMessage, radixes, radix, transposition);
 }
-void chyna(ulong *pre_result, ulong *radixes, ulong radix, ulong *result){
+void chyna(ulong *pre_result, ulong *radixes, ulong radix, ulong *result, ulong offset){
 	*result = 0;
 	for (int i = 0; i < NUMBER_OF_RADIX; i++)
-		*result = modularAddUniver(*result,modularMultUniver(modularMultUniver(pre_result[i],radixes[i + NUMBER_OF_RADIX],radix), radixes[i+ 2 * NUMBER_OF_RADIX],radix),radix);
+		*result = modularAddUniver(*result,modularMultUniver(modularMultUniver(pre_result[i],radixes[(i + offset) % NUMBER_OF_RADIX + NUMBER_OF_RADIX],radix), radixes[(i + offset) % NUMBER_OF_RADIX + 2 * NUMBER_OF_RADIX],radix),radix);
 }
 void scalar(ulong *a, ulong *b, ulong *result, ulong N){
 	for (int j = 0; j < NUMBER_OF_RADIX; j++){
@@ -102,12 +102,12 @@ void translateFromDecimal(ulong* decimals, ulong *systems, ulong *result, ulong 
 	}
   for(int k = 0; k < AMOUNT_OF_VARIABLES; k++){
 		for (int i = 0; i < NUMBER_OF_RADIX; i++){
-  	   	temp[i] = decimals[i] % systems[i];
+  	   	temp[i] = decimals[i] % systems[(i + k) % NUMBER_OF_RADIX];
 		}
-		chyna(temp, radixes, radix, &result[temp2[k]]);
+		chyna(temp, radixes, radix, &result[temp2[k]], k);
 		for (int i = 0; i < NUMBER_OF_RADIX; i++){
 			decimals[i] -= result[temp2[k]];
-  	 	decimals[i] /= systems[i];
+  	 	decimals[i] /= systems[(i + k) % NUMBER_OF_RADIX];
   		}
 	}
 }

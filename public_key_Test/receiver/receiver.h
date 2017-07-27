@@ -60,7 +60,7 @@ typedef struct FullCubePolynomial {
 } FullCubePolynomial;
 
 void swap_ulong(ulong *a, ulong *b);
-void generateSecretKey(struct Matrices *matrices, ulong *secretVector, ulong *answers, ulong *transposition, ulong radix);
+void generateSecretKey(struct Matrices *matrices, ulong *secretVector, ulong *answers, ulong *transposition, ulong radix, ulong max);
 void generateModule();
 void computePartsOfModule();
 
@@ -93,7 +93,7 @@ void transmitterConnection();
 void getEncodedMessage(ulong *encodedOrRealMessage);
 
 void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *encodedMessage, ulong *realMessage, ulong *constants, ulong *secretVector, ulong *radixes, ulong *transposition, ulong radix, ulong det);
-void chyna(ulong *pre_result, ulong *radixes, ulong radix, ulong *result);
+void chyna(ulong *pre_result, ulong *radixes, ulong radix, ulong *result, ulong offset);
 uchar inArray(ulong *arr, uint length, ulong element);
 uint getModules(uint index);
 ulong getRandom(ulong module);
@@ -134,7 +134,7 @@ void translateFromDecimal(ulong* decimals, ulong *systems, ulong *result, ulong 
 ulong euler(ulong n);
 ulong gcd(ulong a, ulong b);
 ulong isModuleOk (ulong module);
-void generatePows(ulong *result, ulong *radixes, ulong lastPow);
+void generatePows(ulong *result, ulong *radixes, ulong lastPow, ulong *max);
 void full_gcd(ulong* coef_vector, ulong* answer_vector, ulong* root_matrix);
 #ifdef PRINT
 void printMatrix(ulong *matrix, uint size1, uint size2);

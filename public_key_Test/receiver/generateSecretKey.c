@@ -52,29 +52,32 @@ void matricesTransposition(ulong *matrices, ulong *transposition){
 }
 
 
-void generatePows(ulong *result, ulong *radixes, ulong lastPow) {
+void generatePows(ulong *result, ulong *radixes, ulong lastPow, ulong *max) {
     //Заносит в массив с указателем array
     //степени числа radix, степень соответствует индексу
     //надо проверить чтобы длина массива была не меньше lastPow
     ulong i = 0;
     for (int j = 0;j < NUMBER_OF_RADIX; j++){
+      ulong temp_max = 1;
       result[i] = 1;
       i++;
       for (int k = 1; k<=lastPow; k++) {
-          result[i] = result[i-1]*radixes[j];
+          result[i] = result[i-1]*radixes[(j + k - 1) % NUMBER_OF_RADIX ];
+          temp_max += result[i];
           i++;
+      }
+      if (*max < temp_max){
+        *max = temp_max;
       }
     }
 }
 
-void generateSecretKey(struct Matrices *matrices, ulong *secretVector, ulong *answers, ulong *transposition, ulong radix) {
-    ulong minModule = 0;
-	for(uint i = AMOUNT_OF_VARIABLES * (NUMBER_OF_RADIX - 1); i < AMOUNT_OF_VARIABLES * NUMBER_OF_RADIX; i++)
-		minModule += answers[i] * (radix-1);
+void generateSecretKey(struct Matrices *matrices, ulong *secretVector, ulong *answers, ulong *transposition, ulong radix, ulong max) {
+  ulong minModule = max * (radix - 1);
 	printf("%llu ", minModule);
-	while(1) { 
+	while(1) {
 		generateModule(minModule);
-		if (moduleStruct.module > minModule && moduleStruct.module < (minModule + (minModule >> 2))) break; 
+		if (moduleStruct.module > minModule && moduleStruct.module < (minModule + (minModule >> 2))) break;
 	}
 	generateFirstMatrices(matrices->firstMatrix, matrices->firstInverseMatrix, AMOUNT_OF_POLYNOMS, &matrices->firstMatrixDet);
  	matricesTransposition(answers, transposition);
@@ -102,7 +105,7 @@ void generateModule(ulong minModule) {
 	ulong k[moduleStruct.masSize];
 	uint masOfBits[moduleStruct.masSize];
 	uint averageBits = moduleStruct.moduleSize / moduleStruct.masSize;
-	uint flag = 0; 
+	uint flag = 0;
 
 	for (uint j = 0; j < moduleStruct.masSize; j++) {
 		FILE *fin = fopen(PATH_TO_MODULES, "rb");

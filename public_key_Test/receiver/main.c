@@ -41,13 +41,16 @@ int main(int argc, char* argv[]) {
 	FullCubePolynomial publicKey[AMOUNT_OF_POLYNOMS];
 	ulong encodedMessage[AMOUNT_OF_POLYNOMS];
 	ulong realMessage[AMOUNT_OF_VARIABLES] = {0};
-	ulong radixes[NUMBER_OF_RADIX * 3] = {3, 5};
+	ulong radixes[NUMBER_OF_RADIX * 3] = {2, 3 , 5, 7, 11, 13, 17, 19, 23};
 	ulong answers[AMOUNT_OF_VARIABLES * NUMBER_OF_RADIX];
 	ulong secretVector[LENGTH_OF_SECRET_VECTOR];
 	ulong transposition[AMOUNT_OF_VARIABLES];
+	ulong max;
 	for (int loop = 0; loop < amountOfLoopIterations; loop++) {
 		ulong radix = 1;
-	generatePows(answers, radixes, AMOUNT_OF_VARIABLES - 1);
+	generatePows(answers, radixes, AMOUNT_OF_VARIABLES - 1, &max);
+	printf("matrix\n");
+	printMatrix(answers, NUMBER_OF_RADIX, AMOUNT_OF_VARIABLES);
 	for (int i = 0; i < NUMBER_OF_RADIX; i++){
 		radix *= radixes[i];
 	}
@@ -60,7 +63,7 @@ int main(int argc, char* argv[]) {
 		tStart = clock();
 		//tStartRDTSC = timeRDTSC();
 #endif
-		generateSecretKey(&matrices, secretVector, answers, transposition, radix); //////////////////////////////////////////////////////
+		generateSecretKey(&matrices, secretVector, answers, transposition, radix, max); //////////////////////////////////////////////////////
 		printf("Module: %llu\n", moduleStruct.module);
 #ifdef TIME
 		msec = (clock() - tStart) * 1000 / CLOCKS_PER_SEC;
