@@ -2,7 +2,6 @@
 #include <math.h>
 #include <stdlib.h>
 #include <time.h>
-#include <windows.h>
 #include <string.h>
 
 #include "../defines.h"
