@@ -1,12 +1,11 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include <time.h>
+#include <windows.h>
+#include <string.h>
 
 #include "../defines.h"
-
-#ifdef TIME
-#include "myTime.h" 
-#endif
 
 
 #define AMOUNT_OF_MEMBERS (AMOUNT_OF_VARIABLES * (AMOUNT_OF_VARIABLES + 1) * (AMOUNT_OF_VARIABLES + 2) / 6)
@@ -37,6 +36,7 @@ typedef unsigned char uchar;
 typedef struct Module {
 	ulong module;
 	const uchar masSize;
+	ulong inverseDegree[2];
 	ulong partsOfModule[MAS_SIZE * 3];
 } Module;
 
@@ -121,6 +121,14 @@ ulong modularInverseAddUniver(ulong a, ulong module);
 ulong modularInverseMultUniver(ulong a, ulong module);
 
 /**
+ *  This block for time calculations
+ */
+
+void startTime(clock_t *time, ulong *realtime);
+void endTime(clock_t *time, ulong *realtime);
+void printTimes(clock_t *times, ulong *realtime);
+
+/**
  *	Other
  */
 
@@ -133,7 +141,7 @@ void printSecretKey(Matrices matrices);
 void printCubePolynomials(CubePolynomial *cubePolynomials);
 void printAddFunction(CubePolynomial addFunction, int line, int number, int degree);
 void printPolynomialsAfterAddFunctions(CubePolynomial *polynomials);
-void printPublicKey(CubePolynomial *publicKey, uint bytes);
+void printPublicKey(CubePolynomial *publicKey, uint bytes, uint averageBytes, int loop);
 void printEncodedMessage(ulong *encodedMessage);
 void printDecodedMessage(ulong *decodedMessage);
 void printMatrix(ulong *matrix, uint size1, uint size2);

@@ -9,9 +9,7 @@ extern FILE *output;
 
 void decoding(ulong *firstInverseMatrix, ulong *secondInverseMatrix, ulong *encodedOrRealMessage, ulong *constants, ulong *constants3) {
 	ulong cube[size];
-	ulong inverseDegree[2];
-    inverseDegree[0] = modularInverseMultUniver(3, euler(moduleStruct.module));	//	Считаем степень, которая будет соответствовать кубическому корню из числа
-    inverseDegree[1] = modularInverseMultUniver(5, euler(moduleStruct.module)); //  Считаем степень, которая будет соответствовать корнюы 5 степени из числа
+	ulong inverseDegree[2] = {moduleStruct.inverseDegree[0], moduleStruct.inverseDegree[1]};
 #ifdef PRINT
 	printf("inverseDegree for 3: %llu\ninverseDegree for 5:  %llu\n\n", inverseDegree[0], inverseDegree[1]);
 	fprintf(output, "inverseDegree for 3: %llu\ninverseDegree for 5:  %llu\n\n", inverseDegree[0], inverseDegree[1]);

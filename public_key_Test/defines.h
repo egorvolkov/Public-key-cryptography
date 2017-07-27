@@ -2,7 +2,7 @@
  * TIME - if this constant is defined then time will be measured and printed
  * PRINT - if this constant is defined then all information will be printed to console and to a file "output.txt"
  */
-//#define TIME
+#define TIME
 //#define PRINT
 
 /**
@@ -11,7 +11,7 @@
  * 		Also you can set this parameter like an argument of execution the program. Parameter has more priority.
  */
 #define AMOUNT_OF_LOOP_ITERATIONS 10000000
-#define PAUSE 100
+#define PAUSE 10
 
 /**
  * AMOUNT_OF_VARIABLES - amount of variables; from 0 to infinity (in a theory)
@@ -30,8 +30,8 @@
  *   	You can use any meanings you want but our algorithm of module generation isn't perfect.
  * 		Some meanings can cause looping.
  */
-#define SIZE_OF_AVAR 7
-#define AMOUNT_OF_VARIABLES 16
+#define SIZE_OF_AVAR 5
+#define AMOUNT_OF_VARIABLES 20
 #define AMOUNT_OF_VAR_IN_LINE_FIRST 4
 #define AMOUNT_OF_VAR_IN_LINE_SECOND 4
 #define SIZE_OF_VARIABLE 62

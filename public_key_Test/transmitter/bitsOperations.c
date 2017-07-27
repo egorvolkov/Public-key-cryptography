@@ -35,7 +35,7 @@ ulong get5Vars(uint *var, uint pos){
     ulong result = 0;
     for(uint i = 0; i < 5; i++){
         result <<= SIZE_OF_AVAR;
-        result = getFromVar_test(var, pos + i);
+        result |= getFromVar_test(var, 5 * pos + i);
     }
     return result;
 }

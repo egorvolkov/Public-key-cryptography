@@ -103,9 +103,11 @@ void generateModule() {
 		} while (max > a);
 		p2 = i - 2;
 
-		//do {
-			moduleStruct.module = getModules(getRandom(p2 - p1 + 1) + p1);
-		//} while ((moduleStruct.module - 1) % 5 == 0);
+		moduleStruct.module = getModules(getRandom(p2 - p1 + 1) + p1);
+
+    	moduleStruct.inverseDegree[0] = modularInverseMultUniver(3, euler(moduleStruct.module));	//	Считаем степень, которая будет соответствовать кубическому корню из числа
+    	moduleStruct.inverseDegree[1] = modularInverseMultUniver(5, euler(moduleStruct.module)); //  Считаем степень, которая будет соответствовать корнюы 5 степени из числа
+    	
 		moduleStruct.partsOfModule[0] = moduleStruct.module;
 		computePartsOfModule();
 		fclose(fin);
@@ -177,6 +179,9 @@ void generateModule() {
 			moduleStruct.partsOfModule[j] = k[j];
 		}
 	} while (moduleStruct.module < ((ulong)1 << SIZE_OF_VARIABLE) || moduleStruct.module >= ((ulong)1 << SIZE_OF_MODULE));
+
+    moduleStruct.inverseDegree[0] = modularInverseMultUniver(3, euler(moduleStruct.module));	//	Считаем степень, которая будет соответствовать кубическому корню из числа
+    moduleStruct.inverseDegree[1] = modularInverseMultUniver(5, euler(moduleStruct.module)); //  Считаем степень, которая будет соответствовать корнюы 5 степени из числа
 
 	computePartsOfModule();
 }

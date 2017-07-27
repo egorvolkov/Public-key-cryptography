@@ -1,11 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+#include <windows.h>
+#include <string.h>
 
 #include "../defines.h"
-
-#ifdef TIME
-#include "myTime.h"
-#endif
 
 
 #define AMOUNT_OF_MEMBERS (AMOUNT_OF_VARIABLES * (AMOUNT_OF_VARIABLES + 1) * (AMOUNT_OF_VARIABLES + 2) / 6)
@@ -39,17 +38,21 @@ uint returnEncodedMessage(uchar *encodedMessage);
 ulong getRandom(ulong module);
 void factor(ulong *publicKey);
 
+/**
+ *  This block for time calculations
+ */
+
+void startTime(clock_t *time, ulong *realtime);
+void endTime(clock_t *time, ulong *realtime);
+void printTimes(clock_t times, ulong realtime);
+
 //	TO OPTIMIZE THESE FUNCTIONS
 void longAdd(uchar *a, uchar *b, uchar *result);
 void longAddEncoded(uchar *a, uchar *b, uchar *result);
 void longMult(uchar *a, uchar *b, uchar *result);
 void longMultToChar(uchar *a, uchar b, uchar *result);
 void longDeg(ulong a, uchar b, uchar *result);
-#ifdef PRINT
 void longPrintNumber(uchar *number, int N);
-#endif
-void longToZero(uchar *number);
-void longToZeroEncoded(uchar *number);
 void longGetNumber(ulong number, uchar *longNumber);
 
 void printFullCubePolynomials(FullCubePolynomial *cubePolynomials);

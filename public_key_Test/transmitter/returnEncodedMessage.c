@@ -12,8 +12,31 @@ uint returnEncodedMessage(uchar *encodedMessage) {
 		return 1;
 	}
 
-	fwrite(encodedMessage, 1, size*LENGTH_OF_ENCODED_NUMBER, fout);
-	bytes += size*LENGTH_OF_ENCODED_NUMBER;
+	int amount;
+	int flag = 0;
+	for (int i = 0; i < size; i++) {
+		amount = 0;
+		flag = 0;
+		for (int j = 0; j < LENGTH_OF_ENCODED_NUMBER; j++) {
+			for (int k = 0; k < 8; k++) {
+				if ((encodedMessage[LENGTH_OF_ENCODED_NUMBER*i + j] >> (7 - k)) & 1 == 1) {
+					flag = 1;
+					break;
+				}
+			}
+			if (flag) {
+				break;
+			}
+			amount++;
+		}
+		amount = LENGTH_OF_ENCODED_NUMBER - amount;
+		fwrite(&amount, 1, 4, fout);
+		bytes += 4;
+		for (int j = LENGTH_OF_ENCODED_NUMBER - amount; j < LENGTH_OF_ENCODED_NUMBER; j++) {
+			fwrite(encodedMessage + i*LENGTH_OF_ENCODED_NUMBER + j, 1, 1, fout);
+			bytes++;
+		}
+	}
 
 	fclose(fout);
 

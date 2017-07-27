@@ -6,7 +6,6 @@ extern struct Module moduleStruct;
 uint returnPublicKey(CubePolynomial *publicKey) {
 	FILE* fout;
 	uint bytes = 0;
-	uint amount = AMOUNT_OF_MEMBERS;
 
 	fout = fopen(PATH_TO_PUBLIC_KEY, "wb");
 	if (!fout) {
@@ -14,10 +13,33 @@ uint returnPublicKey(CubePolynomial *publicKey) {
 		return 1;
 	}
 
+	uint amount;
 	for (int i = 0; i < size; i++) {
-		fwrite(publicKey[i].factor, 8, MAX_TERMS_IN_KEY, fout);
-		fwrite(publicKey[i].vars, 4, MAX_VARS_IN_KEY, fout);
-		bytes += 8 * MAX_TERMS_IN_KEY + 4 * MAX_VARS_IN_KEY;
+		amount = 0;
+		for (int j = MAX_TERMS_IN_KEY - 1; j >= 0; j--) {
+			if (publicKey[i].factor[j] != 0) {
+				break;
+			}
+			amount++;
+		}
+		amount = MAX_TERMS_IN_KEY - amount;
+		fwrite(&amount, 1, 4, fout);
+		bytes += 4;
+		fwrite(publicKey[i].factor, 8, amount, fout);
+		bytes += 8 * (amount);
+
+		amount = 0;
+		for (int j = MAX_VARS_IN_KEY - 1; j >= 0; j--) {
+			if (publicKey[i].vars[j] != 0) {
+				break;
+			}
+			amount++;
+		}
+		amount = MAX_VARS_IN_KEY - amount;
+		fwrite(&amount, 1, 4, fout);
+		bytes += 4;
+		fwrite(publicKey[i].vars, 4, amount, fout);
+		bytes += 4 * (amount);
 	}
 
 	// uint bufSize = (size * amount * SIZE_OF_MODULE + 7) / 8;

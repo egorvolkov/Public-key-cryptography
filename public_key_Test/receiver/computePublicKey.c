@@ -21,9 +21,10 @@ void cubeOfPolynomials(ulong *matrix, CubePolynomial cubePolynomials[], ulong *c
 	ulong polinom[size + 1];
     uint pow = 0;
 	for (uint i = 0; i < size; i++) {
-        for (uint j = 0; j < size + 1; j++){
-            polinom[j] = 0;
-        }
+        // for (uint j = 0; j < size + 1; j++){
+        //     polinom[j] = 0;
+        // }
+        memset(polinom, 0, 8*(size + 1));
 		for (uint j = 0; j < 2 * AMOUNT_OF_VAR_IN_LINE_FIRST;){
 			ulong index = matrix[i*2 * AMOUNT_OF_VAR_IN_LINE_FIRST + j];
 			ulong number = matrix[i*2 * AMOUNT_OF_VAR_IN_LINE_FIRST + j + 1];

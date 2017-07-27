@@ -9,7 +9,7 @@ struct Module moduleStruct = {1, MAS_SIZE};
 int main(int argc, char* argv[]) {
 	int amountOfLoopIterations = AMOUNT_OF_LOOP_ITERATIONS;
 	int pause = PAUSE;
-	uint bytes;
+	uint bytes, averageBytes = 0;
 	if (argc > 1) {
 		amountOfLoopIterations = 0;
 		int i = 0;
@@ -27,10 +27,8 @@ int main(int argc, char* argv[]) {
 		}
 	}
 
-#ifdef TIME
-	double tStart, tEnd, timeOfSecretKey = 0, timeOfPublicKey = 0, timeOfDecoding = 0;
-	double tStartRDTSC, tEndRDTSC, timeOfSecretKeyRDTSC = 0, timeOfPublicKeyRDTSC = 0, timeOfDecodingRDTSC = 0;
-#endif
+	clock_t timer[3];
+    ulong realtime[3];
 
 	FILE *file = NULL;
 	struct Matrices matrices;
@@ -38,64 +36,35 @@ int main(int argc, char* argv[]) {
 	ulong encodedOrRealMessage[size];
 
 	for (int loop = 0; loop < amountOfLoopIterations; loop++) {
-#ifdef TIME
-		tStart = getTime();
-		tStartRDTSC = timeRDTSC();
-#endif
+
+        startTime(timer, realtime);
 		generateSecretKey(&matrices); //////////////////////////////////////////////////////
-#ifdef TIME
-		tEnd = getTime();
-		tEndRDTSC = timeRDTSC();
-		printf("Time of generation a secret key: %f ms\n", tEnd - tStart);
-		timeOfSecretKey += tEnd - tStart;
-		timeOfSecretKeyRDTSC += tEndRDTSC - tStartRDTSC;
-#endif
+        endTime(timer, realtime);
+
 		printSecretKey(matrices);
-#ifdef TIME
-		tStart = getTime();
-		tStartRDTSC = timeRDTSC();
-#endif
+
+        startTime(timer + 1, realtime + 1);
         computePublicKey(matrices.firstMatrix, matrices.secondMatrix, matrices.secondInverseMatrix, publicKey, matrices.constants, matrices.constants3);
-#ifdef TIME
-		tEnd = getTime();
-		tEndRDTSC = timeRDTSC();
-		printf("Time of computing a public key: %f ms\n", tEnd - tStart);
-		timeOfPublicKey += tEnd - tStart;
-		timeOfPublicKeyRDTSC += tEndRDTSC - tStartRDTSC;
-#endif
+        endTime(timer + 1, realtime + 1);
 
 		bytes = returnPublicKey(publicKey);
+		averageBytes += bytes;
 
-		printPublicKey(publicKey, bytes);
+		printPublicKey(publicKey, bytes, averageBytes, loop);
 		
 		transmitterConnection();
 
 		getEncodedMessage(encodedOrRealMessage);
 
 		printEncodedMessage(encodedOrRealMessage);
-#ifdef TIME
-		tStart = getTime();
-		tStartRDTSC = timeRDTSC();
-#endif
+
+        startTime(timer + 2, realtime + 2);
         decoding(matrices.firstInverseMatrix, matrices.secondInverseMatrix, encodedOrRealMessage, matrices.constants, matrices.constants3);
-#ifdef TIME
-		tEnd = getTime();
-		tEndRDTSC = timeRDTSC();
-		printf("Time of decoding: %f ms\n", tEnd - tStart);
-		timeOfDecoding += tEnd - tStart;
-		timeOfDecodingRDTSC += tEndRDTSC - tStartRDTSC;
-#endif		
+        endTime(timer + 2, realtime + 2);
+
 		printDecodedMessage(encodedOrRealMessage);
-#ifdef TIME
-		printf("\nMiddle time (iteration %u)\n\
-			Time of generation a secret key: %f ms; %f Hz\n\
-			Time of computing a public key: %f ms; %f Hz\n\
-			Time of decoding: %f ms; %f Hz\n",\
-		       loop + 1,\
-		       timeOfSecretKey / (loop + 1), timeOfSecretKeyRDTSC / (loop + 1),\
-		       timeOfPublicKey / (loop + 1), timeOfPublicKeyRDTSC / (loop + 1),\
-		       timeOfDecoding / (loop + 1), timeOfDecodingRDTSC / (loop + 1));
-#endif
+        printTimes(timer, realtime);
+
 		file = fopen(PATH_TO_MESSAGE, "r");
 		for (int i = 0; i < size; i++) {
 			ulong buf;

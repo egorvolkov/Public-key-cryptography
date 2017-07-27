@@ -22,9 +22,11 @@ void getEncodedMessage(ulong *encodedOrRealMessage) {	// TO IMPROVE THE ALGORITH
 	printf("Encoded message:\n");
 	fprintf(output, "Encoded message:\n"); 
 #endif
+	int amount;
 	for (int i = 0; i < size; i++) {
 		encodedOrRealMessage[i] = 0;
-		for (int j = 0; j < LENGTH_OF_ENCODED_NUMBER; j++) {
+		fread(&amount, 1, 4, fin);
+		for (int j = 0; j < amount; j++) {
 			fread(&bufChar, 1, 1, fin);
 #ifdef PRINT
 			for (int k = 0; k < 8; k++) {

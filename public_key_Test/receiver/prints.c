@@ -110,7 +110,7 @@ void printPolynomialsAfterAddFunctions(CubePolynomial *polynomials) {
 #endif
 }
 
-void printPublicKey(CubePolynomial *publicKey, uint bytes) {
+void printPublicKey(CubePolynomial *publicKey, uint bytes, uint averageBytes, int loop) {
 #ifndef PRINT
 		return;
 #else
@@ -124,8 +124,11 @@ void printPublicKey(CubePolynomial *publicKey, uint bytes) {
     printf("\n");
     fprintf(output, "\n"); 
 
-    printf("Bytes written: %d\n\n", bytes);
-	fprintf(output, "Bytes written: %d\n\n", bytes);
+    printf("Bytes written: %u\n\n", bytes);
+	fprintf(output, "Bytes written: %u\n\n", bytes);
+
+    printf("Average bytes written: %u\n\n", averageBytes/(loop + 1));
+	fprintf(output, "Average bytes written: %u\n\n", averageBytes/(loop + 1));
 #endif
 }
 
