@@ -3,7 +3,7 @@
 extern const uint size;
 extern struct Module moduleStruct;
 
-uint returnPublicKey(FullCubePolynomial *publicKey) {
+uint returnPublicKey(CubePolynomial *publicKey) {
 	FILE* fout;
 	uint bytes = 0;
 	uint amount = AMOUNT_OF_MEMBERS;
@@ -17,6 +17,7 @@ uint returnPublicKey(FullCubePolynomial *publicKey) {
 	for (int i = 0; i < size; i++) {
 		fwrite(publicKey[i].factor, 8, MAX_TERMS_IN_KEY, fout);
 		fwrite(publicKey[i].vars, 4, MAX_VARS_IN_KEY, fout);
+		bytes += 8 * MAX_TERMS_IN_KEY + 4 * MAX_VARS_IN_KEY;
 	}
 
 	// uint bufSize = (size * amount * SIZE_OF_MODULE + 7) / 8;

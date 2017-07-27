@@ -2,15 +2,15 @@
  * TIME - if this constant is defined then time will be measured and printed
  * PRINT - if this constant is defined then all information will be printed to console and to a file "output.txt"
  */
-//#define TIME
-#define PRINT
+#define TIME
+//#define PRINT
 
 /**
  * AMOUNT_OF_LOOP_ITERATIONS - the program will starts a loop with this parameter. Must be more then 0
  * PAUSE - amount of loop iterations before a pause. Must be more then 0
  * 		Also you can set this parameter like an argument of execution the program. Parameter has more priority.
  */
-#define AMOUNT_OF_LOOP_ITERATIONS 100000
+#define AMOUNT_OF_LOOP_ITERATIONS 10000000
 #define PAUSE 1
 
 /**
@@ -30,13 +30,13 @@
  *   	You can use any meanings you want but our algorithm of module generation isn't perfect.
  * 		Some meanings can cause looping.
  */
-#define SIZE_OF_AVAR 4
-#define AMOUNT_OF_VARIABLES 4
-#define AMOUNT_OF_VAR_IN_LINE_FIRST 2
-#define AMOUNT_OF_VAR_IN_LINE_SECOND 2
-#define SIZE_OF_VARIABLE 5
+#define SIZE_OF_AVAR 5
+#define AMOUNT_OF_VARIABLES 16
+#define AMOUNT_OF_VAR_IN_LINE_FIRST 4
+#define AMOUNT_OF_VAR_IN_LINE_SECOND 4
+#define SIZE_OF_VARIABLE 62
 #define SIZE_OF_MODULE (SIZE_OF_VARIABLE + 1)
-#define MAS_SIZE 1
+#define MAS_SIZE 5
 
 /**
  * BYTES_FOR_AMOUNT_OF_MEMBER - this constant is for encoding a long number.

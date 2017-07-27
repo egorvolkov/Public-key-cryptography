@@ -6,14 +6,14 @@ void writeVar_test(uint* var, uint num, uint pos){
     if(bits - (cur % bits) >= SIZE_OF_AVAR){ // Если число влезает, то записываем в одну ячейку
         var[cur / bits] &= ~(((1 << SIZE_OF_AVAR) - 1) << (bits - cur - SIZE_OF_AVAR));
         var[cur / bits] |= num << (bits - cur - SIZE_OF_AVAR);
-        cur += SIZE_OF_AVAR;
+        //cur += SIZE_OF_AVAR;
     } else { //Если число не влезает, то делим его на две части раскидываем в соседние ячейки
         uint shift_help = SIZE_OF_AVAR - (bits - (cur % bits));
         var[cur / bits] &= ~((1 << SIZE_OF_AVAR) - 1) >> shift_help;
         var[cur / bits] |= num >> shift_help;
         var[(cur / bits) + 1] &= ~((1 << SIZE_OF_AVAR) - 1) << (bits - shift_help);
         var[(cur / bits) + 1] |= num << (bits - shift_help);
-        cur += SIZE_OF_AVAR;
+        //cur += SIZE_OF_AVAR;
     }
 }
 
@@ -30,7 +30,7 @@ uint getFromVar_test(uint* var, uint pos) {
         uint secondPart = (var[(cur/bits) + 1] >> (bits - shift_help));
         result = firstPart | secondPart;
     }
-    cur += SIZE_OF_AVAR;
+    //cur += SIZE_OF_AVAR;
     return result;
 }
 

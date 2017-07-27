@@ -1,23 +1,42 @@
-#include "myTime.h"
+#include "transmitter.h"
 
+ulong iters = 0;
+float mtime[2] = {0,0};
 
-double getTime() {
-	//#ifdef TIME
-	//struct timespec t;
-	//clock_gettime (CLOCK_MONOTONIC, &t);
-	//return (double)t.tv_sec * 1000 + (double)t.tv_nsec / 1000000;
-	//#endif
-	return 0;
+//winonly code
+int wininit = 0;
+LARGE_INTEGER winfq;
+LARGE_INTEGER winclk;
+
+void startTime(clock_t *timer, ulong *realtime) {
+#ifdef TIME
+    *timer = clock();
+	if (wininit == 0){
+		QueryPerformanceFrequency(&winfq);
+	}
+	QueryPerformanceCounter(&winclk);
+	*realtime = (ulong)winclk.QuadPart;
+#endif
 }
 
-double timeRDTSC() {
-	//#ifdef TIME
-	//union ticks {
-	//	unsigned long long tx;
-	//	struct dblword { long tl,th; } dw; // little endian
-	//} t;
-	//asm("rdtsc\n": "=a"(t.dw.tl),"=d"(t.dw.th));
-	//return (double)t.tx;
-	//#endif
-	return 0;
-} // for x86 only!
+void endTime(clock_t *timer, ulong *realtime) {
+#ifdef TIME
+	*timer = clock() - (*timer);
+	QueryPerformanceCounter(&winclk);
+	*realtime = (ulong) winclk.QuadPart - (*realtime);
+#endif
+}
+
+void printTimes(clock_t times, ulong realtime) {
+#ifdef TIME
+    iters++;
+    printf("CPU time for coding: %.fms\n", ((float)(times*1000))/CLOCKS_PER_SEC);
+	printf("Real time for coding: %fms\n", (float)(realtime*1000)/winfq.QuadPart);
+    printf("\n");
+    mtime[0] += ((float)(times*1000))/CLOCKS_PER_SEC;
+    mtime[1] += (float)(realtime*1000)/winfq.QuadPart;
+    printf("Average CPU time for coding: %.fms\n", mtime[0]/iters);
+    printf("Average real time for coding: %fms\n", mtime[1]/iters);
+    printf("\n\n");
+#endif
+}

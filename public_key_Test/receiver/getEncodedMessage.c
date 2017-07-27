@@ -19,7 +19,8 @@ void getEncodedMessage(ulong *encodedOrRealMessage) {	// TO IMPROVE THE ALGORITH
 	uchar bufChar = 0;
 	ulong buf = 0;
 #ifdef PRINT
-	fprintf(output, "Encoded message:\n"); printf("Encoded message:\n");
+	printf("Encoded message:\n");
+	fprintf(output, "Encoded message:\n"); 
 #endif
 	for (int i = 0; i < size; i++) {
 		encodedOrRealMessage[i] = 0;
@@ -27,16 +28,23 @@ void getEncodedMessage(ulong *encodedOrRealMessage) {	// TO IMPROVE THE ALGORITH
 			fread(&bufChar, 1, 1, fin);
 #ifdef PRINT
 			for (int k = 0; k < 8; k++) {
-				fprintf(output, "%d", (bufChar >> (7 - k)) & 1); printf("%d", (bufChar >> (7 - k)) & 1);
+				printf("%d", (bufChar >> (7 - k)) & 1);
+				fprintf(output, "%d", (bufChar >> (7 - k)) & 1); 
 			}
-			fprintf(output, " "); printf(" ");
+			printf(" ");
+			fprintf(output, " "); 
 #endif
 			buf = bufChar;
 			encodedOrRealMessage[i] = modularAdd(modularMult(encodedOrRealMessage[i], (ulong)256), buf);
 		}
 #ifdef PRINT
-		fprintf(output, "\n"); printf("\n");
+		printf("\n");
+		fprintf(output, "\n"); 
 #endif
 	}
+#ifdef PRINT
+	printf("\n");
+	fprintf(output, "\n"); 
+#endif
 	fclose(fin);
 }
