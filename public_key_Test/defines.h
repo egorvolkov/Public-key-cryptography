@@ -3,7 +3,7 @@
  * PRINT - if this constant is defined then all information will be printed to console and to a file "output.txt"
  */
 //#define TIME
-#define PRINT
+//#define PRINT
 
 /**
  * AMOUNT_OF_LOOP_ITERATIONS - the program will starts a loop with this parameter. Must be more then 0
@@ -30,10 +30,10 @@
  *   	You can use any meanings you want but our algorithm of module generation isn't perfect.
  * 		Some meanings can cause looping.
  */
-#define SIZE_OF_AVAR 4
-#define AMOUNT_OF_VARIABLES 4
-#define AMOUNT_OF_VAR_IN_LINE_FIRST 2
-#define AMOUNT_OF_VAR_IN_LINE_SECOND 2
+#define SIZE_OF_AVAR 7
+#define AMOUNT_OF_VARIABLES 16
+#define AMOUNT_OF_VAR_IN_LINE_FIRST 4
+#define AMOUNT_OF_VAR_IN_LINE_SECOND 4
 #define SIZE_OF_VARIABLE 62
 #define SIZE_OF_MODULE (SIZE_OF_VARIABLE + 1)
 #define MAS_SIZE 5

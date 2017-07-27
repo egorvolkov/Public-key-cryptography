@@ -28,7 +28,7 @@
 
 
 #define PATH_TO_MODULES "modules35.txt"
-#define MODULES 323 //4806
+#define MODULES 37548 //323 //4806
 
 typedef unsigned long long ulong;
 typedef unsigned long uint;

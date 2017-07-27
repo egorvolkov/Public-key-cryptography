@@ -8,9 +8,9 @@ extern struct Module moduleStruct;
 #endif
 
 void printSecretKey(Matrices matrices) {
-	#ifndef PRINT
+#ifndef PRINT
 		return;
-	#endif
+#else
 	output = fopen(PATH_TO_OUTPUT, "w");
 
 	fprintf(output, "SIZE: %d\nSIZE_OF_VARIABLE: %d\nSIZE_OF_MODULE: %d\n\n", size, SIZE_OF_VARIABLE, SIZE_OF_MODULE);
@@ -65,12 +65,13 @@ void printSecretKey(Matrices matrices) {
 	}
 	printf("\n\n");
 	fprintf(output, "\n\n"); 
+#endif
 }
 
 void printCubePolynomials(CubePolynomial *cubePolynomials) {
-	#ifndef PRINT
+#ifndef PRINT
 		return;
-	#endif
+#else
 		
 	printf("Cube polynomials\n");
 	fprintf(output, "Cube polynomials\n"); 
@@ -80,21 +81,23 @@ void printCubePolynomials(CubePolynomial *cubePolynomials) {
 
     printf("\n");
     fprintf(output, "\n"); 
+#endif
 }
 
 void printAddFunction(CubePolynomial addFunction, int line, int number, int degree) {
-	#ifndef PRINT
+#ifndef PRINT
 		return;
-	#endif
+#else
 
 	printf("Adding function %d, polynomial %d, degree %d\n", line, number, degree);
 	printPolynomial(addFunction);
+#endif
 }
 
 void printPolynomialsAfterAddFunctions(CubePolynomial *polynomials) {
-	#ifndef PRINT
+#ifndef PRINT
 		return;
-	#endif
+#else
 		
 	printf("\nPolynomials after adding functions\n");
 	fprintf(output, "\nPolynomials after adding functions\n"); 
@@ -104,12 +107,13 @@ void printPolynomialsAfterAddFunctions(CubePolynomial *polynomials) {
 
     printf("\n");
     fprintf(output, "\n"); 
+#endif
 }
 
 void printPublicKey(CubePolynomial *publicKey, uint bytes) {
-	#ifndef PRINT
+#ifndef PRINT
 		return;
-	#endif
+#else
 
 	printf("Public key\n");
 	fprintf(output, "Public key\n"); 
@@ -122,12 +126,13 @@ void printPublicKey(CubePolynomial *publicKey, uint bytes) {
 
     printf("Bytes written: %d\n\n", bytes);
 	fprintf(output, "Bytes written: %d\n\n", bytes);
+#endif
 }
 
 void printEncodedMessage(ulong *encodedMessage) {
-	#ifndef PRINT
+#ifndef PRINT
 		return;
-	#endif
+#else
 
 	printf("Encoded message by module: ");
 	fprintf(output, "Encoded message by module: "); 
@@ -137,12 +142,13 @@ void printEncodedMessage(ulong *encodedMessage) {
 	}
 	printf("\n\n");
 	fprintf(output, "\n\n"); 
+#endif
 }
 
 void printDecodedMessage(ulong *decodedMessage) {
-	#ifndef PRINT
+#ifndef PRINT
 		return;
-	#endif
+#else
 
 	printf("Decoded message: ");
 	fprintf(output, "Decoded message: ");
@@ -153,39 +159,59 @@ void printDecodedMessage(ulong *decodedMessage) {
 	printf("\n\n"); 
 
 	fclose(output);
+#endif
 }
 
 void printMatrix(ulong *matrix, uint size1, uint size2) {
+#ifndef PRINT
+		return;
+#else
 	for (int i = 0; i < size1; i++) {
 		for (int j = 0; j < size2; j++) {
 			printf("%llu ", matrix[i * size2 + j]);
 		}
 		printf("\n");
 	}
+#endif
 }
 
 void fprintMatrix(ulong *matrix, uint size1, uint size2) {
+#ifndef PRINT
+		return;
+#else
 	for (int i = 0; i < size1; i++) {
 		for (int j = 0; j < size2; j++) {
 			fprintf(output, "%llu ", matrix[i * size2 + j]);
 		}
 		fprintf(output, "\n");
 	}
+#endif
 }
 
 void printPolynomials(CubePolynomial *cubePolynomials) {
+#ifndef PRINT
+		return;
+#else
 	for (int i = 0; i < size; i++) {
 		printPolynomial(cubePolynomials[i]);
 	}
+#endif
 }
 
 void fprintPolynomials(CubePolynomial *cubePolynomials) {
+#ifndef PRINT
+		return;
+#else
 	for (int i = 0; i < size; i++) {
 		fprintPolynomial(cubePolynomials[i]);
 	}
+#endif
 }
 
 void printPolynomial(CubePolynomial cubePolynomials){
+#ifndef PRINT
+		return;
+#else
     for (int j = 0; j < MAX_TERMS_IN_POLY; j++) {
         if (cubePolynomials.factor[j] == 0) {
             continue;
@@ -202,9 +228,13 @@ void printPolynomial(CubePolynomial cubePolynomials){
         }
     }
     printf("\n");
+#endif
 }
 
 void fprintPolynomial(CubePolynomial cubePolynomials){
+#ifndef PRINT
+		return;
+#else
     for (int j = 0; j < MAX_TERMS_IN_POLY; j++) {
         if (cubePolynomials.factor[j] == 0) {
             continue;
@@ -221,9 +251,13 @@ void fprintPolynomial(CubePolynomial cubePolynomials){
         }
     }
     fprintf(output, "\n");
+#endif
 }
 
 void printRareMatrix(ulong* matrix, int size1, int size2, int amount) {
+#ifndef PRINT
+		return;
+#else
 	int was_printed;
 	for (int i = 0; i < size1; i++) {
 		for (int j = 0; j < size2; j++) {
@@ -241,9 +275,13 @@ void printRareMatrix(ulong* matrix, int size1, int size2, int amount) {
 		}
 		printf("\n");
 	}
+#endif
 }
 
 void fprintRareMatrix(ulong* matrix, int size1, int size2, int amount) {
+#ifndef PRINT
+		return;
+#else
 	int was_printed;
 	for (int i = 0; i < size1; i++) {
 		for (int j = 0; j < size2; j++) {
@@ -261,4 +299,5 @@ void fprintRareMatrix(ulong* matrix, int size1, int size2, int amount) {
 		}
 		fprintf(output, "\n");
 	}
+#endif
 }

@@ -11,6 +11,69 @@ void generateSecretKey(struct Matrices *matrices) {
 }
 
 void generateModule() {
+	//printf("%d %u %lf\n", MODULES - MODULES / 10, getModules(MODULES - MODULES / 10), (pow(getModules(MODULES - MODULES / 10), moduleStruct.masSize)));
+	// if ((pow(getModules(MODULES - MODULES / 10), moduleStruct.masSize) < (double)((ulong)1 << SIZE_OF_VARIABLE))/* && (getModules(MODULES - MODULES / 10) < 6200)*/) {
+	// 	printf("Too little masSize. Press Enter to exit.\n");
+	// 	getchar();
+	// 	exit(1);
+	// }
+
+	// const int masSize = moduleStruct.masSize;
+	// ulong min[masSize];
+	// ulong max[masSize];
+
+	// min[masSize - 1] = (ulong)1 << SIZE_OF_VARIABLE;
+	// max[masSize - 1] = (ulong)1 << SIZE_OF_MODULE;
+
+	// ulong modules = 0;
+	// ulong a = 0;
+	// ulong b = 0;
+
+	// uint buf;
+	// FILE *fin = fopen(PATH_TO_MODULES, "rb");
+	// for (int i = masSize - 2; i >= 0; i--) {
+	// 	fseek(fin, 0, SEEK_SET);
+	// 	modules = 0;
+	// 	do {
+	// 		fread(&buf, 4, 1, fin);
+	// 		if (buf > max[i + 1]) {
+	// 			break;
+	// 		}
+	// 		modules++;
+	// 	} while (modules < MODULES);
+	// 	a = getModules(modules/10);
+	// 	b = getModules(modules - modules/10);
+	// 	min[i] = min[i + 1] / b;
+	// 	max[i] = max[i + 1] / a;
+	// 	printf("%llu %llu\n", min[i], max[i]);
+	// }
+	// modules = 0;
+	// do {
+	// 	fread(&buf, 4, 1, fin);
+	// 	if (buf > max[masSize - 1]) {
+	// 		break;
+	// 	}
+	// 	modules++;
+	// } while (modules < MODULES);
+	// fclose(fin);
+
+	// moduleStruct.module = 1;
+	// for (int i = 0; i < masSize; i++) {
+	// 	do {
+	// 		moduleStruct.partsOfModule[i] = getModules(getRandom(modules));
+	// 	} while (moduleStruct.module * moduleStruct.partsOfModule[i] >= max[i] || moduleStruct.module * moduleStruct.partsOfModule[i] < min[i] || inArray(moduleStruct.partsOfModule, i, moduleStruct.partsOfModule[i]));
+	// 	printf("%llu ", moduleStruct.partsOfModule[i]);
+	// 	moduleStruct.module *= moduleStruct.partsOfModule[i];
+	// }
+	// //printf("\n");
+
+	// computePartsOfModule();
+
+
+
+
+
+
 	if (pow(getModules(MODULES - MODULES / 10), moduleStruct.masSize) < (double)((ulong)1 << SIZE_OF_VARIABLE)) {
 		printf("Too little masSize. Press Enter to exit.\n");
 		getchar();
