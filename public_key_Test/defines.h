@@ -11,7 +11,7 @@
  * 		Also you can set this parameter like an argument of execution the program. Parameter has more priority.
  */
 #define AMOUNT_OF_LOOP_ITERATIONS 10000000
-#define PAUSE 10
+#define PAUSE 1000
 
 /**
  * AMOUNT_OF_VARIABLES - amount of variables; from 0 to infinity (in a theory)

@@ -19,10 +19,17 @@ void getPublicKey(FullCubePolynomial *publicKey) {
 		return;
 	}
 
-	int amount;// = 0;
+	int amount;
+	unsigned char symbbites;// = 0;
 	for (int i = 0; i < size; i++) {
-		fread(&amount, 1, 4, fin);
-		fread(publicKey[i].factor, 8, amount, fin);
+		fread(&symbbites, 1, 1, fin);
+		amount = 0;
+		fread(&amount, symbbites, 1, fin);
+		for (int j = 0; j < amount; j++) {
+			fread(&symbbites, 1, 1,fin);
+			publicKey[i].factor[j] = 0;
+			fread(publicKey[i].factor + j, symbbites, 1, fin);
+		}
 		for (int j = amount; j < MAX_TERMS_IN_KEY; j++) {
 			publicKey[i].factor[j] = 0;
 		}
@@ -66,4 +73,13 @@ void getPublicKey(FullCubePolynomial *publicKey) {
 	fclose(fin);
 
 	//factor(publicKey);	//	Раставляем коэфициенты в конечном многочлене. Нужно для подставления значений.
+}
+
+unsigned char bytesNumber(ulong num) {
+	unsigned char bits = 0;
+	while (num) {
+		bits++;
+		num >>= 1;
+	}
+	return (bits + 7) / 8;
 }

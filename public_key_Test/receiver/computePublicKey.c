@@ -18,22 +18,22 @@ void computePublicKey(ulong *firstMatrix, ulong *secondMatrix, ulong *inverseSec
 
 void cubeOfPolynomials(ulong *matrix, CubePolynomial cubePolynomials[], ulong *constants, ulong *inverseSecondMatrix) {
 	CubePolynomial *buf;
-	ulong polinom[size + 1];
+	ulong polynom[size + 1];
     uint pow = 0;
 	for (uint i = 0; i < size; i++) {
         // for (uint j = 0; j < size + 1; j++){
-        //     polinom[j] = 0;
+        //     polynom[j] = 0;
         // }
-        memset(polinom, 0, 8*(size + 1));
+        memset(polynom, 0, 8*(size + 1));
 		for (uint j = 0; j < 2 * AMOUNT_OF_VAR_IN_LINE_FIRST;){
 			ulong index = matrix[i*2 * AMOUNT_OF_VAR_IN_LINE_FIRST + j];
 			ulong number = matrix[i*2 * AMOUNT_OF_VAR_IN_LINE_FIRST + j + 1];
-			polinom[index] = number;
+			polynom[index] = number;
 			j += 2;
 		}
-        polinom[size] = constants[i];
+        polynom[size] = constants[i];
 		buf = &(cubePolynomials[i]);
-        polynomialDeg(polinom, buf, ((inverseSecondMatrix[pow * 2 + 1] % 2 == 1) ? 5 : 3));
+        polynomialDeg(polynom, buf, ((inverseSecondMatrix[pow * 2 + 1] % 2 == 1) ? 5 : 3));
         pow++;
         if (pow == size * AMOUNT_OF_VAR_IN_LINE_SECOND) {
             pow = 0;
@@ -45,9 +45,10 @@ void multToSecondMatrix(ulong *matrix, CubePolynomial *cubePolynomials, CubePoly
     ulong cur;
     ulong index, fac;
     for(uint i = 0; i < size; i++) {
-        for (uint j = 0; j < MAX_VARS_IN_KEY; j++) {
-            publicKey[i].vars[j] = 0;
-        }
+        memset(publicKey[i].vars, 0, MAX_VARS_IN_KEY);
+        // for (uint j = 0; j < MAX_VARS_IN_KEY; j++) {
+        //     publicKey[i].vars[j] = 0;
+        // }
     }
     for (uint i = 0; i < size; i++) {
         cur = 0;
@@ -87,6 +88,7 @@ void multToSecondMatrix(ulong *matrix, CubePolynomial *cubePolynomials, CubePoly
         for (cur; cur < MAX_TERMS_IN_KEY; cur++) {
             publicKey[i].factor[cur] = 0;
         }
+        //memset(publicKey[i].factor + cur, 0, (MAX_TERMS_IN_KEY - cur)*8);
     }
 }
 
@@ -96,9 +98,10 @@ void addFunctions(ulong *matrix, ulong *constants, CubePolynomial *bufferMatrix,
 		for (uint j = i + 1; j < size; j++){
 			CubePolynomial buffer;
 			ulong polynom[size+1];
-			for (uint k = 0; k < size + 1; k++){
-				polynom[k] = 0;
-			}
+			// for (uint k = 0; k < size + 1; k++){
+			// 	polynom[k] = 0;
+			// }
+            memset(polynom, 0, 8*(size + 1));
 			for (uint k = 0; k < 2 * AMOUNT_OF_VAR_IN_LINE_FIRST;){
 				ulong index = matrix[j*2 * AMOUNT_OF_VAR_IN_LINE_FIRST + k];
 				ulong number = matrix[j*2 * AMOUNT_OF_VAR_IN_LINE_FIRST + k + 1];

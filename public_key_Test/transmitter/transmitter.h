@@ -61,3 +61,4 @@ void writeVar_test(uint*, uint, uint);
 void print_bin(uint, uint);
 uint getFromVar_test(uint*, uint);
 ulong get5Vars(uint *, uint);
+unsigned char bytesNumber(ulong num);

@@ -157,3 +157,4 @@ void print_bin(uint, uint);
 uint getFromVar_test(uint*, uint);
 ulong get5Vars(uint *, uint);
 void write5Vars(uint *, uint *, uint, uint);
+unsigned char bytesNumber(ulong num);

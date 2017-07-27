@@ -14,19 +14,27 @@ uint returnPublicKey(CubePolynomial *publicKey) {
 	}
 
 	uint amount;
+	unsigned char symbbytes;
 	for (int i = 0; i < size; i++) {
-		amount = 0;
-		for (int j = MAX_TERMS_IN_KEY - 1; j >= 0; j--) {
-			if (publicKey[i].factor[j] != 0) {
-				break;
-			}
-			amount++;
-		}
-		amount = MAX_TERMS_IN_KEY - amount;
-		fwrite(&amount, 1, 4, fout);
-		bytes += 4;
-		fwrite(publicKey[i].factor, 8, amount, fout);
-		bytes += 8 * (amount);
+        amount = 0;
+        for (int j = MAX_TERMS_IN_KEY - 1; j >= 0; j--) {
+            if (publicKey[i].factor[j] != 0) {
+                break;
+            }
+            amount++;
+        }
+        amount = MAX_TERMS_IN_KEY - amount;
+
+        symbbytes = bytesNumber(amount);
+        fwrite(&symbbytes, 1, 1, fout);
+        fwrite(&amount, symbbytes, 1, fout);
+        bytes += symbbytes + 1;
+        for (int j = 0; j < amount; j++) {
+            symbbytes = bytesNumber(publicKey[i].factor[j]);
+            fwrite(&symbbytes, 1, 1, fout);
+            fwrite(&(publicKey[i].factor[j]), symbbytes, 1, fout);
+            bytes += symbbytes + 1;
+        }
 
 		amount = 0;
 		for (int j = MAX_VARS_IN_KEY - 1; j >= 0; j--) {
@@ -69,4 +77,14 @@ uint returnPublicKey(CubePolynomial *publicKey) {
 	fclose(fout);
 
 	return bytes;
+}
+
+
+unsigned char bytesNumber(ulong num) {
+	unsigned char bits = 0;
+	while (num) {
+		bits++;
+		num >>= 1;
+	}
+	return (bits + 7) / 8;
 }

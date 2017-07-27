@@ -61,13 +61,13 @@ ulong modularDeg(ulong a, ulong k)
 	ulong res = 1;
 	while (k > 0)
 	{
-		if (k % (ulong)2 == (ulong)1)
+		if (k & 1 == (ulong)1)
 		{
 			k--;
 			res = modularMult(res, a);
 
 		}
-		k /= (ulong)2;
+		k >>= 1;///= (ulong)2;
 		a = modularMult(a, a);
 
 	}
